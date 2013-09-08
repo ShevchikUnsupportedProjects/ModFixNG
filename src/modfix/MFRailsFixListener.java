@@ -38,6 +38,7 @@ public class MFRailsFixListener implements Listener {
 	public void onPistonMovedRails(BlockPistonExtendEvent e)
 	{
 		if (!config.enableRailsFix) {return;}
+		
 		for (Block b : e.getBlocks())
 		{
 			if (config.RailsIDs.contains(b.getTypeId()))
