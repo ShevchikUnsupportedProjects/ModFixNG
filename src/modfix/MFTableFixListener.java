@@ -45,9 +45,9 @@ import com.comphenix.protocol.events.PacketEvent;
 public class MFTableFixListener implements Listener {
 
 	private Main main;
-	private ModFixConfig config;
+	private Config config;
 	
-	MFTableFixListener(Main main, ModFixConfig config) {
+	MFTableFixListener(Main main, Config config) {
 		this.main = main;
 		this.config = config;
 		initCloseInventoryFixListener();

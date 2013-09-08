@@ -39,9 +39,9 @@ import com.comphenix.protocol.events.PacketEvent;
 public class MFFreecamInventoryOpenFix implements Listener {
 
 	private Main main;
-	private ModFixConfig config;
+	private Config config;
 
-	MFFreecamInventoryOpenFix(Main main, ModFixConfig config) {
+	MFFreecamInventoryOpenFix(Main main, Config config) {
 		this.main = main;
 		this.config = config;
 		initClientCloseInventoryFixListener();

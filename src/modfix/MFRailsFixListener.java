@@ -27,9 +27,9 @@ public class MFRailsFixListener implements Listener {
 	
 	@SuppressWarnings("unused")
 	private Main main;
-	private ModFixConfig config;
+	private Config config;
 	
-	MFRailsFixListener(Main main, ModFixConfig config) {
+	MFRailsFixListener(Main main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

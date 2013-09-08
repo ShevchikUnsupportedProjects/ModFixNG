@@ -29,9 +29,9 @@ public class MFChunkFixListener implements Listener {
 
 	@SuppressWarnings("unused")
 	private Main main;
-	private ModFixConfig config;
+	private Config config;
 
-	MFChunkFixListener(Main main, ModFixConfig config) {
+	MFChunkFixListener(Main main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

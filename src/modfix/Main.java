@@ -26,9 +26,9 @@ import com.comphenix.protocol.ProtocolManager;
 //warning: this plugin requires ProtocolLib to run
 public class Main extends JavaPlugin {
 
-	private ModFixConfig config;
+	private Config config;
 	
-	private MFCommandListener commandl;
+	private Commands commandl;
 	private MFBagFixListener bagl;
 	private MFTableFixListener tablel;
 	private MFChunkFixListener chunkl;
@@ -44,10 +44,10 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		//init config
-		config = new ModFixConfig(this);
+		config = new Config(this);
 		config.loadConfig();
 		//init command listener
-		commandl = new MFCommandListener(this,config);
+		commandl = new Commands(this,config);
 		getCommand("modfix").setExecutor(commandl);
 		getServer().getPluginManager().registerEvents(commandl, this);
 		//init bag bugfix listener

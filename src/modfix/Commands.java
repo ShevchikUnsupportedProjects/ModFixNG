@@ -33,12 +33,12 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class MFCommandListener implements  CommandExecutor,Listener{
+public class Commands implements  CommandExecutor,Listener{
 	@SuppressWarnings("unused")
 	private Main main;
-	private ModFixConfig config;
+	private Config config;
 	
-	MFCommandListener(Main main, ModFixConfig config) {
+	Commands(Main main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

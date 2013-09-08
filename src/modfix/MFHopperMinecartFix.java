@@ -27,9 +27,9 @@ public class MFHopperMinecartFix implements Listener {
 
 	@SuppressWarnings("unused")
 	private Main main;
-	private ModFixConfig config;
+	private Config config;
 	
-	MFHopperMinecartFix(Main main, ModFixConfig config) {
+	MFHopperMinecartFix(Main main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

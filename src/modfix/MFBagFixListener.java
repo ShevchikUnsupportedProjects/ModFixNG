@@ -35,9 +35,9 @@ import com.comphenix.protocol.events.PacketEvent;
 // BackPack fix
 public class MFBagFixListener implements Listener {
 	private Main main;
-	private ModFixConfig config;
+	private Config config;
 	
-	MFBagFixListener(Main main, ModFixConfig config) {
+	MFBagFixListener(Main main, Config config) {
 		this.main = main;
 		this.config = config;
 		initBag19BugFixListener();

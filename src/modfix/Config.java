@@ -25,10 +25,10 @@ import java.util.HashSet;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class ModFixConfig {
+public class Config {
 	@SuppressWarnings("unused")
 	private Main main;
-	ModFixConfig(Main main)
+	Config(Main main)
 	{
 		this.main = main;
 	}

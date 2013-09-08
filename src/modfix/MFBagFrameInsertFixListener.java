@@ -28,9 +28,9 @@ public class MFBagFrameInsertFixListener implements Listener {
 
 	@SuppressWarnings("unused")
 	private Main main;
-	private ModFixConfig config;
+	private Config config;
 
-	MFBagFrameInsertFixListener(Main main, ModFixConfig config) {
+	MFBagFrameInsertFixListener(Main main, Config config) {
 		this.main = main;
 		this.config = config;
 	}
