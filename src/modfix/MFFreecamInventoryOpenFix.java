@@ -31,7 +31,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.Packets;
-import com.comphenix.protocol.events.ConnectionSide;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
@@ -84,25 +83,15 @@ public class MFFreecamInventoryOpenFix implements Listener {
 			{
 				for (Block b : new HashSet<Block>(matreference.keySet()))
 				{
-					if (b!=null)
+					if (b!=null && b.getTypeId() != matreference.get(b))
 					{
-						if (b.getTypeId() != (matreference.get(b)))
+						for (String p : openedinvs.get(b))
 						{
-							for (String p : openedinvs.get(b))
-							{
-								backreference.remove(p);
-								if (Bukkit.getPlayerExact(p) != null)
-								{
-									try {
-										 Bukkit.getPlayerExact(p).closeInventory();
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-							}
-							openedinvs.remove(b);
-							matreference.remove(b);
+							backreference.remove(p);
+							try {Bukkit.getPlayerExact(p).closeInventory();} catch (Exception e) {e.printStackTrace();}
 						}
+						openedinvs.remove(b);
+						matreference.remove(b);
 					}
 				}
 			}
@@ -111,51 +100,59 @@ public class MFFreecamInventoryOpenFix implements Listener {
 	
 	private void initClientCloseInventoryFixListener()
 	{
-		main.protocolManager.addPacketListener(
-				  new PacketAdapter(main, ConnectionSide.CLIENT_SIDE, 
-				  ListenerPriority.HIGHEST, Packets.Client.CLOSE_WINDOW) {
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+				new PacketAdapter(
+						PacketAdapter
+						.params(main, Packets.Client.CLOSE_WINDOW)
+						.clientSide()
+						.listenerPriority(ListenerPriority.HIGHEST)
+				) 
+				{
 					@Override
-				    public void onPacketReceiving(final PacketEvent e) {
-						Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
-							public void run() {
-								String pl = e.getPlayer().getName();
-								if (backreference.containsKey(pl)) {
-									openedinvs.get(backreference.get(pl)).remove(pl);
-									if (openedinvs.get(backreference.get(pl)).size() == 0) {
-										openedinvs.remove(backreference.get(pl));
-									}
-									matreference.remove(backreference.get(pl));
-									backreference.remove(pl);
-								}
+				    public void onPacketReceiving(final PacketEvent e)
+					{
+						String pl = e.getPlayer().getName();
+						if (backreference.containsKey(pl)) 
+						{
+							openedinvs.get(backreference.get(pl)).remove(pl);
+							if (openedinvs.get(backreference.get(pl)).size() == 0) 
+							{
+								openedinvs.remove(backreference.get(pl));
 							}
-						});
+							matreference.remove(backreference.get(pl));
+							backreference.remove(pl);
+						}
 					}
-				});
+				}).syncStart();
 	}
 	
 	
 	private void initServerCloseInventoryFixListener()
 	{
-		main.protocolManager.addPacketListener(
-				  new PacketAdapter(main, ConnectionSide.SERVER_SIDE, 
-				  ListenerPriority.HIGHEST, Packets.Server.CLOSE_WINDOW) {
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+				new PacketAdapter(
+							PacketAdapter
+							.params(main, Packets.Server.CLOSE_WINDOW)
+							.serverSide()
+				) 
+				{
 					@Override
-				    public void onPacketSending(PacketEvent e) {
-				    	String pl = e.getPlayer().getName();
-				    	if (backreference.containsKey(pl))
-				    	{
-				    		openedinvs.get(backreference.get(pl)).remove(pl);
-				    		if (openedinvs.get(backreference.get(pl)).size() == 0) {
+					public void onPacketSending(PacketEvent e) 
+					{
+						String pl = e.getPlayer().getName();
+						if (backreference.containsKey(pl))
+						{
+							openedinvs.get(backreference.get(pl)).remove(pl);
+				    		if (openedinvs.get(backreference.get(pl)).size() == 0) 
+				    		{
 				    			openedinvs.remove(backreference.get(pl));
 				    		}
 				    		matreference.remove(backreference.get(pl));
 				    		backreference.remove(pl);
-				    	}
-				    }
-				});
+						}
+					}
+				}).syncStart();
 	}
-	
-	
 	
 	//additional check for 0-amount items
 	public void initInvCheck()
@@ -165,10 +162,12 @@ public class MFFreecamInventoryOpenFix implements Listener {
 			public void run()
 			{
 				if (!config.enablefreecamzeroitemscheck) {return;}
+				
 				for (Player p : Bukkit.getOnlinePlayers())
 				{
 					//hotbar slots
-					for(int i = 0; i < 9; i++) {
+					for(int i = 0; i < 9; i++) 
+					{
 						ItemStack item = p.getInventory().getItem(i);
 						if (item != null && item.getAmount() == 0)
 						{
