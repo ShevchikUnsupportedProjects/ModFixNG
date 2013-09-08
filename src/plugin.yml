@@ -2,7 +2,7 @@ name: ModFixNG
 main: modfix.Main
 version: 1.0
 author: Shevchik
-softdepend: [ProtocolLib]
+depend: [ProtocolLib]
 load: STARTUP
 commands:
   modfix:
