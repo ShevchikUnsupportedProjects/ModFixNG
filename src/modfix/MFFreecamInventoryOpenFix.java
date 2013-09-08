@@ -109,7 +109,7 @@ public class MFFreecamInventoryOpenFix implements Listener {
 				) 
 				{
 					@Override
-				    public void onPacketReceiving(final PacketEvent e)
+				    public void onPacketReceiving(PacketEvent e)
 					{
 						String pl = e.getPlayer().getName();
 						if (backreference.containsKey(pl)) 
