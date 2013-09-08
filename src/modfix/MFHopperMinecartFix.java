@@ -38,6 +38,7 @@ public class MFHopperMinecartFix implements Listener {
 	public void onEnteredHopperMinecart(VehicleEnterEvent e)
 	{
 		if (!config.enablehopperminecartfix) {return;}
+		
 		if (e.getEntered() instanceof Player && e.getVehicle().getType().getTypeId() == config.hopperminecartid)
 		{
 			e.setCancelled(true);
