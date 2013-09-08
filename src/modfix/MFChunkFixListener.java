@@ -28,10 +28,10 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 public class MFChunkFixListener implements Listener {
 
 	@SuppressWarnings("unused")
-	private Main main;
+	private ModFixNG main;
 	private Config config;
 
-	MFChunkFixListener(Main main, Config config) {
+	MFChunkFixListener(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

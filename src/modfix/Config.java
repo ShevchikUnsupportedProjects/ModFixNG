@@ -27,8 +27,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config {
 	@SuppressWarnings("unused")
-	private Main main;
-	Config(Main main)
+	private ModFixNG main;
+	Config(ModFixNG main)
 	{
 		this.main = main;
 	}

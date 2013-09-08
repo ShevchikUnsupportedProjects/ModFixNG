@@ -26,10 +26,10 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 public class MFHopperMinecartFix implements Listener {
 
 	@SuppressWarnings("unused")
-	private Main main;
+	private ModFixNG main;
 	private Config config;
 	
-	MFHopperMinecartFix(Main main, Config config) {
+	MFHopperMinecartFix(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

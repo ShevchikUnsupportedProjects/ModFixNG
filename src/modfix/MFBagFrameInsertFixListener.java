@@ -27,10 +27,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class MFBagFrameInsertFixListener implements Listener {
 
 	@SuppressWarnings("unused")
-	private Main main;
+	private ModFixNG main;
 	private Config config;
 
-	MFBagFrameInsertFixListener(Main main, Config config) {
+	MFBagFrameInsertFixListener(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

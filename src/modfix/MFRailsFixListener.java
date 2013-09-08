@@ -26,10 +26,10 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 public class MFRailsFixListener implements Listener {
 	
 	@SuppressWarnings("unused")
-	private Main main;
+	private ModFixNG main;
 	private Config config;
 	
-	MFRailsFixListener(Main main, Config config) {
+	MFRailsFixListener(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

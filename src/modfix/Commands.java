@@ -35,10 +35,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Commands implements  CommandExecutor,Listener{
 	@SuppressWarnings("unused")
-	private Main main;
+	private ModFixNG main;
 	private Config config;
 	
-	Commands(Main main, Config config) {
+	Commands(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

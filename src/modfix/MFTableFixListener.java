@@ -44,10 +44,10 @@ import com.comphenix.protocol.events.PacketEvent;
 //CraftingTablesFix
 public class MFTableFixListener implements Listener {
 
-	private Main main;
+	private ModFixNG main;
 	private Config config;
 	
-	MFTableFixListener(Main main, Config config) {
+	MFTableFixListener(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		initCloseInventoryFixListener();

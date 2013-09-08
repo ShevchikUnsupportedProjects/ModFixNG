@@ -24,7 +24,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
 //warning: this plugin requires ProtocolLib to run
-public class Main extends JavaPlugin {
+public class ModFixNG extends JavaPlugin {
 
 	private Config config;
 	

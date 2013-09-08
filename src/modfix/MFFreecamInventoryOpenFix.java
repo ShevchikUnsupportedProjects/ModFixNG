@@ -38,10 +38,10 @@ import com.comphenix.protocol.events.PacketEvent;
 
 public class MFFreecamInventoryOpenFix implements Listener {
 
-	private Main main;
+	private ModFixNG main;
 	private Config config;
 
-	MFFreecamInventoryOpenFix(Main main, Config config) {
+	MFFreecamInventoryOpenFix(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		initClientCloseInventoryFixListener();
