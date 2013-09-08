@@ -39,6 +39,7 @@ public class MFBagFrameInsertFixListener implements Listener {
 	public void onPlayerClickedFrame(final PlayerInteractEvent e)
 	{
 		if (!config.enableBagFrameInsertfix) {return;}
+		
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
 		
 		if (config.bagids.contains(e.getPlayer().getItemInHand().getTypeId()))
