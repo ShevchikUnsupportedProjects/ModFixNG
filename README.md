@@ -1,4 +1,4 @@
-ModFix
+ModFixNG
 ======
 
 Plugin to fix dupes  in some minecraft mods
