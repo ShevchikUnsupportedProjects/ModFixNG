@@ -1,0 +1,9 @@
+name: ModFix
+main: modfix.Main
+version: 2.8.final
+author: Shevchik
+softdepend: [ProtocolLib]
+load: STARTUP
+commands:
+  modfix:
+    usage: 'Используйте команд /modfix help для получения списка комманд'
