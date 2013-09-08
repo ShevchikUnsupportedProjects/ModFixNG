@@ -33,10 +33,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-
 import com.comphenix.protocol.Packets;
-import com.comphenix.protocol.events.ConnectionSide;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
@@ -50,7 +47,8 @@ public class MFTableFixListener implements Listener {
 	MFTableFixListener(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
-		initCloseInventoryFixListener();
+		initClientCloseInventoryFixListener();
+		initServerCloseInventoryFixListener();
 		scheduleCheckTask();
 	}
 	
@@ -64,7 +62,6 @@ public class MFTableFixListener implements Listener {
 	public void OnPlayerIneractTable(PlayerInteractEvent e)
 	{
 		if (!config.enableTablesFix) {return;}
-		
 		
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
 		{
@@ -91,28 +88,59 @@ public class MFTableFixListener implements Listener {
 	}
 	
 	
-
-	private void initCloseInventoryFixListener()
-	{//remove block from hashmap on inventory close, just InventoryCloseEvent is not enough, not every mod fires it, so we will use packets.
-		main.protocolManager.addPacketListener(
-				  new PacketAdapter(main, ConnectionSide.CLIENT_SIDE, 
-				  ListenerPriority.HIGHEST, Packets.Client.CLOSE_WINDOW) {
+	private void initClientCloseInventoryFixListener()
+	{
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+				new PacketAdapter(						
+						PacketAdapter
+						.params(main, Packets.Client.CLOSE_WINDOW)
+						.clientSide()
+						.listenerPriority(ListenerPriority.HIGHEST)
+				) 
+				{
 					@Override
-				    public void onPacketReceiving(PacketEvent e) {
-					String plname = e.getPlayer().getName();
-					if (backreference.containsKey(plname))
-						{//gotcha, you closed table inventory
+				    public void onPacketReceiving(PacketEvent e) 
+					{
+						String plname = e.getPlayer().getName();
+						if (backreference.containsKey(plname))
+						{
 						    protectblocks.remove(backreference.get(plname));
 						    backreference.remove(plname);
 						    matreference.remove(backreference.get(plname));
 						}
 				    }
-				});
+				}).syncStart();
 	}
 	
+
+	private void initServerCloseInventoryFixListener()
+	{
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+				new PacketAdapter(						
+						PacketAdapter
+						.params(main, Packets.Server.CLOSE_WINDOW)
+						.serverSide()
+						.listenerPriority(ListenerPriority.HIGHEST)
+				) 
+				{
+					@Override
+				    public void onPacketSending(PacketEvent e) 
+					{
+						String plname = e.getPlayer().getName();
+						if (backreference.containsKey(plname))
+						{
+						    protectblocks.remove(backreference.get(plname));
+						    backreference.remove(plname);
+						    matreference.remove(backreference.get(plname));
+						}
+				    }
+				}).syncStart();
+	}
+
+
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent e)
-	{//Player can break opened block and then won't trigger inventory closing
+	{
 		if (!config.enableTablesFix) {return;}
 		
 		Block br = e.getBlock();
@@ -123,28 +151,11 @@ public class MFTableFixListener implements Listener {
 			{
 				e.getPlayer().sendMessage(ChatColor.RED + "Вы не можете сломать этот предмет, по крайней мере сейчас");
 				e.setCancelled(true);
-			} else {
-				backreference.remove(protectblocks.get(br));
-				protectblocks.remove(br);
-			    matreference.remove(br);
 			}
 		}
 	}
 	
-	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onPlayerQuit(PlayerQuitEvent e)
-	{//player can quit without closing table inventory, let's check it
-		String plname = e.getPlayer().getName();
-		if (backreference.containsKey(plname))
-		{
-		    protectblocks.remove(backreference.get(plname));
-		    backreference.remove(plname);
-		    matreference.remove(backreference.get(plname));
-		}
-	}
-		
-	
+
 	private void scheduleCheckTask()
 	{
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
@@ -173,7 +184,7 @@ public class MFTableFixListener implements Listener {
 			}
 		},0,1);
 	}
-	
+
 	private void deleteDropNearBlock(final Block b)
 	{
 		//remove all items
