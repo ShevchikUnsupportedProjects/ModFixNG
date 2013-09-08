@@ -47,68 +47,52 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null)
-		{
-			log.severe("[ModFix] ProtolLib is not installed, install it first");
-			log.severe("[ModFix] Shutting down server");
-			Bukkit.shutdown();
-			return;
-		}
-		else
-		{
-		    protocolManager = ProtocolLibrary.getProtocolManager();
-		}
-		
-			//init config
-			config = new ModFixConfig(this);
-			config.loadConfig();
-			//init command listener
-			commandl = new MFCommandListener(this,config);
-			getCommand("modfix").setExecutor(commandl);
-			getServer().getPluginManager().registerEvents(commandl, this);
-			//init bag bugfix listener
-			bagl = new MFBagFixListener(this,config);
-			getServer().getPluginManager().registerEvents(bagl, this);
-			//init table bugfix listener
-			tablel = new MFTableFixListener(this,config);
-			getServer().getPluginManager().registerEvents(tablel, this);
-			//init chunk bugfix listener
-			chunkl = new MFChunkFixListener(this,config);
-			getServer().getPluginManager().registerEvents(chunkl, this);
-			//init minecart bugfix listener
-			mpl = new MFMinecartFreecamOpenFixListener(this,config);
-			getServer().getPluginManager().registerEvents(mpl, this);
-			//init rails bugfix listener
-			rfl = new MFRailsFixListener(this,config);
-			getServer().getPluginManager().registerEvents(rfl, this);
-			//init freecam fix listener
-			fciol = new MFFreecamInventoryOpenFix(this,config);
-			getServer().getPluginManager().registerEvents(fciol, this);
-			//init hopperminecart fix listener
-			hpl = new MFHopperMinecartFix(this,config);
-			getServer().getPluginManager().registerEvents(hpl, this);
-			//init bag insert into frame fix listener
-			bfil = new MFBagFrameInsertFixListener(this,config);
-			getServer().getPluginManager().registerEvents(bfil, this);
-	}
-	
+		protocolManager = ProtocolLibrary.getProtocolManager();
+		//init config
+		config = new ModFixConfig(this);
+		config.loadConfig();
+		//init command listener
+		commandl = new MFCommandListener(this,config);
+		getCommand("modfix").setExecutor(commandl);
+		getServer().getPluginManager().registerEvents(commandl, this);
+		//init bag bugfix listener
+		bagl = new MFBagFixListener(this,config);
+		getServer().getPluginManager().registerEvents(bagl, this);
+		//init table bugfix listener
+		tablel = new MFTableFixListener(this,config);
+		getServer().getPluginManager().registerEvents(tablel, this);
+		//init chunk bugfix listener
+		chunkl = new MFChunkFixListener(this,config);
+		getServer().getPluginManager().registerEvents(chunkl, this);
+		//init minecart bugfix listener
+		mpl = new MFMinecartFreecamOpenFixListener(this,config);
+		getServer().getPluginManager().registerEvents(mpl, this);
+		//init rails bugfix listener
+		rfl = new MFRailsFixListener(this,config);
+		getServer().getPluginManager().registerEvents(rfl, this);
+		//init freecam fix listener
+		fciol = new MFFreecamInventoryOpenFix(this,config);
+		getServer().getPluginManager().registerEvents(fciol, this);
+		//init hopperminecart fix listener
+		hpl = new MFHopperMinecartFix(this,config);
+		getServer().getPluginManager().registerEvents(hpl, this);
+		//init bag insert into frame fix listener
+		bfil = new MFBagFrameInsertFixListener(this,config);
+		getServer().getPluginManager().registerEvents(bfil, this);
+	}	
 	@Override
 	public void onDisable() {
-		//null variables for folks reloading plugins
-		if (protocolManager != null)
-		{
-			config = null;
-			commandl = null;
-			HandlerList.unregisterAll(this);
-			tablel = null;
-			mpl = null;
-			rfl = null;
-			fciol = null;
-			hpl = null;
-			bfil = null;
-			protocolManager.removePacketListeners(this);
-			protocolManager = null;
-		}
+		config = null;
+		commandl = null;
+		HandlerList.unregisterAll(this);
+		tablel = null;
+		mpl = null;
+		rfl = null;
+		fciol = null;
+		hpl = null;
+		bfil = null;
+		protocolManager.removePacketListeners(this);
+		protocolManager = null;
 	}
 	
 	
