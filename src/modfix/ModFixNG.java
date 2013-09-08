@@ -17,6 +17,7 @@
 
 package modfix;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -77,6 +78,10 @@ public class ModFixNG extends JavaPlugin {
 	}	
 	@Override
 	public void onDisable() {
+		for (Player p : getServer().getOnlinePlayers())
+		{
+			p.closeInventory();
+		}
 		config = null;
 		commandl = null;
 		HandlerList.unregisterAll(this);
