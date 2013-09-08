@@ -36,12 +36,9 @@ public class Main extends JavaPlugin {
 	private MFCommandListener commandl;
 	private MFBagFixListener bagl;
 	private MFTableFixListener tablel;
-	private MFVillagerFixListener villagerl;
 	private MFChunkFixListener chunkl;
-	private MFExpFixListener expl;
 	private MFMinecartFreecamOpenFixListener mpl;
 	private MFRailsFixListener rfl;	
-	private MFRP2FixListener rp2l;
 	private MFFreecamInventoryOpenFix fciol;
 	private MFHopperMinecartFix hpl;
 	private MFBagFrameInsertFixListener bfil;
@@ -75,24 +72,15 @@ public class Main extends JavaPlugin {
 			//init table bugfix listener
 			tablel = new MFTableFixListener(this,config);
 			getServer().getPluginManager().registerEvents(tablel, this);
-			//init villager bugfix listener
-			villagerl = new MFVillagerFixListener(this,config);
-			getServer().getPluginManager().registerEvents(villagerl, this);
 			//init chunk bugfix listener
 			chunkl = new MFChunkFixListener(this,config);
 			getServer().getPluginManager().registerEvents(chunkl, this);
-			//init exp bugfix listener
-			expl = new MFExpFixListener(this,config);
-			getServer().getPluginManager().registerEvents(expl, this);
 			//init minecart bugfix listener
 			mpl = new MFMinecartFreecamOpenFixListener(this,config);
 			getServer().getPluginManager().registerEvents(mpl, this);
 			//init rails bugfix listener
 			rfl = new MFRailsFixListener(this,config);
 			getServer().getPluginManager().registerEvents(rfl, this);
-			//init rp2 wires fix listener
-			rp2l = new MFRP2FixListener(this,config);
-			getServer().getPluginManager().registerEvents(rp2l, this);
 			//init freecam fix listener
 			fciol = new MFFreecamInventoryOpenFix(this,config);
 			getServer().getPluginManager().registerEvents(fciol, this);
@@ -113,10 +101,8 @@ public class Main extends JavaPlugin {
 			commandl = null;
 			HandlerList.unregisterAll(this);
 			tablel = null;
-			villagerl = null;
 			mpl = null;
 			rfl = null;
-			rp2l = null;
 			fciol = null;
 			hpl = null;
 			bfil = null;
