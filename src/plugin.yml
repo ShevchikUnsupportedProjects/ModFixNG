@@ -1,6 +1,6 @@
-name: ModFix
+name: ModFixNG
 main: modfix.Main
-version: 2.8.final
+version: 1.0
 author: Shevchik
 softdepend: [ProtocolLib]
 load: STARTUP
