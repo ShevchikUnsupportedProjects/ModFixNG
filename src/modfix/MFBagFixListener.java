@@ -45,7 +45,8 @@ public class MFBagFixListener implements Listener {
 	
 	//close inventory on death
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onPlayerD(PlayerDeathEvent event) {
+	public void onPlayerDeath(PlayerDeathEvent event) 
+	{
 		if (!config.enableBackPackFix) {return;}
 		
 		Player p = (Player) event.getEntity();
@@ -67,7 +68,8 @@ public class MFBagFixListener implements Listener {
 	
 	//close inventory on quit
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onPlayerExit(PlayerQuitEvent event) {
+	public void onPlayerExit(PlayerQuitEvent event) 
+	{
 		if (!config.enableBackPackFix) {return;}
 		
 		event.getPlayer().closeInventory();
