@@ -1,4 +1,4 @@
-<project name="ModFix" default="build" basedir=".">
+<project name="ModFixNG" default="build" basedir=".">
 
     <path id="libs">
         <fileset dir="libs" includes="**/*.jar"/>
@@ -10,7 +10,7 @@
 		<copy todir="build/classes">
      		<fileset file="src/plugin.yml" />
 		</copy>
-        <jar destfile="target/ModFix.jar" basedir="build/classes" />
+        <jar destfile="target/ModFixNG.jar" basedir="build/classes" />
 		<delete dir="build"/>
     </target>
 	
