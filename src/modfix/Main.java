@@ -29,8 +29,6 @@ import com.comphenix.protocol.ProtocolManager;
 //warning: this plugin requires ProtocolLib to run
 public class Main extends JavaPlugin {
 
-	private Logger log = Bukkit.getLogger();
-	
 	private ModFixConfig config;
 	
 	private MFCommandListener commandl;
