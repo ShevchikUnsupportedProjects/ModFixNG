@@ -40,12 +40,11 @@ public class MFChunkFixListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerChangedChunkByMoveEvent(PlayerMoveEvent e)
 	{
-		if (config.enableChunkUnloadFixMove)
+		if (!config.enableChunkUnloadFixMove) {return;}
+
+		if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
 		{
-			if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
-			{
-					e.getPlayer().closeInventory();
-			}
+			e.getPlayer().closeInventory();
 		}
 	}
 	
@@ -53,12 +52,11 @@ public class MFChunkFixListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerChangedChunkByTeleport(PlayerTeleportEvent e)
 	{
-		if (config.enableChunkUnloadFixTP)
+		if (!config.enableChunkUnloadFixTP) {return;}
+
+		if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
 		{
-			if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
-			{
-					e.getPlayer().closeInventory();
-			}
+			e.getPlayer().closeInventory();
 		}
 	}
 	
@@ -66,9 +64,8 @@ public class MFChunkFixListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerChangedWolrd(PlayerChangedWorldEvent e)
 	{
-		if (config.enableChunkUnloadFixTP)
-		{
-			e.getPlayer().closeInventory();
-		}
+		if (!config.enableChunkUnloadFixTP) {return;}
+
+		e.getPlayer().closeInventory();
 	}
 }
