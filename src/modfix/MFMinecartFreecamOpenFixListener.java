@@ -27,7 +27,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import com.comphenix.protocol.Packets;
-import com.comphenix.protocol.events.ConnectionSide;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
@@ -62,11 +61,16 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 	
 	private void initMinecartInventoryClickCheck()
 	{
-		main.protocolManager.addPacketListener(
-				  new PacketAdapter(main, ConnectionSide.CLIENT_SIDE, 
-				  ListenerPriority.HIGHEST, Packets.Client.WINDOW_CLICK) {
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+				new PacketAdapter(
+						PacketAdapter.params(main, Packets.Client.WINDOW_CLICK)
+						.clientSide()
+						.listenerPriority(ListenerPriority.HIGHEST)
+				) 
+				{
 					@Override
-				    public void onPacketReceiving(PacketEvent e) {	
+				    public void onPacketReceiving(PacketEvent e) 
+					{	
 				    	
 						if (!config.enableMinecartFix) {return;}
 				    
@@ -82,7 +86,7 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 							}
 						}
 					}
-				});
+				}).syncStart();
 	}
 	
 	
@@ -90,27 +94,39 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 	//remove player from list when he closes minecart
 	private void initClientCloseInventoryFixListener()
 	{
-		main.protocolManager.addPacketListener(
-				  new PacketAdapter(main, ConnectionSide.CLIENT_SIDE, 
-				  ListenerPriority.HIGHEST, Packets.Client.CLOSE_WINDOW) {
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+				new PacketAdapter(
+						PacketAdapter
+						.params(main, Packets.Client.CLOSE_WINDOW)
+						.clientSide()
+						.listenerPriority(ListenerPriority.HIGHEST)
+				) 
+				{
 					@Override
-				    public void onPacketReceiving(PacketEvent e) {
-				    	playersopenedminecart.remove(e.getPlayer().getName());
-				    }
-				});
+					public void onPacketReceiving(PacketEvent e) 
+					{
+						playersopenedminecart.remove(e.getPlayer().getName());
+					}
+				}).syncStart();
 	}
 	
 	//remove player from list when he closes minecart
 	private void initServerCloseInventoryFixListener()
 	{
-		main.protocolManager.addPacketListener(
-				  new PacketAdapter(main, ConnectionSide.SERVER_SIDE, 
-				  ListenerPriority.HIGHEST, Packets.Server.CLOSE_WINDOW) {
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+				new PacketAdapter(
+						PacketAdapter
+						.params(main, Packets.Server.CLOSE_WINDOW)
+						.serverSide()
+						.listenerPriority(ListenerPriority.HIGHEST)
+				) 
+				{
 					@Override
-				    public void onPacketSending(PacketEvent e) {
+					public void onPacketSending(PacketEvent e) 
+					{
 			    		playersopenedminecart.remove(e.getPlayer().getName());
 				    }
-				});
+				}).syncStart();
 	}
 	
 }
