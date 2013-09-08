@@ -28,7 +28,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.Packets;
-import com.comphenix.protocol.events.ConnectionSide;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
@@ -47,22 +46,19 @@ public class MFBagFixListener implements Listener {
 	//close inventory on death
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerD(PlayerDeathEvent event) {
-		if (config.enableBackPackFix) {
-			Player p = (Player) event.getEntity();
-			p.closeInventory();
-			if (config.enableCropanalyzerFix) 
+		if (!config.enableBackPackFix) {return;}
+		
+		Player p = (Player) event.getEntity();
+		p.closeInventory();
+		if (config.enableCropanalyzerFix) 
+		{
+			Iterator<ItemStack> it = event.getDrops().iterator();
+			while (it.hasNext())
 			{
-				if (p.getItemInHand().getTypeId() == config.CropanalyzerID)
+				ItemStack i = it.next();
+				if (i.getTypeId() == config.CropanalyzerID)
 				{
-					Iterator<ItemStack> it = event.getDrops().iterator();
-					while (it.hasNext())
-					{
-						ItemStack i = it.next();
-						if (i.getTypeId() == config.CropanalyzerID)
-						{
-							it.remove();
-						}
-					}
+					it.remove();
 				}
 			}
 		}
@@ -72,52 +68,45 @@ public class MFBagFixListener implements Listener {
 	//close inventory on quit
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerExit(PlayerQuitEvent event) {
-		if (config.enableBackPackFix) {
-					event.getPlayer().closeInventory();
-			}
+		if (!config.enableBackPackFix) {return;}
+		
+		event.getPlayer().closeInventory();
 	}
 
 	
 	//restrict using 1-9 buttons in modded inventories
 	private void initBag19BugFixListener()
 	{
-		main.protocolManager.addPacketListener(
-				  new PacketAdapter(main, ConnectionSide.CLIENT_SIDE, 
-				  ListenerPriority.HIGHEST, Packets.Client.WINDOW_CLICK) {
-				    @SuppressWarnings("deprecation")
-					@Override
-				    public void onPacketReceiving(PacketEvent e) {
-				    	if (!config.enableBackPackFix) {return;}
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+				new PacketAdapter(
+						PacketAdapter
+						.params(main, Packets.Client.WINDOW_CLICK)
+						.clientSide()
+						.listenerPriority(ListenerPriority.HIGHEST)
+				) 
+				{
+					  @SuppressWarnings("deprecation")
+					  @Override
+					  public void onPacketReceiving(PacketEvent e) 
+					  {
+						  if (!config.enableBackPackFix) {return;}
 				    	
-				    	Player pl = e.getPlayer();
-			    		//if item in hand is one of the bad ids - check buttons
-			    		if (config.BackPacks19IDs.contains(pl.getItemInHand().getTypeId())) {
-			    			//restrict illegal bag moving
-			    			//check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)
-			    			if (e.getPacket().getIntegers().getValues().get(3) == 2)
-			    			{//check to which slot we want to move item (if to bag slot - block action)
-			    				if (pl.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
-			    				{
-					    			e.setCancelled(true);
-						    		e.getPlayer().updateInventory();
-			    				}
-			    			}
-				    		//restrict cropanalyzer moving
-				    		if (!config.enableCropanalyzerFix) {return;}
-				    		if (pl.getItemInHand().getTypeId() == config.CropanalyzerID)
-				    		{
-				    			if (e.getPacket().getIntegers().getValues().get(3) == 0 || e.getPacket().getIntegers().getValues().get(3) == 2)
-				    			{
-				    				//check which slot we clicked (if it is cropanalyzer slot - cancel action)
-				    				if (e.getPacket().getIntegers().getValues().get(1) == pl.getInventory().getHeldItemSlot()+3)
-				    				{
-				    					e.setCancelled(true);
-				    					e.getPlayer().updateInventory();
-				    				}
-				    			}
-				    		}
-				 	   	}
-				    }
-				});
+						  Player pl = e.getPlayer();
+						  //if item in hand is one of the bad ids - check buttons
+						  if (config.BackPacks19IDs.contains(pl.getItemInHand().getTypeId())) 
+						  {
+							  //restrict illegal bag moving
+							  //check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)
+							  if (e.getPacket().getIntegers().getValues().get(3) == 2)
+							  {//check to which slot we want to move item (if to bag slot - block action)
+								  if (pl.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
+								  {
+									  e.setCancelled(true);
+									  e.getPlayer().updateInventory();
+								  }
+							  }
+						  }
+					  }
+				}).start();
 	}	
 }
