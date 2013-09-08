@@ -134,6 +134,7 @@ public class MFFreecamInventoryOpenFix implements Listener {
 							PacketAdapter
 							.params(main, Packets.Server.CLOSE_WINDOW)
 							.serverSide()
+							.listenerPriority(ListenerPriority.HIGHEST)
 				) 
 				{
 					@Override
