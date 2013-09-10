@@ -85,6 +85,7 @@ public class MFBagFixListener implements Listener {
 						.params(main, Packets.Client.WINDOW_CLICK)
 						.clientSide()
 						.listenerPriority(ListenerPriority.HIGHEST)
+						.optionIntercept()
 				) 
 				{
 					  @SuppressWarnings("deprecation")
