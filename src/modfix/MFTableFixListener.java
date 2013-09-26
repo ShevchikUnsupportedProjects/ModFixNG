@@ -103,9 +103,9 @@ public class MFTableFixListener implements Listener {
 					@Override
 				    public void onPacketReceiving(PacketEvent e) 
 					{
-						String pl = null;
+						String plname = null;
 						try {
-							pl = e.getPlayer().getName();
+							plname = e.getPlayer().getName();
 						} catch (Exception ex) {
 							ex.printStackTrace();
 							System.out.println("Caught exception while hadling inventory close");
@@ -113,11 +113,11 @@ public class MFTableFixListener implements Listener {
 							System.out.println("Address: "+e.getSource());
 							System.out.println("Online players: "+Arrays.asList(Bukkit.getOnlinePlayers()));
 						}
-						if (pl != null && backreference.containsKey(pl))
+						if (plname != null && backreference.containsKey(plname))
 						{
-						    protectblocks.remove(backreference.get(pl));
-						    backreference.remove(pl);
-						    matreference.remove(backreference.get(pl));
+						    protectblocks.remove(backreference.get(plname));
+						    backreference.remove(plname);
+						    matreference.remove(backreference.get(plname));
 						}
 				    }
 				}).syncStart();

@@ -112,9 +112,9 @@ public class MFFreecamInventoryOpenFix implements Listener {
 					@Override
 				    public void onPacketReceiving(PacketEvent e)
 					{
-						String pl = null;
+						String plname = null;
 						try {
-							pl = e.getPlayer().getName();
+							plname = e.getPlayer().getName();
 						} catch (Exception ex) {
 							ex.printStackTrace();
 							System.out.println("Caught exception while hadling inventory close");
@@ -122,15 +122,15 @@ public class MFFreecamInventoryOpenFix implements Listener {
 							System.out.println("Address: "+e.getSource());
 							System.out.println("Online players: "+Arrays.asList(Bukkit.getOnlinePlayers()));
 						}
-						if (pl != null && backreference.containsKey(pl)) 
+						if (plname != null && backreference.containsKey(plname)) 
 						{
-							openedinvs.get(backreference.get(pl)).remove(pl);
-							if (openedinvs.get(backreference.get(pl)).size() == 0) 
+							openedinvs.get(backreference.get(plname)).remove(plname);
+							if (openedinvs.get(backreference.get(plname)).size() == 0) 
 							{
-								openedinvs.remove(backreference.get(pl));
+								openedinvs.remove(backreference.get(plname));
 							}
-							matreference.remove(backreference.get(pl));
-							backreference.remove(pl);
+							matreference.remove(backreference.get(plname));
+							backreference.remove(plname);
 						}
 					}
 				}).syncStart();

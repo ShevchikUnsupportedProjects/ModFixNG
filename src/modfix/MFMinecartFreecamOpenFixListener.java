@@ -107,9 +107,9 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 					@Override
 					public void onPacketReceiving(PacketEvent e) 
 					{
-						String pl = null;
+						String plname = null;
 						try {
-							pl = e.getPlayer().getName();
+							plname = e.getPlayer().getName();
 						} catch (Exception ex) {
 							ex.printStackTrace();
 							System.out.println("Caught exception while hadling inventory close");
@@ -117,9 +117,9 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 							System.out.println("Address: "+e.getSource());
 							System.out.println("Online players: "+Arrays.asList(Bukkit.getOnlinePlayers()));
 						}
-						if (pl != null)
+						if (plname != null)
 						{
-							playersopenedminecart.remove(pl);
+							playersopenedminecart.remove(plname);
 						}
 					}
 				}).syncStart();
