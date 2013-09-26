@@ -17,6 +17,7 @@
 
 package modfix;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -33,6 +34,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+
 import com.comphenix.protocol.Packets;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -101,12 +103,21 @@ public class MFTableFixListener implements Listener {
 					@Override
 				    public void onPacketReceiving(PacketEvent e) 
 					{
-						String plname = e.getPlayer().getName();
-						if (backreference.containsKey(plname))
+						String pl = null;
+						try {
+							pl = e.getPlayer().getName();
+						} catch (Exception ex) {
+							ex.printStackTrace();
+							System.out.println("Caught exception while hadling inventory close");
+							System.out.println("Player: "+e.getPlayer());
+							System.out.println("Address: "+e.getSource());
+							System.out.println("Online players: "+Arrays.asList(Bukkit.getOnlinePlayers()));
+						}
+						if (pl != null && backreference.containsKey(pl))
 						{
-						    protectblocks.remove(backreference.get(plname));
-						    backreference.remove(plname);
-						    matreference.remove(backreference.get(plname));
+						    protectblocks.remove(backreference.get(pl));
+						    backreference.remove(pl);
+						    matreference.remove(backreference.get(pl));
 						}
 				    }
 				}).syncStart();

@@ -17,6 +17,7 @@
 
 package modfix;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -111,8 +112,17 @@ public class MFFreecamInventoryOpenFix implements Listener {
 					@Override
 				    public void onPacketReceiving(PacketEvent e)
 					{
-						String pl = e.getPlayer().getName();
-						if (backreference.containsKey(pl)) 
+						String pl = null;
+						try {
+							pl = e.getPlayer().getName();
+						} catch (Exception ex) {
+							ex.printStackTrace();
+							System.out.println("Caught exception while hadling inventory close");
+							System.out.println("Player: "+e.getPlayer());
+							System.out.println("Address: "+e.getSource());
+							System.out.println("Online players: "+Arrays.asList(Bukkit.getOnlinePlayers()));
+						}
+						if (pl != null && backreference.containsKey(pl)) 
 						{
 							openedinvs.get(backreference.get(pl)).remove(pl);
 							if (openedinvs.get(backreference.get(pl)).size() == 0) 
