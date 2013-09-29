@@ -28,12 +28,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public class Config {
 	@SuppressWarnings("unused")
 	private ModFixNG main;
-	Config(ModFixNG main)
-	{
+	private File configfile;
+	Config(ModFixNG main) {
 		this.main = main;
+		configfile = new File(main.getDataFolder(),"config.yml");
 	}
-	
-	protected boolean enableVillagersFix = true;
+
 	protected boolean enableBackPackFix = true;
 	protected HashSet<Integer> BackPacks19IDs = new HashSet<Integer>();
 	protected boolean enableCropanalyzerFix = true;
@@ -44,15 +44,10 @@ public class Config {
 	protected HashSet<String> IntTablesIDs= new HashSet<String>();
 	protected HashSet<String> BrkTablesIDs= new HashSet<String>();
 	protected boolean enableTablesFixExtendedCheck = true;
-	protected boolean enableExpFix = true;
-	protected HashSet<String> furnSlotIDs= new HashSet<String>();
 	protected boolean enableMinecartFix = true;
-	protected boolean enableExpFixExtendedCheck = true;
 	protected HashSet<Short> minecartsIDs = new HashSet<Short>();
 	protected boolean enableRailsFix = true;
 	protected HashSet<Integer> RailsIDs = new HashSet<Integer>();
-	protected boolean enableRP2wiresfix = true;
-	protected HashSet<String> RP2WiresIDs = new HashSet<String>();
 	protected boolean enableFreecamFix = true;
 	protected HashSet<String> freecamBlockIDs = new HashSet<String>();
 	protected boolean enablefreecamzeroitemscheck = true;
@@ -64,12 +59,11 @@ public class Config {
 	protected short frameentity = 18;
 	
 	public void loadConfig(){
-		FileConfiguration config = YamlConfiguration.loadConfiguration(new File("plugins/ModFix/config.yml"));
+		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 		enableBackPackFix = config.getBoolean("BackPackFix.enable",enableBackPackFix);
 		BackPacks19IDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.19BlockIDs"));
 		enableCropanalyzerFix = config.getBoolean("BackPackFix.CropanalyzerFix.enable",enableCropanalyzerFix);
 		CropanalyzerID = config.getInt("BackPackFix.CropanalyzerFix.ID",CropanalyzerID);
-		enableVillagersFix = config.getBoolean("VillagersFix.enable",enableVillagersFix);
 		enableChunkUnloadFixTP = config.getBoolean("ChunkUnloadFix.enable.teleport",enableChunkUnloadFixTP);
 		enableChunkUnloadFixMove = config.getBoolean("ChunkUnloadFix.enable.movement",enableChunkUnloadFixMove);
 		enableTablesFix = config.getBoolean("TablesFix.enable",enableTablesFix);
@@ -77,15 +71,10 @@ public class Config {
 		BrkTablesIDs = new HashSet<String>(config.getStringList("TablesFix.BreakBlockIDs"));
 		IntTablesIDs.addAll(BrkTablesIDs);
 		enableTablesFixExtendedCheck = config.getBoolean("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
-		enableExpFix = config.getBoolean("ExpFix.enable",enableExpFix);
-		furnSlotIDs = new HashSet<String>(config.getStringList("ExpFix.FurnaceIds"));
-		enableExpFixExtendedCheck = config.getBoolean("ExpFix.ExtendedCheck.enable",enableExpFixExtendedCheck);
 		enableMinecartFix = config.getBoolean("MinecartPortalFix.enable", enableMinecartFix);
 		minecartsIDs = new HashSet<Short>(config.getShortList("MinecartPortalFix.cartsIDs"));
 		enableRailsFix = config.getBoolean("RailsFix.enable", enableRailsFix);
 		RailsIDs = new HashSet<Integer>(config.getIntegerList("RailsFix.railsIDs"));
-		enableRP2wiresfix = config.getBoolean("RP2WiresFix.enable", enableRP2wiresfix);
-		RP2WiresIDs = new HashSet<String>(config.getStringList("RP2WiresFix.wiresIDs"));
 		enableFreecamFix = config.getBoolean("FreeCamInvFix.enable",enableFreecamFix);
 		freecamBlockIDs = new HashSet<String>(config.getStringList("FreeCamInvFix.checkBlockIDs"));
 		enablefreecamzeroitemscheck = config.getBoolean("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
@@ -106,22 +95,16 @@ public class Config {
 		config.set("BackPackFix.19BlockIDs",new ArrayList<Integer>(BackPacks19IDs));
 		config.set("BackPackFix.CropanalyzerFix.enable",enableCropanalyzerFix);
 		config.set("BackPackFix.CropanalyzerFix.ID",CropanalyzerID);
-		config.set("VillagersFix.enable",enableVillagersFix);
 		config.set("ChunkUnloadFix.enable.teleport",enableChunkUnloadFixTP);
 		config.set("ChunkUnloadFix.enable.movement",enableChunkUnloadFixMove);
 		config.set("TablesFix.enable",enableTablesFix);
 		config.set("TablesFix.InteractBlockIDs",new ArrayList<String>(IntTablesIDs));
 		config.set("TablesFix.BreakBlockIDs",new ArrayList<String>(BrkTablesIDs));
 		config.set("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
-		config.set("ExpFix.enable",enableExpFix);
-		config.set("ExpFix.FurnaceIds",new ArrayList<String>(furnSlotIDs));
-		config.set("ExpFix.ExtendedCheck.enable",enableExpFixExtendedCheck);
 		config.set("MinecartPortalFix.enable", enableMinecartFix);
 		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(minecartsIDs));
 		config.set("RailsFix.enable", enableRailsFix);
 		config.set("RailsFix.railsIDs",new ArrayList<Integer>(RailsIDs));
-		config.set("RP2WiresFix.enable", enableRP2wiresfix);
-		config.set("RP2WiresFix.wiresIDs",new ArrayList<String>(RP2WiresIDs));
 		config.set("FreeCamInvFix.enable",enableFreecamFix);
 		config.set("FreeCamInvFix.checkBlockIDs",new ArrayList<String>(freecamBlockIDs));
 		config.set("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
@@ -133,10 +116,7 @@ public class Config {
 		config.set("BagFrameInsertFix.gregIDs",new ArrayList<String>(frameids));
 		
 		try {
-			config.save(new File("plugins/ModFix/config.yml"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			config.save(configfile);
+		} catch (IOException e) {}
 	}
 }
