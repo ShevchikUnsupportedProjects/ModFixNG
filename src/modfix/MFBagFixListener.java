@@ -96,6 +96,17 @@ public class MFBagFixListener implements Listener {
 
 						  if (e.getPlayer() == null) {return;}
 
+						  //try to catch error, to test if the error was fixed
+						  try {
+							  e.getPlayer().getName();
+						  } catch (Exception ex) {
+							  System.out.println("=====ModFixNG error trace BEGIN========");
+							  System.out.println(ex.getStackTrace());
+							  System.out.println(e.getPlayer());
+							  System.out.println(e.getSource().toString());
+							  System.out.println("=====ModFixNG error trace END==========");
+						  }
+						  
 						  final Player player = e.getPlayer();					  
 						  //if item in hand is one of the bad ids - check buttons
 						  if (config.BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
