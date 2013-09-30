@@ -94,28 +94,22 @@ public class MFBagFixListener implements Listener {
 					  {
 						  if (!config.enableBackPackFix) {return;}
 
-						  try {
-							  Player player = e.getPlayer();
-							  player.getName(); //for try NPE catch purpose.							  
-							  //if item in hand is one of the bad ids - check buttons
-							  if (config.BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
-							  {
-								  //restrict illegal bag moving
-								  //check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)
-								  if (e.getPacket().getIntegers().getValues().get(3) == 2)
-								  {//check to which slot we want to move item (if to bag slot - block action)
-									  if (player.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
-									  {
-										  e.setCancelled(true);
-										  e.getPlayer().updateInventory();
-									  }
+						  if (e.getPlayer() == null) {return;}
+
+						  final Player player = e.getPlayer();					  
+						  //if item in hand is one of the bad ids - check buttons
+						  if (config.BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
+						  {
+							  //restrict illegal bag moving
+							  //check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)
+							  if (e.getPacket().getIntegers().getValues().get(3) == 2)
+							  {//check to which slot we want to move item (if to bag slot - block action)
+								  if (player.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
+								  {
+									  e.setCancelled(true);
+									  player.updateInventory();
 								  }
 							  }
-						  } catch (Exception ex) {
-							  ex.printStackTrace();
-							  System.out.println("Caught exception while hadling inventory click");
-							  System.out.println("Player: "+e.getPlayer());
-							  System.out.println("Address: "+e.getSource());
 						  }
 					  }
 				}).start();
