@@ -17,7 +17,6 @@
 
 package modfix;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -103,17 +102,10 @@ public class MFTableFixListener implements Listener {
 					@Override
 				    public void onPacketReceiving(PacketEvent e) 
 					{
-						String plname = null;
-						try {
-							plname = e.getPlayer().getName();
-						} catch (Exception ex) {
-							ex.printStackTrace();
-							System.out.println("Caught exception while hadling inventory close");
-							System.out.println("Player: "+e.getPlayer());
-							System.out.println("Address: "+e.getSource());
-							System.out.println("Online players: "+Arrays.asList(Bukkit.getOnlinePlayers()));
-						}
-						if (plname != null && backreference.containsKey(plname))
+						if (e.getPlayer() == null) {return;}
+						
+						String plname = e.getPlayer().getName();
+						if (backreference.containsKey(plname))
 						{
 						    protectblocks.remove(backreference.get(plname));
 						    backreference.remove(plname);

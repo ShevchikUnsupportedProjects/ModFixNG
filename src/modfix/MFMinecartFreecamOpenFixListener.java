@@ -76,18 +76,11 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 				    	
 						if (!config.enableMinecartFix) {return;}
 				    
+						if (e.getPlayer() == null) {return;}
+						
 						Player player = e.getPlayer();
-						String plname = null;
-						try {
-							plname = player.getName();
-						} catch (Exception ex) {
-							ex.printStackTrace();
-							System.out.println("Caught exception while hadling inventory close");
-							System.out.println("Player: "+e.getPlayer());
-							System.out.println("Address: "+e.getSource());
-							System.out.println("Online players: "+Arrays.asList(Bukkit.getOnlinePlayers()));
-						}
-						if (plname != null && playersopenedminecart.containsKey(plname))
+						String plname = player.getName();
+						if (playersopenedminecart.containsKey(plname))
 						{
 							Entity ent = playersopenedminecart.get(plname);
 							if (!ent.isValid() || !ent.getWorld().equals(player.getWorld()) || ent.getLocation().distanceSquared(player.getLocation()) > 36)
