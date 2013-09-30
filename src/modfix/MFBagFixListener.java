@@ -93,17 +93,18 @@ public class MFBagFixListener implements Listener {
 					  public void onPacketReceiving(PacketEvent e) 
 					  {
 						  if (!config.enableBackPackFix) {return;}
-				    	
+
 						  try {
-							  Player pl = e.getPlayer();
+							  Player player = e.getPlayer();
+							  player.getName(); //for try NPE catch purpose.							  
 							  //if item in hand is one of the bad ids - check buttons
-							  if (config.BackPacks19IDs.contains(pl.getItemInHand().getTypeId())) 
+							  if (config.BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
 							  {
 								  //restrict illegal bag moving
 								  //check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)
 								  if (e.getPacket().getIntegers().getValues().get(3) == 2)
 								  {//check to which slot we want to move item (if to bag slot - block action)
-									  if (pl.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
+									  if (player.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
 									  {
 										  e.setCancelled(true);
 										  e.getPlayer().updateInventory();
