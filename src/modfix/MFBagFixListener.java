@@ -94,8 +94,6 @@ public class MFBagFixListener implements Listener {
 					  {
 						  if (!config.enableBackPackFix) {return;}
 
-						  if (e.getPlayer() == null) {return;}
-
 						  //try to catch error, to test if the error was fixed
 						  try {
 							  e.getPlayer().getName();
@@ -106,6 +104,8 @@ public class MFBagFixListener implements Listener {
 							  System.out.println(e.getSource().toString());
 							  System.out.println("=====ModFixNG error trace END==========");
 						  }
+						  
+						  if (e.getPlayer() == null) {return;}
 						  
 						  final Player player = e.getPlayer();					  
 						  //if item in hand is one of the bad ids - check buttons
