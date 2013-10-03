@@ -94,17 +94,6 @@ public class MFBagFixListener implements Listener {
 					  {
 						  if (!config.enableBackPackFix) {return;}
 
-						  //try to catch error, to test if the error was fixed
-						  try {
-							  e.getPlayer().getName();
-						  } catch (Exception ex) {
-							  System.out.println("=====ModFixNG error trace BEGIN========");
-							  System.out.println(ex.getStackTrace());
-							  System.out.println(e.getPlayer());
-							  System.out.println(e.getSource().toString());
-							  System.out.println("=====ModFixNG error trace END==========");
-						  }
-						  
 						  if (e.getPlayer() == null) {return;}
 						  
 						  final Player player = e.getPlayer();					  
