@@ -36,7 +36,7 @@ public class MFBagFrameInsertFixListener implements Listener {
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onPlayerClickedFrame(final PlayerInteractEvent e)
+	public void onPlayerClickedFrame(PlayerInteractEvent e)
 	{
 		if (!config.enableBagFrameInsertfix) {return;}
 		
@@ -46,13 +46,13 @@ public class MFBagFrameInsertFixListener implements Listener {
 		{
 			if (config.frameids.contains(Utils.getIDstring(e.getClickedBlock())))
 			{
-				e.setCancelled(true);
+				e.getPlayer().closeInventory();
 			}
 		}
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onPlayerClickedFrame(final PlayerInteractEntityEvent e)
+	public void onPlayerClickedFrame(PlayerInteractEntityEvent e)
 	{
 		if (!config.enableBagFrameInsertfix) {return;}
 		
@@ -60,7 +60,7 @@ public class MFBagFrameInsertFixListener implements Listener {
 		{
 			if (e.getRightClicked().getType().getTypeId() == config.frameentity)
 			{
-				e.setCancelled(true);
+				e.getPlayer().closeInventory();
 			}
 		}
 	}
