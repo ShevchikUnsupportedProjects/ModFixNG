@@ -102,15 +102,17 @@ public class MFTableFixListener implements Listener {
 					@Override
 				    public void onPacketReceiving(PacketEvent e) 
 					{
-						if (e.getPlayer() == null) {return;}
+						try {
+							if (e.getPlayer() == null) {return;}
 						
-						String plname = e.getPlayer().getName();
-						if (backreference.containsKey(plname))
-						{
-						    protectblocks.remove(backreference.get(plname));
-						    backreference.remove(plname);
-						    matreference.remove(backreference.get(plname));
-						}
+							String plname = e.getPlayer().getName();
+							if (backreference.containsKey(plname))
+							{
+								protectblocks.remove(backreference.get(plname));
+								backreference.remove(plname);
+								matreference.remove(backreference.get(plname));
+							}
+						} catch (Exception ex) {ex.printStackTrace();}
 				    }
 				}).syncStart();
 	}

@@ -111,19 +111,21 @@ public class MFFreecamInventoryOpenFix implements Listener {
 					@Override
 				    public void onPacketReceiving(PacketEvent e)
 					{
-						if (e.getPlayer() == null) {return;}
+						try {
+							if (e.getPlayer() == null) {return;}
 						
-						String plname = e.getPlayer().getName();
-						if (backreference.containsKey(plname)) 
-						{
-							openedinvs.get(backreference.get(plname)).remove(plname);
-							if (openedinvs.get(backreference.get(plname)).size() == 0) 
+							String plname = e.getPlayer().getName();
+							if (backreference.containsKey(plname)) 
 							{
-								openedinvs.remove(backreference.get(plname));
+								openedinvs.get(backreference.get(plname)).remove(plname);
+								if (openedinvs.get(backreference.get(plname)).size() == 0) 
+								{
+									openedinvs.remove(backreference.get(plname));
+								}
+								matreference.remove(backreference.get(plname));
+								backreference.remove(plname);
 							}
-							matreference.remove(backreference.get(plname));
-							backreference.remove(plname);
-						}
+						} catch (Exception ex) {ex.printStackTrace();}
 					}
 				}).syncStart();
 	}

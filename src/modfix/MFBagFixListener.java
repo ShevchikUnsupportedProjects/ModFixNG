@@ -92,25 +92,27 @@ public class MFBagFixListener implements Listener {
 					  @Override
 					  public void onPacketReceiving(PacketEvent e) 
 					  {
-						  if (!config.enableBackPackFix) {return;}
+						  try {
+							  if (!config.enableBackPackFix) {return;}
 
-						  if (e.getPlayer() == null) {return;}
+							  if (e.getPlayer() == null) {return;}
 						  
-						  final Player player = e.getPlayer();					  
-						  //if item in hand is one of the bad ids - check buttons
-						  if (config.BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
-						  {
-							  //restrict illegal bag moving
-							  //check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)
-							  if (e.getPacket().getIntegers().getValues().get(3) == 2)
-							  {//check to which slot we want to move item (if to bag slot - block action)
-								  if (player.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
-								  {
-									  e.setCancelled(true);
-									  player.updateInventory();
+							  final Player player = e.getPlayer();					  
+							  //if item in hand is one of the bad ids - check buttons
+							  if (config.BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
+							  {
+								  //restrict illegal bag moving
+								  //check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)
+								  if (e.getPacket().getIntegers().getValues().get(3) == 2)
+								  {//check to which slot we want to move item (if to bag slot - block action)
+									  if (player.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
+									  {
+										  e.setCancelled(true);
+										  player.updateInventory();
+									  }
 								  }
 							  }
-						  }
+						  } catch (Exception ex) {ex.printStackTrace();}
 					  }
 				}).start();
 	}	
