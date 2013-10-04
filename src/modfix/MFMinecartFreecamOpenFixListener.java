@@ -17,10 +17,8 @@
 
 package modfix;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -111,20 +109,11 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 					@Override
 					public void onPacketReceiving(PacketEvent e) 
 					{
-						String plname = null;
 						try {
-							plname = e.getPlayer().getName();
-						} catch (Exception ex) {
-							ex.printStackTrace();
-							System.out.println("Caught exception while hadling inventory close");
-							System.out.println("Player: "+e.getPlayer());
-							System.out.println("Address: "+e.getSource());
-							System.out.println("Online players: "+Arrays.asList(Bukkit.getOnlinePlayers()));
-						}
-						if (plname != null)
-						{
-							playersopenedminecart.remove(plname);
-						}
+							if (e.getPlayer() == null) {return;}
+						
+							playersopenedminecart.remove(e.getPlayer().getName());
+				    	} catch (Exception ex) {ex.printStackTrace();}
 					}
 				}).syncStart();
 	}
