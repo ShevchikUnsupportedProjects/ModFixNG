@@ -91,7 +91,7 @@ public class ModFixNG extends JavaPlugin {
 		fciol = null;
 		hpl = null;
 		bfil = null;
-		protocolManager.getAsynchronousManager().unregisterAsyncHandlers(this);
+		protocolManager.removePacketListeners(this);
 		protocolManager = null;
 	}
 	

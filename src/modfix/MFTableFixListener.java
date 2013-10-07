@@ -17,8 +17,8 @@
 
 package modfix;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -54,9 +54,9 @@ public class MFTableFixListener implements Listener {
 	}
 	
 	
-	private HashMap<Block, String> protectblocks = new HashMap<Block, String>();
-	private HashMap<String, Block> backreference = new HashMap<String, Block>();
-	private HashMap<Block, Integer> matreference = new HashMap<Block, Integer>();
+	private ConcurrentHashMap<Block, String> protectblocks = new ConcurrentHashMap<Block, String>();
+	private ConcurrentHashMap<String, Block> backreference = new ConcurrentHashMap<String, Block>();
+	private ConcurrentHashMap<Block, Integer> matreference = new ConcurrentHashMap<Block, Integer>();
 	
 	//allow only one player to interact with table at a time
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -91,7 +91,7 @@ public class MFTableFixListener implements Listener {
 	
 	private void initClientCloseInventoryFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(						
 						PacketAdapter
 						.params(main, Packets.Client.CLOSE_WINDOW)
@@ -114,13 +114,13 @@ public class MFTableFixListener implements Listener {
 							}
 						} catch (Exception ex) {ex.printStackTrace();}
 				    }
-				}).syncStart();
+				});
 	}
 	
 
 	private void initServerCloseInventoryFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(						
 						PacketAdapter
 						.params(main, Packets.Server.CLOSE_WINDOW)
@@ -139,7 +139,7 @@ public class MFTableFixListener implements Listener {
 						    matreference.remove(backreference.get(plname));
 						}
 				    }
-				}).syncStart();
+				});
 	}
 
 

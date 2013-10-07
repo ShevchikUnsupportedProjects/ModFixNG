@@ -19,6 +19,7 @@ package modfix;
 
 import java.util.Iterator;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -79,7 +80,7 @@ public class MFBagFixListener implements Listener {
 	//restrict using 1-9 buttons in modded inventories
 	private void initBag19BugFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, Packets.Client.WINDOW_CLICK)
@@ -108,12 +109,18 @@ public class MFBagFixListener implements Listener {
 									  if (player.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
 									  {
 										  e.setCancelled(true);
-										  player.updateInventory();
+										  Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+										  {
+											 public void run()
+											 {
+												  player.updateInventory(); 
+											 }
+										  });
 									  }
 								  }
 							  }
 						  } catch (Exception ex) {ex.printStackTrace();}
 					  }
-				}).start();
+				});
 	}	
 }

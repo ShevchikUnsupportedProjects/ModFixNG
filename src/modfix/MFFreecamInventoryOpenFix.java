@@ -17,8 +17,8 @@
 
 package modfix;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -49,9 +49,9 @@ public class MFFreecamInventoryOpenFix implements Listener {
 		initInvCheck();
 	}
 	
-	private HashMap<Block,HashSet<String>> openedinvs = new HashMap<Block,HashSet<String>>();
-	private HashMap<String,Block> backreference = new HashMap<String,Block>();
-	private HashMap<Block,Integer> matreference = new HashMap<Block,Integer>();
+	private ConcurrentHashMap<Block,HashSet<String>> openedinvs = new ConcurrentHashMap<Block,HashSet<String>>();
+	private ConcurrentHashMap<String,Block> backreference = new ConcurrentHashMap<String,Block>();
+	private ConcurrentHashMap<Block,Integer> matreference = new ConcurrentHashMap<Block,Integer>();
 	
 	
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
@@ -100,7 +100,7 @@ public class MFFreecamInventoryOpenFix implements Listener {
 	
 	private void initClientCloseInventoryFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, Packets.Client.CLOSE_WINDOW)
@@ -114,26 +114,32 @@ public class MFFreecamInventoryOpenFix implements Listener {
 						try {
 							if (e.getPlayer() == null) {return;}
 						
-							String plname = e.getPlayer().getName();
-							if (backreference.containsKey(plname)) 
+							final String playername = e.getPlayer().getName();
+							Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
 							{
-								openedinvs.get(backreference.get(plname)).remove(plname);
-								if (openedinvs.get(backreference.get(plname)).size() == 0) 
+								public void run()
 								{
-									openedinvs.remove(backreference.get(plname));
+									if (backreference.containsKey(playername)) 
+									{
+										openedinvs.get(backreference.get(playername)).remove(playername);
+										if (openedinvs.get(backreference.get(playername)).size() == 0) 
+										{
+											openedinvs.remove(backreference.get(playername));
+										}
+										matreference.remove(backreference.get(playername));
+										backreference.remove(playername);
+									}
 								}
-								matreference.remove(backreference.get(plname));
-								backreference.remove(plname);
-							}
+							});
 						} catch (Exception ex) {ex.printStackTrace();}
 					}
-				}).syncStart();
+				});
 	}
 	
 	
 	private void initServerCloseInventoryFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 							PacketAdapter
 							.params(main, Packets.Server.CLOSE_WINDOW)
@@ -156,7 +162,7 @@ public class MFFreecamInventoryOpenFix implements Listener {
 				    		backreference.remove(pl);
 						}
 					}
-				}).syncStart();
+				});
 	}
 	
 	//additional check for 0-amount items
