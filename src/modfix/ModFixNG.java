@@ -34,7 +34,6 @@ public class ModFixNG extends JavaPlugin {
 	private MFTableFixListener tablel;
 	private MFChunkFixListener chunkl;
 	private MFMinecartFreecamOpenFixListener mpl;
-	private MFRailsFixListener rfl;	
 	private MFFreecamInventoryOpenFix fciol;
 	private MFHopperMinecartFix hpl;
 	private MFBagFrameInsertFixListener bfil;
@@ -63,9 +62,6 @@ public class ModFixNG extends JavaPlugin {
 		//init minecart bugfix listener
 		mpl = new MFMinecartFreecamOpenFixListener(this,config);
 		getServer().getPluginManager().registerEvents(mpl, this);
-		//init rails bugfix listener
-		rfl = new MFRailsFixListener(this,config);
-		getServer().getPluginManager().registerEvents(rfl, this);
 		//init freecam fix listener
 		fciol = new MFFreecamInventoryOpenFix(this,config);
 		getServer().getPluginManager().registerEvents(fciol, this);
@@ -87,7 +83,6 @@ public class ModFixNG extends JavaPlugin {
 		HandlerList.unregisterAll(this);
 		tablel = null;
 		mpl = null;
-		rfl = null;
 		fciol = null;
 		hpl = null;
 		bfil = null;
