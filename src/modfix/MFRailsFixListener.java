@@ -37,7 +37,8 @@ public class MFRailsFixListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPistonMovedRails(BlockPistonExtendEvent e)
 	{
-		if (!config.enableRailsFix) {return;}
+		if (true) {return;}
+		//TODO: write a proper fix for this
 		
 		for (Block b : e.getBlocks())
 		{
