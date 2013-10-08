@@ -17,7 +17,7 @@
 
 package modfix;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -44,7 +44,7 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 		initMinecartInventoryClickCheck();
 	}
 	
-	private ConcurrentHashMap<String,Entity> playersopenedminecart = new ConcurrentHashMap<String,Entity>();
+	private HashMap<String,Entity> playersopenedminecart = new HashMap<String,Entity>();
 	
 	//add player to list when he opens minecart
 	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
@@ -61,7 +61,7 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 	
 	private void initMinecartInventoryClickCheck()
 	{
-		main.protocolManager.addPacketListener(
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
 				new PacketAdapter(
 						PacketAdapter.params(main, Packets.Client.WINDOW_CLICK)
 						.clientSide()
@@ -75,7 +75,7 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 				    		if (!config.enableMinecartFix) {return;}
 				    
 				    		if (e.getPlayer() == null) {return;}
-
+						
 				    		Player player = e.getPlayer();
 				    		String plname = player.getName();
 				    		if (playersopenedminecart.containsKey(plname))
@@ -84,13 +84,13 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 				    			if (!ent.isValid() || !ent.getWorld().equals(player.getWorld()) || ent.getLocation().distanceSquared(player.getLocation()) > 36)
 				    			{
 									e.setCancelled(true);
-									e.getPlayer().closeInventory();
 									playersopenedminecart.remove(plname);
+									e.getPlayer().closeInventory();
 				    			}
 				    		}
 				    	} catch (Exception ex) {ex.printStackTrace();}
 					}
-				});
+				}).syncStart();
 	}
 	
 	
@@ -98,7 +98,7 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 	//remove player from list when he closes minecart
 	private void initClientCloseInventoryFixListener()
 	{
-		main.protocolManager.addPacketListener(
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, Packets.Client.CLOSE_WINDOW)
@@ -115,13 +115,13 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 							playersopenedminecart.remove(e.getPlayer().getName());
 				    	} catch (Exception ex) {ex.printStackTrace();}
 					}
-				});
+				}).syncStart();
 	}
 	
 	//remove player from list when he closes minecart
 	private void initServerCloseInventoryFixListener()
 	{
-		main.protocolManager.addPacketListener(
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, Packets.Server.CLOSE_WINDOW)
@@ -134,7 +134,7 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 					{
 			    		playersopenedminecart.remove(e.getPlayer().getName());
 				    }
-				});
+				}).syncStart();
 	}
 	
 }
