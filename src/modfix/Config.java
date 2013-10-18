@@ -46,8 +46,6 @@ public class Config {
 	protected boolean enableTablesFixExtendedCheck = true;
 	protected boolean enableMinecartFix = true;
 	protected HashSet<Short> minecartsIDs = new HashSet<Short>();
-	protected boolean enableFreecamFix = true;
-	protected HashSet<String> freecamBlockIDs = new HashSet<String>();
 	protected boolean enablefreecamzeroitemscheck = true;
 	protected boolean enablehopperminecartfix = true;
 	protected short hopperminecartid = 46;
@@ -71,9 +69,7 @@ public class Config {
 		enableTablesFixExtendedCheck = config.getBoolean("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
 		enableMinecartFix = config.getBoolean("MinecartPortalFix.enable", enableMinecartFix);
 		minecartsIDs = new HashSet<Short>(config.getShortList("MinecartPortalFix.cartsIDs"));
-		enableFreecamFix = config.getBoolean("FreeCamInvFix.enable",enableFreecamFix);
-		freecamBlockIDs = new HashSet<String>(config.getStringList("FreeCamInvFix.checkBlockIDs"));
-		enablefreecamzeroitemscheck = config.getBoolean("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
+		enablefreecamzeroitemscheck = config.getBoolean("FreeCamInvFix.enabled",enablefreecamzeroitemscheck);
 		enablehopperminecartfix = config.getBoolean("HopperMinecartFix.enabled",enablehopperminecartfix);
 		hopperminecartid = (short) config.getInt("HopperMinecartFix.HopperMinecartID",hopperminecartid);
 		enableBagFrameInsertfix = config.getBoolean("BagFrameInsertFix.enabled",enableBagFrameInsertfix);
@@ -99,9 +95,7 @@ public class Config {
 		config.set("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
 		config.set("MinecartPortalFix.enable", enableMinecartFix);
 		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(minecartsIDs));
-		config.set("FreeCamInvFix.enable",enableFreecamFix);
-		config.set("FreeCamInvFix.checkBlockIDs",new ArrayList<String>(freecamBlockIDs));
-		config.set("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
+		config.set("FreeCamInvFix.enabled",enablefreecamzeroitemscheck);
 		config.set("HopperMinecartFix.enabled",enablehopperminecartfix);
 		config.set("HopperMinecartFix.HopperMinecartID",hopperminecartid);
 		config.set("BagFrameInsertFix.enabled",enableBagFrameInsertfix);

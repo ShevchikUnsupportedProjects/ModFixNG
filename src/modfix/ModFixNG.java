@@ -34,7 +34,8 @@ public class ModFixNG extends JavaPlugin {
 	private MFTableFixListener tablel;
 	private MFChunkFixListener chunkl;
 	private MFMinecartFreecamOpenFixListener mpl;
-	private MFFreecamInventoryOpenFix fciol;
+	@SuppressWarnings("unused")
+	private MFFreecamInventoryZeroItemsFix fciol;
 	private MFHopperMinecartFix hpl;
 	private MFBagFrameInsertFixListener bfil;
 	
@@ -63,8 +64,7 @@ public class ModFixNG extends JavaPlugin {
 		mpl = new MFMinecartFreecamOpenFixListener(this,config);
 		getServer().getPluginManager().registerEvents(mpl, this);
 		//init freecam fix listener
-		fciol = new MFFreecamInventoryOpenFix(this,config);
-		getServer().getPluginManager().registerEvents(fciol, this);
+		fciol = new MFFreecamInventoryZeroItemsFix(this,config);
 		//init hopperminecart fix listener
 		hpl = new MFHopperMinecartFix(this,config);
 		getServer().getPluginManager().registerEvents(hpl, this);
