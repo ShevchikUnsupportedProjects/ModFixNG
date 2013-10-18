@@ -71,24 +71,22 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 					@Override
 				    public void onPacketReceiving(PacketEvent e) 
 					{	
-				    	try {
-				    		if (!config.enableMinecartFix) {return;}
+						if (!config.enableMinecartFix) {return;}
 				    
-				    		if (e.getPlayer() == null) {return;}
+				    	if (e.getPlayer() == null) {return;}
 						
-				    		Player player = e.getPlayer();
-				    		String plname = player.getName();
-				    		if (playersopenedminecart.containsKey(plname))
+				    	Player player = e.getPlayer();
+				    	String plname = player.getName();
+				    	if (playersopenedminecart.containsKey(plname))
+				    	{
+				    		Entity ent = playersopenedminecart.get(plname);
+				    		if (!ent.isValid() || !ent.getWorld().equals(player.getWorld()) || ent.getLocation().distanceSquared(player.getLocation()) > 36)
 				    		{
-				    			Entity ent = playersopenedminecart.get(plname);
-				    			if (!ent.isValid() || !ent.getWorld().equals(player.getWorld()) || ent.getLocation().distanceSquared(player.getLocation()) > 36)
-				    			{
-									e.setCancelled(true);
-									playersopenedminecart.remove(plname);
-									e.getPlayer().closeInventory();
-				    			}
+								e.setCancelled(true);
+								playersopenedminecart.remove(plname);
+								e.getPlayer().closeInventory();
 				    		}
-				    	} catch (Exception ex) {ex.printStackTrace();}
+				    	}
 					}
 				}).syncStart();
 	}
@@ -109,11 +107,11 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 					@Override
 					public void onPacketReceiving(PacketEvent e) 
 					{
-						try {
-							if (e.getPlayer() == null) {return;}
+						if (!config.enableMinecartFix) {return;}
 						
-							playersopenedminecart.remove(e.getPlayer().getName());
-				    	} catch (Exception ex) {ex.printStackTrace();}
+						if (e.getPlayer() == null) {return;}
+						
+						playersopenedminecart.remove(e.getPlayer().getName());
 					}
 				}).syncStart();
 	}
@@ -132,6 +130,8 @@ public class MFMinecartFreecamOpenFixListener implements Listener {
 					@Override
 					public void onPacketSending(PacketEvent e) 
 					{
+						if (!config.enableMinecartFix) {return;}
+						
 			    		playersopenedminecart.remove(e.getPlayer().getName());
 				    }
 				}).syncStart();

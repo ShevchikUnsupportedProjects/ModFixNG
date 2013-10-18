@@ -81,6 +81,8 @@ public class MFFreecamInventoryOpenFix implements Listener {
 		{
 			public void run()
 			{
+				if (!config.enableFreecamFix) {return;}
+				
 				for (Block b : new HashSet<Block>(matreference.keySet()))
 				{
 					if (b!=null && b.getTypeId() != matreference.get(b))
@@ -111,21 +113,21 @@ public class MFFreecamInventoryOpenFix implements Listener {
 					@Override
 				    public void onPacketReceiving(PacketEvent e)
 					{
-						try {
-							if (e.getPlayer() == null) {return;}
+						if (!config.enableFreecamFix) {return;}
 						
-							String plname = e.getPlayer().getName();
-							if (backreference.containsKey(plname)) 
+						if (e.getPlayer() == null) {return;}
+						
+						String plname = e.getPlayer().getName();
+						if (backreference.containsKey(plname)) 
+						{
+							openedinvs.get(backreference.get(plname)).remove(plname);
+							if (openedinvs.get(backreference.get(plname)).size() == 0) 
 							{
-								openedinvs.get(backreference.get(plname)).remove(plname);
-								if (openedinvs.get(backreference.get(plname)).size() == 0) 
-								{
-									openedinvs.remove(backreference.get(plname));
-								}
-								matreference.remove(backreference.get(plname));
-								backreference.remove(plname);
+								openedinvs.remove(backreference.get(plname));
 							}
-						} catch (Exception ex) {ex.printStackTrace();}
+							matreference.remove(backreference.get(plname));
+							backreference.remove(plname);
+						}
 					}
 				}).syncStart();
 	}
@@ -144,6 +146,8 @@ public class MFFreecamInventoryOpenFix implements Listener {
 					@Override
 					public void onPacketSending(PacketEvent e) 
 					{
+						if (!config.enableFreecamFix) {return;}
+						
 						String pl = e.getPlayer().getName();
 						if (backreference.containsKey(pl))
 						{
