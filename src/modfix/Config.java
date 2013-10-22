@@ -47,6 +47,8 @@ public class Config {
 	protected boolean enableMinecartFix = true;
 	protected HashSet<Short> minecartsIDs = new HashSet<Short>();
 	protected boolean enablefreecamzeroitemscheck = true;
+	protected boolean enablefreecaminvclosecheck = true;
+	protected HashSet<String> blocksWithInvIDs = new HashSet<String>();
 	protected boolean enablehopperminecartfix = true;
 	protected short hopperminecartid = 46;
 	protected boolean enableBagFrameInsertfix = true;
@@ -56,25 +58,34 @@ public class Config {
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
+
 		enableBackPackFix = config.getBoolean("BackPackFix.enable",enableBackPackFix);
 		BackPacks19IDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.19BlockIDs"));
 		enableCropanalyzerFix = config.getBoolean("BackPackFix.CropanalyzerFix.enable",enableCropanalyzerFix);
 		CropanalyzerID = config.getInt("BackPackFix.CropanalyzerFix.ID",CropanalyzerID);
+		
 		enableChunkUnloadFixTP = config.getBoolean("ChunkUnloadFix.enable.teleport",enableChunkUnloadFixTP);
 		enableChunkUnloadFixMove = config.getBoolean("ChunkUnloadFix.enable.movement",enableChunkUnloadFixMove);
+		
 		enableTablesFix = config.getBoolean("TablesFix.enable",enableTablesFix);
 		IntTablesIDs = new HashSet<String>(config.getStringList("TablesFix.InteractBlockIDs"));
 		BrkTablesIDs = new HashSet<String>(config.getStringList("TablesFix.BreakBlockIDs"));
 		IntTablesIDs.addAll(BrkTablesIDs);
+		
 		enableTablesFixExtendedCheck = config.getBoolean("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
 		enableMinecartFix = config.getBoolean("MinecartPortalFix.enable", enableMinecartFix);
 		minecartsIDs = new HashSet<Short>(config.getShortList("MinecartPortalFix.cartsIDs"));
-		enablefreecamzeroitemscheck = config.getBoolean("FreeCamInvFix.enabled",enablefreecamzeroitemscheck);
+		
+		enablefreecamzeroitemscheck = config.getBoolean("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
+		enablefreecaminvclosecheck = config.getBoolean("FreeCamInvFix.forceCloseInvOnBreak.enabled",enablefreecaminvclosecheck);
+		blocksWithInvIDs = new HashSet<String>(config.getStringList("FreeCamInvFix.forceCloseInvOnBreak.BlockIDs"));
+		
 		enablehopperminecartfix = config.getBoolean("HopperMinecartFix.enabled",enablehopperminecartfix);
 		hopperminecartid = (short) config.getInt("HopperMinecartFix.HopperMinecartID",hopperminecartid);
+		
 		enableBagFrameInsertfix = config.getBoolean("BagFrameInsertFix.enabled",enableBagFrameInsertfix);
 		bagids = new HashSet<Integer>(config.getIntegerList("BagFrameInsertFix.bagIDs"));
-		frameentity = (short) config.getInt("BagFrameInsertFix.frameentity");
+		frameentity = (short) config.getInt("BagFrameInsertFix.frameentity",frameentity);
 		frameids = new HashSet<String>(config.getStringList("BagFrameInsertFix.gregIDs"));
 				
 		saveConfig();
@@ -83,21 +94,30 @@ public class Config {
 	public void saveConfig()
 	{
 		FileConfiguration config = new YamlConfiguration();
+		
 		config.set("BackPackFix.enable",enableBackPackFix);
 		config.set("BackPackFix.19BlockIDs",new ArrayList<Integer>(BackPacks19IDs));
 		config.set("BackPackFix.CropanalyzerFix.enable",enableCropanalyzerFix);
 		config.set("BackPackFix.CropanalyzerFix.ID",CropanalyzerID);
+
 		config.set("ChunkUnloadFix.enable.teleport",enableChunkUnloadFixTP);
 		config.set("ChunkUnloadFix.enable.movement",enableChunkUnloadFixMove);
+
 		config.set("TablesFix.enable",enableTablesFix);
 		config.set("TablesFix.InteractBlockIDs",new ArrayList<String>(IntTablesIDs));
 		config.set("TablesFix.BreakBlockIDs",new ArrayList<String>(BrkTablesIDs));
 		config.set("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
+
 		config.set("MinecartPortalFix.enable", enableMinecartFix);
 		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(minecartsIDs));
-		config.set("FreeCamInvFix.enabled",enablefreecamzeroitemscheck);
+
+		config.set("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
+		config.set("FreeCamInvFix.forceCloseInvOnBreak.enabled",enablefreecaminvclosecheck);
+		config.set("FreeCamInvFix.forceCloseInvOnBreak.BlockIDs",new ArrayList<String>(blocksWithInvIDs));
+		
 		config.set("HopperMinecartFix.enabled",enablehopperminecartfix);
 		config.set("HopperMinecartFix.HopperMinecartID",hopperminecartid);
+
 		config.set("BagFrameInsertFix.enabled",enableBagFrameInsertfix);
 		config.set("BagFrameInsertFix.bagIDs",new ArrayList<Integer>(bagids));
 		config.set("BagFrameInsertFix.frameentity",frameentity);
