@@ -34,7 +34,6 @@ public class ModFixNG extends JavaPlugin {
 	private MFTableFixListener tablel;
 	private MFChunkFixListener chunkl;
 	private MFMinecartFreecamOpenFixListener mpl;
-	@SuppressWarnings("unused")
 	private MFFreecamInventoryZeroItemsFix fciol;
 	private MFHopperMinecartFix hpl;
 	private MFBagFrameInsertFixListener bfil;
