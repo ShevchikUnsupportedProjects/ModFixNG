@@ -65,6 +65,7 @@ public class ModFixNG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(mpl, this);
 		//init freecam fix listener
 		fciol = new MFFreecamInventoryZeroItemsFix(this,config);
+		getServer().getPluginManager().registerEvents(fciol, this);
 		//init hopperminecart fix listener
 		hpl = new MFHopperMinecartFix(this,config);
 		getServer().getPluginManager().registerEvents(hpl, this);
