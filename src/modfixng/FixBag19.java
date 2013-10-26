@@ -47,17 +47,17 @@ public class FixBag19 implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent event) 
 	{
-		if (!config.enableBackPackFix) {return;}
+		if (!config.fixBag19Enabled) {return;}
 		
 		Player p = (Player) event.getEntity();
 		p.closeInventory();
-		if (config.enableCropanalyzerFix) 
+		if (config.fixBag19CropanalyzerFixEnabled) 
 		{
 			Iterator<ItemStack> it = event.getDrops().iterator();
 			while (it.hasNext())
 			{
 				ItemStack i = it.next();
-				if (i.getTypeId() == config.CropanalyzerID)
+				if (i.getTypeId() == config.fixBag19CropanalyzerID)
 				{
 					it.remove();
 				}
@@ -70,7 +70,7 @@ public class FixBag19 implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerExit(PlayerQuitEvent event) 
 	{
-		if (!config.enableBackPackFix) {return;}
+		if (!config.fixBag19Enabled) {return;}
 		
 		event.getPlayer().closeInventory();
 	}
@@ -93,13 +93,13 @@ public class FixBag19 implements Listener {
 					  public void onPacketReceiving(PacketEvent e) 
 					  {
 						  try {
-							  if (!config.enableBackPackFix) {return;}
+							  if (!config.fixBag19Enabled) {return;}
 
 							  if (e.getPlayer() == null) {return;}
 						  
 							  final Player player = e.getPlayer();					  
 							  //if item in hand is one of the bad ids - check buttons
-							  if (config.BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
+							  if (config.fixBag19BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
 							  {
 								  //restrict illegal bag moving
 								  //check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)

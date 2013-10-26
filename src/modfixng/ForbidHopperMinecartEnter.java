@@ -37,9 +37,9 @@ public class ForbidHopperMinecartEnter implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onEnteredHopperMinecart(VehicleEnterEvent e)
 	{
-		if (!config.enablehopperminecartfix) {return;}
+		if (!config.forbidHopperMinecartEnterEnabled) {return;}
 		
-		if (e.getEntered() instanceof Player && e.getVehicle().getType().getTypeId() == config.hopperminecartid)
+		if (e.getEntered() instanceof Player && e.getVehicle().getType().getTypeId() == config.forbidHopperMinecartEnterID)
 		{
 			e.setCancelled(true);
 		}

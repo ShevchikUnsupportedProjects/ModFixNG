@@ -52,9 +52,9 @@ public class FixFreecamEntities implements Listener {
 	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
 	public void onPlayerOpenedMinecart(PlayerInteractEntityEvent e)
 	{
-		if (!config.enableFreecamEntityFix)  {return;}
+		if (!config.fixFreecamEntitiesEnabled)  {return;}
 		
-		if (config.minecartsIDs.contains(e.getRightClicked().getType().getTypeId()))
+		if (config.fixFreecamEntitiesEntitiesIDs.contains(e.getRightClicked().getType().getTypeId()))
 		{
 			playersopenedminecart.put(e.getPlayer().getName(),e.getRightClicked());
 		}
@@ -74,7 +74,7 @@ public class FixFreecamEntities implements Listener {
 					@Override
 					public void onPacketReceiving(PacketEvent e) 
 					{
-						if (!config.enableFreecamEntityFix) {return;}
+						if (!config.fixFreecamEntitiesEnabled) {return;}
 						
 						if (e.getPlayer() == null) {return;}
 						
@@ -102,7 +102,7 @@ public class FixFreecamEntities implements Listener {
 					@Override
 					public void onPacketSending(PacketEvent e) 
 					{
-						if (!config.enableFreecamEntityFix) {return;}
+						if (!config.fixFreecamEntitiesEnabled) {return;}
 						
 						removePlayerFromList(e.getPlayer().getName());
 				    }
@@ -121,7 +121,7 @@ public class FixFreecamEntities implements Listener {
 		{
 			public void run()
 			{
-				if (!config.enableFreecamEntityFix) {return;}
+				if (!config.fixFreecamEntitiesEnabled) {return;}
 				
 				HashSet<String> playerNamesToCheck = new HashSet<String>(playersopenedminecart.keySet());
 				for (String playername : playerNamesToCheck)

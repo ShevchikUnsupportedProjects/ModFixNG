@@ -38,13 +38,13 @@ public class FixBagFrameInsert implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerClickedFrame(PlayerInteractEvent e)
 	{
-		if (!config.enableBagFrameInsertfix) {return;}
+		if (!config.fixBagFrameInsertEnabled) {return;}
 		
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
 		
-		if (config.bagids.contains(e.getPlayer().getItemInHand().getTypeId()))
+		if (config.fixBagFrameInsertBagIDs.contains(e.getPlayer().getItemInHand().getTypeId()))
 		{
-			if (config.frameids.contains(Utils.getIDstring(e.getClickedBlock())))
+			if (config.fixBagFrameInsertGregIDs.contains(Utils.getIDstring(e.getClickedBlock())))
 			{
 				e.getPlayer().closeInventory();
 			}
@@ -54,11 +54,11 @@ public class FixBagFrameInsert implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerClickedFrame(PlayerInteractEntityEvent e)
 	{
-		if (!config.enableBagFrameInsertfix) {return;}
+		if (!config.fixBagFrameInsertEnabled) {return;}
 		
-		if (config.bagids.contains(e.getPlayer().getItemInHand().getTypeId()))
+		if (config.fixBagFrameInsertBagIDs.contains(e.getPlayer().getItemInHand().getTypeId()))
 		{
-			if (e.getRightClicked().getType().getTypeId() == config.frameentity)
+			if (e.getRightClicked().getType().getTypeId() == config.fixBagFrameInsertFrameentityID)
 			{
 				e.getPlayer().closeInventory();
 			}

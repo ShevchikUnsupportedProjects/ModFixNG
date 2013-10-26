@@ -40,7 +40,7 @@ public class ForceInventoryCloseOnChunkChange implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerChangedChunkByMoveEvent(PlayerMoveEvent e)
 	{
-		if (!config.enableChunkUnloadFixMove) {return;}
+		if (!config.forceCloseInventoryOnChunkChangeMove) {return;}
 
 		if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
 		{
@@ -52,7 +52,7 @@ public class ForceInventoryCloseOnChunkChange implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerChangedChunkByTeleport(PlayerTeleportEvent e)
 	{
-		if (!config.enableChunkUnloadFixTP) {return;}
+		if (!config.forceCloseInventoryOnChunkChangeTeleport) {return;}
 
 		if (!e.getFrom().getChunk().equals(e.getTo().getChunk()))
 		{
@@ -64,7 +64,7 @@ public class ForceInventoryCloseOnChunkChange implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerChangedWolrd(PlayerChangedWorldEvent e)
 	{
-		if (!config.enableChunkUnloadFixTP) {return;}
+		if (!config.forceCloseInventoryOnChunkChangeTeleport) {return;}
 
 		e.getPlayer().closeInventory();
 	}

@@ -57,7 +57,7 @@ public class FixFreecamBlocks implements Listener {
 		{
 			public void run()
 			{
-				if (!config.enablefreecamzeroitemscheck) {return;}
+				if (!config.fixFreecamBlockZeroItemsCheckEnabled) {return;}
 				
 				for (Player p : Bukkit.getOnlinePlayers())
 				{
@@ -81,10 +81,10 @@ public class FixFreecamBlocks implements Listener {
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e)
 	{
-		if (!config.enablefreecaminvclosecheck) {return;}
+		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 		
 		Block b = e.getClickedBlock();
-		if (config.blocksWithInvIDs.contains(Utils.getIDstring(b)))
+		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(Utils.getIDstring(b)))
 		{
 			playerOpenBlock.put(e.getPlayer().getName(), b);
 			openedBlockID.put(b, b.getTypeId());
@@ -105,7 +105,7 @@ public class FixFreecamBlocks implements Listener {
 					@Override
 					public void onPacketReceiving(PacketEvent e) 
 					{
-						if (!config.enablefreecaminvclosecheck) {return;}
+						if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 						
 						if (e.getPlayer() == null) {return;}
 						
@@ -135,7 +135,7 @@ public class FixFreecamBlocks implements Listener {
 					@Override
 					public void onPacketSending(PacketEvent e) 
 					{
-						if (!config.enablefreecaminvclosecheck) {return;}
+						if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 						
 						String playername = e.getPlayer().getName();
 						if (playerOpenBlock.containsKey(playername))
@@ -159,7 +159,7 @@ public class FixFreecamBlocks implements Listener {
 		{
 			public void run()
 			{
-				if (!config.enablefreecamzeroitemscheck) {return;}
+				if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 				
 				HashSet<String> playerNamesToCheck = new HashSet<String>(playerOpenBlock.keySet());
 				for (String playername : playerNamesToCheck)
