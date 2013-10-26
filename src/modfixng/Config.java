@@ -41,7 +41,7 @@ public class Config {
 	protected boolean enableChunkUnloadFixTP = true;
 	protected boolean enableChunkUnloadFixMove = true;
 	protected boolean enableTablesFixExtendedCheck = true;
-	protected boolean enableMinecartFix = true;
+	protected boolean enableFreecamEntityFix = true;
 	protected HashSet<Short> minecartsIDs = new HashSet<Short>();
 	protected boolean enablefreecamzeroitemscheck = true;
 	protected boolean enablefreecaminvclosecheck = true;
@@ -65,7 +65,7 @@ public class Config {
 		enableChunkUnloadFixMove = config.getBoolean("ChunkUnloadFix.enable.movement",enableChunkUnloadFixMove);
 		
 		enableTablesFixExtendedCheck = config.getBoolean("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
-		enableMinecartFix = config.getBoolean("MinecartPortalFix.enable", enableMinecartFix);
+		enableFreecamEntityFix = config.getBoolean("MinecartPortalFix.enable", enableFreecamEntityFix);
 		minecartsIDs = new HashSet<Short>(config.getShortList("MinecartPortalFix.cartsIDs"));
 		
 		enablefreecamzeroitemscheck = config.getBoolean("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);
@@ -95,7 +95,7 @@ public class Config {
 		config.set("ChunkUnloadFix.enable.teleport",enableChunkUnloadFixTP);
 		config.set("ChunkUnloadFix.enable.movement",enableChunkUnloadFixMove);
 
-		config.set("MinecartPortalFix.enable", enableMinecartFix);
+		config.set("MinecartPortalFix.enable", enableFreecamEntityFix);
 		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(minecartsIDs));
 
 		config.set("FreeCamInvFix.zeroItemsCheck.enabled",enablefreecamzeroitemscheck);

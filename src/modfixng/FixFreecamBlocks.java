@@ -94,7 +94,7 @@ public class FixFreecamBlocks implements Listener {
 	//remove player from list when he closes inventory
 	private void initClientCloseInventoryFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, Packets.Client.CLOSE_WINDOW)
@@ -109,21 +109,22 @@ public class FixFreecamBlocks implements Listener {
 						
 						if (e.getPlayer() == null) {return;}
 						
-						String playername = e.getPlayer().getName();
-						if (playerOpenBlock.containsKey(playername))
-						{
-							Block b = playerOpenBlock.get(playername);
-							openedBlockID.remove(b);
-							playerOpenBlock.remove(playername);
-						}
+						final String playername = e.getPlayer().getName();
+						Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
+							public void run()
+							{
+								if (playerOpenBlock.containsKey(playername))
+								{
+									removePlayerFromLists(playername);
+								}
+							}
+						});
 					}
-				}).syncStart();
+				});
 	}
-	
-	//remove player from list when he closes inventory
 	private void initServerCloseInventoryFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, Packets.Server.CLOSE_WINDOW)
@@ -139,12 +140,16 @@ public class FixFreecamBlocks implements Listener {
 						String playername = e.getPlayer().getName();
 						if (playerOpenBlock.containsKey(playername))
 						{
-							Block b = playerOpenBlock.get(playername);
-							openedBlockID.remove(b);
-							playerOpenBlock.remove(playername);
+							removePlayerFromLists(playername);
 						}
 				    }
-				}).syncStart();
+				});
+	}
+	private void removePlayerFromLists(String playername)
+	{
+		Block b = playerOpenBlock.get(playername);
+		openedBlockID.remove(b);
+		playerOpenBlock.remove(playername);
 	}
 	
 	//check if block is broken, is yes - force close inventory

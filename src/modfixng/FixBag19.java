@@ -79,7 +79,7 @@ public class FixBag19 implements Listener {
 	//restrict using 1-9 buttons in modded inventories
 	private void initBag19BugFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, Packets.Client.WINDOW_CLICK)
@@ -114,6 +114,6 @@ public class FixBag19 implements Listener {
 							  }
 						  } catch (Exception ex) {ex.printStackTrace();}
 					  }
-				}).start();
+				});
 	}	
 }

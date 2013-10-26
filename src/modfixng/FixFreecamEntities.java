@@ -18,7 +18,9 @@
 package modfixng;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,7 +43,7 @@ public class FixFreecamEntities implements Listener {
 		this.config = config;
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
-		initMinecartInventoryClickCheck();
+		initEntitiesCheck();
 	}
 	
 	private HashMap<String,Entity> playersopenedminecart = new HashMap<String,Entity>();
@@ -50,53 +52,18 @@ public class FixFreecamEntities implements Listener {
 	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
 	public void onPlayerOpenedMinecart(PlayerInteractEntityEvent e)
 	{
-		if (!config.enableMinecartFix)  {return;}
+		if (!config.enableFreecamEntityFix)  {return;}
 		
 		if (config.minecartsIDs.contains(e.getRightClicked().getType().getTypeId()))
 		{
 			playersopenedminecart.put(e.getPlayer().getName(),e.getRightClicked());
 		}
 	}
-	
-	
-	private void initMinecartInventoryClickCheck()
-	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
-				new PacketAdapter(
-						PacketAdapter.params(main, Packets.Client.WINDOW_CLICK)
-						.clientSide()
-						.listenerPriority(ListenerPriority.HIGHEST)
-				) 
-				{
-					@Override
-				    public void onPacketReceiving(PacketEvent e) 
-					{	
-						if (!config.enableMinecartFix) {return;}
-				    
-				    	if (e.getPlayer() == null) {return;}
-						
-				    	Player player = e.getPlayer();
-				    	String plname = player.getName();
-				    	if (playersopenedminecart.containsKey(plname))
-				    	{
-				    		Entity ent = playersopenedminecart.get(plname);
-				    		if (!ent.isValid() || !ent.getWorld().equals(player.getWorld()) || ent.getLocation().distanceSquared(player.getLocation()) > 36)
-				    		{
-								e.setCancelled(true);
-								playersopenedminecart.remove(plname);
-								e.getPlayer().closeInventory();
-				    		}
-				    	}
-					}
-				}).syncStart();
-	}
-	
-	
-	
+
 	//remove player from list when he closes minecart
 	private void initClientCloseInventoryFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, Packets.Client.CLOSE_WINDOW)
@@ -107,19 +74,24 @@ public class FixFreecamEntities implements Listener {
 					@Override
 					public void onPacketReceiving(PacketEvent e) 
 					{
-						if (!config.enableMinecartFix) {return;}
+						if (!config.enableFreecamEntityFix) {return;}
 						
 						if (e.getPlayer() == null) {return;}
 						
-						playersopenedminecart.remove(e.getPlayer().getName());
+						final String playername = e.getPlayer().getName();
+						Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+						{
+							public void run()
+							{
+								removePlayerFromList(playername);
+							}
+						});
 					}
-				}).syncStart();
+				});
 	}
-	
-	//remove player from list when he closes minecart
 	private void initServerCloseInventoryFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, Packets.Server.CLOSE_WINDOW)
@@ -130,11 +102,46 @@ public class FixFreecamEntities implements Listener {
 					@Override
 					public void onPacketSending(PacketEvent e) 
 					{
-						if (!config.enableMinecartFix) {return;}
+						if (!config.enableFreecamEntityFix) {return;}
 						
-			    		playersopenedminecart.remove(e.getPlayer().getName());
+						removePlayerFromList(e.getPlayer().getName());
 				    }
-				}).syncStart();
+				});
+	}
+	private void removePlayerFromList(String playername)
+	{
+		playersopenedminecart.remove(playername);
+	}
+
+
+	//check if entity is not valid, is yes - force close inventory
+	private void initEntitiesCheck()
+	{
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
+		{
+			public void run()
+			{
+				if (!config.enableFreecamEntityFix) {return;}
+				
+				HashSet<String> playerNamesToCheck = new HashSet<String>(playersopenedminecart.keySet());
+				for (String playername : playerNamesToCheck)
+				{
+					Player player = Bukkit.getPlayerExact(playername);
+					if (player != null)
+					{
+						Entity entity = playersopenedminecart.get(playername);
+						if (!entity.isValid() || 
+							!entity.getWorld().equals(player.getWorld()) ||
+							entity.getLocation().distanceSquared(player.getLocation()) > 36
+						)
+						{
+							playersopenedminecart.remove(playername);
+							player.closeInventory();
+						}
+					}
+				}
+			}
+		},0,1);
 	}
 	
 }
