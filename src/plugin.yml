@@ -1,5 +1,5 @@
 name: ModFixNG
-main: modfix.ModFixNG
+main: modfixng.ModFixNG
 version: 1.0
 author: Shevchik
 depend: [ProtocolLib]
