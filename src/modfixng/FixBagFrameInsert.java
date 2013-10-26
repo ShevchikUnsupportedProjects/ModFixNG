@@ -15,7 +15,7 @@
  *
  */
 
-package modfix;
+package modfixng;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,13 +24,13 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class MFBagFrameInsertFixListener implements Listener {
+public class FixBagFrameInsert implements Listener {
 
 	@SuppressWarnings("unused")
 	private ModFixNG main;
 	private Config config;
 
-	MFBagFrameInsertFixListener(ModFixNG main, Config config) {
+	FixBagFrameInsert(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

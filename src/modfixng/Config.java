@@ -15,7 +15,7 @@
  *
  */
 
-package modfix;
+package modfixng;
 
 import java.io.File;
 import java.io.IOException;

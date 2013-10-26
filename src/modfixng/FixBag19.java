@@ -15,7 +15,7 @@
  *
  */
 
-package modfix;
+package modfixng;
 
 import java.util.Iterator;
 
@@ -33,11 +33,11 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 
 // BackPack fix
-public class MFBagFixListener implements Listener {
+public class FixBag19 implements Listener {
 	private ModFixNG main;
 	private Config config;
 	
-	MFBagFixListener(ModFixNG main, Config config) {
+	FixBag19(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		initBag19BugFixListener();

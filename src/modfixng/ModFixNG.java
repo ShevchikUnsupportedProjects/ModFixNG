@@ -15,7 +15,7 @@
 *
 */
 
-package modfix;
+package modfixng;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -30,12 +30,12 @@ public class ModFixNG extends JavaPlugin {
 	private Config config;
 	
 	private Commands commandl;
-	private MFBagFixListener bagl;
-	private MFChunkFixListener chunkl;
-	private MFMinecartFreecamOpenFixListener mpl;
-	private MFFreecamInventoryZeroItemsFix fciol;
-	private MFHopperMinecartFix hpl;
-	private MFBagFrameInsertFixListener bfil;
+	private FixBag19 bagl;
+	private ForceInventoryCloseOnChunkChange chunkl;
+	private FixFreecamEntities mpl;
+	private FixFreecamBlocks fciol;
+	private ForbidHopperMinecartEnter hpl;
+	private FixBagFrameInsert bfil;
 	
 	public ProtocolManager protocolManager = null;
 	
@@ -50,22 +50,22 @@ public class ModFixNG extends JavaPlugin {
 		getCommand("modfix").setExecutor(commandl);
 		getServer().getPluginManager().registerEvents(commandl, this);
 		//init bag bugfix listener
-		bagl = new MFBagFixListener(this,config);
+		bagl = new FixBag19(this,config);
 		getServer().getPluginManager().registerEvents(bagl, this);
 		//init chunk bugfix listener
-		chunkl = new MFChunkFixListener(this,config);
+		chunkl = new ForceInventoryCloseOnChunkChange(this,config);
 		getServer().getPluginManager().registerEvents(chunkl, this);
 		//init minecart bugfix listener
-		mpl = new MFMinecartFreecamOpenFixListener(this,config);
+		mpl = new FixFreecamEntities(this,config);
 		getServer().getPluginManager().registerEvents(mpl, this);
 		//init freecam fix listener
-		fciol = new MFFreecamInventoryZeroItemsFix(this,config);
+		fciol = new FixFreecamBlocks(this,config);
 		getServer().getPluginManager().registerEvents(fciol, this);
 		//init hopperminecart fix listener
-		hpl = new MFHopperMinecartFix(this,config);
+		hpl = new ForbidHopperMinecartEnter(this,config);
 		getServer().getPluginManager().registerEvents(hpl, this);
 		//init bag insert into frame fix listener
-		bfil = new MFBagFrameInsertFixListener(this,config);
+		bfil = new FixBagFrameInsert(this,config);
 		getServer().getPluginManager().registerEvents(bfil, this);
 	}	
 	@Override

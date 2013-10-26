@@ -15,7 +15,7 @@
  *
  */
 
-package modfix;
+package modfixng;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,13 +25,13 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 // ChunkUnloadInventoryFix
-public class MFChunkFixListener implements Listener {
+public class ForceInventoryCloseOnChunkChange implements Listener {
 
 	@SuppressWarnings("unused")
 	private ModFixNG main;
 	private Config config;
 
-	MFChunkFixListener(ModFixNG main, Config config) {
+	ForceInventoryCloseOnChunkChange(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

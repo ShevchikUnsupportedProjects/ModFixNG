@@ -15,7 +15,7 @@
  *
  */
 
-package modfix;
+package modfixng;
 
 import org.bukkit.block.Block;
 

@@ -15,7 +15,7 @@
  *
  */
 
-package modfix;
+package modfixng;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,12 +34,12 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 
-public class MFFreecamInventoryZeroItemsFix implements Listener {
+public class FixFreecamBlocks implements Listener {
 
 	private ModFixNG main;
 	private Config config;
 
-	MFFreecamInventoryZeroItemsFix(ModFixNG main, Config config) {
+	FixFreecamBlocks(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		//zeroItemsCheck

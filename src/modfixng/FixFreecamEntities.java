@@ -15,7 +15,7 @@
  *
  */
 
-package modfix;
+package modfixng;
 
 import java.util.HashMap;
 
@@ -31,12 +31,12 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 
-public class MFMinecartFreecamOpenFixListener implements Listener {
+public class FixFreecamEntities implements Listener {
 	
 	private ModFixNG main;
 	private Config config;
 	
-	MFMinecartFreecamOpenFixListener(ModFixNG main, Config config) {
+	FixFreecamEntities(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		initClientCloseInventoryFixListener();
