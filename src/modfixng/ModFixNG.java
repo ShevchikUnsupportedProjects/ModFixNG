@@ -34,7 +34,7 @@ public class ModFixNG extends JavaPlugin {
 	private ForceInventoryCloseOnChunkChange chunkl;
 	private FixFreecamEntities mpl;
 	private FixFreecamBlocks fciol;
-	private ForbidHopperMinecartEnter hpl;
+	private EjectPlayerInHopperMinecartOnLeave hpl;
 	private FixBagFrameInsert bfil;
 	
 	public ProtocolManager protocolManager = null;
@@ -62,7 +62,7 @@ public class ModFixNG extends JavaPlugin {
 		fciol = new FixFreecamBlocks(this,config);
 		getServer().getPluginManager().registerEvents(fciol, this);
 		//init hopperminecart fix listener
-		hpl = new ForbidHopperMinecartEnter(this,config);
+		hpl = new EjectPlayerInHopperMinecartOnLeave(this,config);
 		getServer().getPluginManager().registerEvents(hpl, this);
 		//init bag insert into frame fix listener
 		bfil = new FixBagFrameInsert(this,config);

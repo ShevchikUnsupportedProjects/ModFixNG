@@ -49,8 +49,8 @@ public class Config {
 	protected boolean fixFreecamBlockCloseInventoryOnBreakCheckEnabled = true;
 	protected HashSet<String> fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>();
 	
-	protected boolean forbidHopperMinecartEnterEnabled = true;
-	protected short forbidHopperMinecartEnterID = 46;
+	protected boolean ejectPlayerInHopperMinecartOnLeaveEnabled = true;
+	protected short ejectPlayerInHopperMinecartOnLeaveHopperMinecartID = 46;
 
 	protected boolean fixBagFrameInsertEnabled = true;
 	protected HashSet<Integer> fixBagFrameInsertBagIDs = new HashSet<Integer>();
@@ -75,8 +75,8 @@ public class Config {
 		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("FreeCamInvFix.forceCloseInvOnBreak.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>(config.getStringList("FreeCamInvFix.forceCloseInvOnBreak.BlockIDs"));
 		
-		forbidHopperMinecartEnterEnabled = config.getBoolean("HopperMinecartFix.enabled",forbidHopperMinecartEnterEnabled);
-		forbidHopperMinecartEnterID = (short) config.getInt("HopperMinecartFix.HopperMinecartID",forbidHopperMinecartEnterID);
+		ejectPlayerInHopperMinecartOnLeaveEnabled = config.getBoolean("HopperMinecartFix.enabled",ejectPlayerInHopperMinecartOnLeaveEnabled);
+		ejectPlayerInHopperMinecartOnLeaveHopperMinecartID = (short) config.getInt("HopperMinecartFix.HopperMinecartID",ejectPlayerInHopperMinecartOnLeaveHopperMinecartID);
 		
 		fixBagFrameInsertEnabled = config.getBoolean("BagFrameInsertFix.enabled",fixBagFrameInsertEnabled);
 		fixBagFrameInsertBagIDs = new HashSet<Integer>(config.getIntegerList("BagFrameInsertFix.bagIDs"));
@@ -105,8 +105,8 @@ public class Config {
 		config.set("FreeCamInvFix.forceCloseInvOnBreak.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
 		config.set("FreeCamInvFix.forceCloseInvOnBreak.BlockIDs",new ArrayList<String>(fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs));
 		
-		config.set("HopperMinecartFix.enabled",forbidHopperMinecartEnterEnabled);
-		config.set("HopperMinecartFix.HopperMinecartID",forbidHopperMinecartEnterID);
+		config.set("HopperMinecartFix.enabled",ejectPlayerInHopperMinecartOnLeaveEnabled);
+		config.set("HopperMinecartFix.HopperMinecartID",ejectPlayerInHopperMinecartOnLeaveHopperMinecartID);
 
 		config.set("BagFrameInsertFix.enabled",fixBagFrameInsertEnabled);
 		config.set("BagFrameInsertFix.bagIDs",new ArrayList<Integer>(fixBagFrameInsertBagIDs));
