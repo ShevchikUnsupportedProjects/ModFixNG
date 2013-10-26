@@ -31,7 +31,6 @@ public class ModFixNG extends JavaPlugin {
 	
 	private Commands commandl;
 	private MFBagFixListener bagl;
-	private MFTableFixListener tablel;
 	private MFChunkFixListener chunkl;
 	private MFMinecartFreecamOpenFixListener mpl;
 	private MFFreecamInventoryZeroItemsFix fciol;
@@ -53,9 +52,6 @@ public class ModFixNG extends JavaPlugin {
 		//init bag bugfix listener
 		bagl = new MFBagFixListener(this,config);
 		getServer().getPluginManager().registerEvents(bagl, this);
-		//init table bugfix listener
-		tablel = new MFTableFixListener(this,config);
-		getServer().getPluginManager().registerEvents(tablel, this);
 		//init chunk bugfix listener
 		chunkl = new MFChunkFixListener(this,config);
 		getServer().getPluginManager().registerEvents(chunkl, this);
@@ -81,7 +77,6 @@ public class ModFixNG extends JavaPlugin {
 		config = null;
 		commandl = null;
 		HandlerList.unregisterAll(this);
-		tablel = null;
 		mpl = null;
 		fciol = null;
 		hpl = null;

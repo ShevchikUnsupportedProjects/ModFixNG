@@ -40,9 +40,6 @@ public class Config {
 	protected int CropanalyzerID = 30122;
 	protected boolean enableChunkUnloadFixTP = true;
 	protected boolean enableChunkUnloadFixMove = true;
-	protected boolean enableTablesFix = true;
-	protected HashSet<String> IntTablesIDs= new HashSet<String>();
-	protected HashSet<String> BrkTablesIDs= new HashSet<String>();
 	protected boolean enableTablesFixExtendedCheck = true;
 	protected boolean enableMinecartFix = true;
 	protected HashSet<Short> minecartsIDs = new HashSet<Short>();
@@ -66,11 +63,6 @@ public class Config {
 		
 		enableChunkUnloadFixTP = config.getBoolean("ChunkUnloadFix.enable.teleport",enableChunkUnloadFixTP);
 		enableChunkUnloadFixMove = config.getBoolean("ChunkUnloadFix.enable.movement",enableChunkUnloadFixMove);
-		
-		enableTablesFix = config.getBoolean("TablesFix.enable",enableTablesFix);
-		IntTablesIDs = new HashSet<String>(config.getStringList("TablesFix.InteractBlockIDs"));
-		BrkTablesIDs = new HashSet<String>(config.getStringList("TablesFix.BreakBlockIDs"));
-		IntTablesIDs.addAll(BrkTablesIDs);
 		
 		enableTablesFixExtendedCheck = config.getBoolean("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
 		enableMinecartFix = config.getBoolean("MinecartPortalFix.enable", enableMinecartFix);
@@ -102,11 +94,6 @@ public class Config {
 
 		config.set("ChunkUnloadFix.enable.teleport",enableChunkUnloadFixTP);
 		config.set("ChunkUnloadFix.enable.movement",enableChunkUnloadFixMove);
-
-		config.set("TablesFix.enable",enableTablesFix);
-		config.set("TablesFix.InteractBlockIDs",new ArrayList<String>(IntTablesIDs));
-		config.set("TablesFix.BreakBlockIDs",new ArrayList<String>(BrkTablesIDs));
-		config.set("TablesFix.ExtendedCheck.enable",enableTablesFixExtendedCheck);
 
 		config.set("MinecartPortalFix.enable", enableMinecartFix);
 		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(minecartsIDs));
