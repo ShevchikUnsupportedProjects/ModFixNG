@@ -17,8 +17,8 @@
 
 package modfixng;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -47,7 +47,7 @@ public class FixFreecamEntities implements Listener {
 		initEntitiesCheck();
 	}
 	
-	private HashMap<String,Entity> playersopenedminecart = new HashMap<String,Entity>();
+	ConcurrentHashMap<String,Entity> playersopenedminecart = new ConcurrentHashMap<String,Entity>(main.getServer().getMaxPlayers());
 	
 	//add player to list when he opens minecart
 	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
@@ -78,15 +78,8 @@ public class FixFreecamEntities implements Listener {
 						if (!config.fixFreecamEntitiesEnabled) {return;}
 						
 						if (e.getPlayer() == null) {return;}
-						
-						final String playername = e.getPlayer().getName();
-						Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
-						{
-							public void run()
-							{
-								removePlayerFromList(playername);
-							}
-						});
+
+						removePlayerFromList(e.getPlayer().getName());
 					}
 				});
 	}
@@ -112,11 +105,9 @@ public class FixFreecamEntities implements Listener {
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e)
 	{
-		String playername = e.getPlayer().getName();
-		if (playersopenedminecart.containsKey(playername))
-		{
-			removePlayerFromList(playername);
-		}
+		if (!config.fixFreecamEntitiesEnabled) {return;}
+
+		removePlayerFromList(e.getPlayer().getName());
 	}
 	private void removePlayerFromList(String playername)
 	{
@@ -132,14 +123,15 @@ public class FixFreecamEntities implements Listener {
 			public void run()
 			{
 				if (!config.fixFreecamEntitiesEnabled) {return;}
-				
-				HashSet<String> playerNamesToCheck = new HashSet<String>(playersopenedminecart.keySet());
-				for (String playername : playerNamesToCheck)
+
+				Iterator<String> namesIterator = playersopenedminecart.keySet().iterator();
+				while (namesIterator.hasNext())
 				{
+					String playername = namesIterator.next();
 					Player player = Bukkit.getPlayerExact(playername);
-					if (player != null)
+					Entity entity = playersopenedminecart.get(playername);
+					if (player != null && entity != null)
 					{
-						Entity entity = playersopenedminecart.get(playername);
 						if (!entity.isValid() || 
 							!entity.getWorld().equals(player.getWorld()) ||
 							entity.getLocation().distanceSquared(player.getLocation()) > 36
