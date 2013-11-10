@@ -27,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.comphenix.protocol.Packets;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -107,6 +108,15 @@ public class FixFreecamEntities implements Listener {
 						removePlayerFromList(e.getPlayer().getName());
 				    }
 				});
+	}
+	@EventHandler(priority=EventPriority.MONITOR)
+	public void onQuit(PlayerQuitEvent e)
+	{
+		String playername = e.getPlayer().getName();
+		if (playersopenedminecart.containsKey(playername))
+		{
+			removePlayerFromList(playername);
+		}
 	}
 	private void removePlayerFromList(String playername)
 	{

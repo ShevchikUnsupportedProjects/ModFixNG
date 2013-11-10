@@ -27,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.Packets;
@@ -144,6 +145,15 @@ public class FixFreecamBlocks implements Listener {
 						}
 				    }
 				});
+	}
+	@EventHandler(priority=EventPriority.MONITOR)
+	public void onQuit(PlayerQuitEvent e)
+	{
+		String playername = e.getPlayer().getName();
+		if (playerOpenBlock.containsKey(playername))
+		{
+			removePlayerFromLists(playername);
+		}
 	}
 	private void removePlayerFromLists(String playername)
 	{
