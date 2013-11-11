@@ -47,7 +47,7 @@ public class FixFreecamEntities implements Listener {
 		initEntitiesCheck();
 	}
 	
-	ConcurrentHashMap<String,Entity> playersopenedminecart = new ConcurrentHashMap<String,Entity>(main.getServer().getMaxPlayers());
+	ConcurrentHashMap<String,Entity> playersopenedminecart = new ConcurrentHashMap<String,Entity>(100);
 	
 	//add player to list when he opens minecart
 	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
