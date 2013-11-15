@@ -49,10 +49,10 @@ public class ModFixNG extends JavaPlugin {
 		commandl = new Commands(this,config);
 		getCommand("modfix").setExecutor(commandl);
 		getServer().getPluginManager().registerEvents(commandl, this);
-		//init bag bugfix listener
+		//init bag fix listener
 		bagl = new FixBag19(this,config);
 		getServer().getPluginManager().registerEvents(bagl, this);
-		//init chunk bugfix listener
+		//init chunk fix listener
 		chunkl = new ForceInventoryCloseOnChunkChange(this,config);
 		getServer().getPluginManager().registerEvents(chunkl, this);
 		//init entity freecam fix listener
@@ -61,7 +61,7 @@ public class ModFixNG extends JavaPlugin {
 		//init block freecam  fix listener
 		fciol = new FixFreecamBlocks(this,config);
 		getServer().getPluginManager().registerEvents(fciol, this);
-		//init hopperminecart fix listener
+		//init hopper minecart fix listener
 		hpl = new EjectPlayerInHopperMinecartOnLeave(this,config);
 		getServer().getPluginManager().registerEvents(hpl, this);
 		//init bag insert into frame fix listener
