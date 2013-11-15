@@ -167,7 +167,7 @@ public class FixFreecamBlocks implements Listener {
 					if (bs.getBlock().getType() != bs.getType())
 					{
 						try {Bukkit.getPlayerExact(playername).closeInventory();} catch (Exception e) {}
-						playerOpenBlock.remove(playername);
+						namesIterator.remove();
 					}
 				}
 			}
