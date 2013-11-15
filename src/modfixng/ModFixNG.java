@@ -55,10 +55,10 @@ public class ModFixNG extends JavaPlugin {
 		//init chunk bugfix listener
 		chunkl = new ForceInventoryCloseOnChunkChange(this,config);
 		getServer().getPluginManager().registerEvents(chunkl, this);
-		//init minecart bugfix listener
+		//init entity freecam fix listener
 		mpl = new FixFreecamEntities(this,config);
 		getServer().getPluginManager().registerEvents(mpl, this);
-		//init freecam fix listener
+		//init block freecam  fix listener
 		fciol = new FixFreecamBlocks(this,config);
 		getServer().getPluginManager().registerEvents(fciol, this);
 		//init hopperminecart fix listener
