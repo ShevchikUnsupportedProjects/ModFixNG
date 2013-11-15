@@ -17,8 +17,8 @@
 
 package modfixng;
 
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -77,12 +77,18 @@ public class FixFreecamBlocks implements Listener {
 		},0,1);
 	}
 	
-	private ConcurrentHashMap<String,BlockState> playerOpenBlock = new ConcurrentHashMap<String,BlockState>(100);
+	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
 	
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e)
 	{
 		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
+		
+		String playername = e.getPlayer().getName();
+		if (playerOpenBlock.containsKey(playername))
+		{
+			e.setCancelled(true);
+		}
 		
 		Block b = e.getClickedBlock();
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(Utils.getIDstring(b)))
@@ -109,9 +115,14 @@ public class FixFreecamBlocks implements Listener {
 						
 						if (e.getPlayer() == null) {return;}
 						
-						String playername = e.getPlayer().getName();
-						
-						removePlayerFromLists(playername);
+						final String playername = e.getPlayer().getName();
+						Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+						{
+							public void run()
+							{
+								removePlayer(playername);
+							}
+						});
 					}
 				});
 	}
@@ -132,7 +143,7 @@ public class FixFreecamBlocks implements Listener {
 						
 						String playername = e.getPlayer().getName();
 
-						removePlayerFromLists(playername);
+						removePlayer(playername);
 				    }
 				});
 	}
@@ -143,9 +154,9 @@ public class FixFreecamBlocks implements Listener {
 		
 		String playername = e.getPlayer().getName();
 
-		removePlayerFromLists(playername);
+		removePlayer(playername);
 	}
-	private void removePlayerFromLists(String playername)
+	private void removePlayer(String playername)
 	{
 		playerOpenBlock.remove(playername);
 	}

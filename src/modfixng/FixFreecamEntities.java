@@ -17,8 +17,8 @@
 
 package modfixng;
 
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -47,13 +47,19 @@ public class FixFreecamEntities implements Listener {
 		initEntitiesCheck();
 	}
 	
-	ConcurrentHashMap<String,Entity> playersopenedminecart = new ConcurrentHashMap<String,Entity>(100);
+	HashMap<String,Entity> playersopenedminecart = new HashMap<String,Entity>(100);
 	
 	//add player to list when he opens minecart
 	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
 	public void onPlayerOpenedMinecart(PlayerInteractEntityEvent e)
 	{
 		if (!config.fixFreecamEntitiesEnabled)  {return;}
+		
+		String playername = e.getPlayer().getName();
+		if (playersopenedminecart.containsKey(playername))
+		{
+			e.setCancelled(true);
+		}
 		
 		if (config.fixFreecamEntitiesEntitiesIDs.contains(e.getRightClicked().getType().getTypeId()))
 		{
@@ -79,7 +85,14 @@ public class FixFreecamEntities implements Listener {
 						
 						if (e.getPlayer() == null) {return;}
 
-						removePlayerFromList(e.getPlayer().getName());
+						final String playername = e.getPlayer().getName();
+						Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+						{
+							public void run()
+							{
+								removePlayer(playername);
+							}
+						});
 					}
 				});
 	}
@@ -98,7 +111,7 @@ public class FixFreecamEntities implements Listener {
 					{
 						if (!config.fixFreecamEntitiesEnabled) {return;}
 						
-						removePlayerFromList(e.getPlayer().getName());
+						removePlayer(e.getPlayer().getName());
 				    }
 				});
 	}
@@ -107,9 +120,9 @@ public class FixFreecamEntities implements Listener {
 	{
 		if (!config.fixFreecamEntitiesEnabled) {return;}
 
-		removePlayerFromList(e.getPlayer().getName());
+		removePlayer(e.getPlayer().getName());
 	}
-	private void removePlayerFromList(String playername)
+	private void removePlayer(String playername)
 	{
 		playersopenedminecart.remove(playername);
 	}
