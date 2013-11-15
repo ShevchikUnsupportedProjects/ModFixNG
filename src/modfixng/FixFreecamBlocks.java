@@ -17,8 +17,8 @@
 
 package modfixng;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -77,7 +77,7 @@ public class FixFreecamBlocks implements Listener {
 		},0,1);
 	}
 	
-	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
+	private ConcurrentHashMap<String,BlockState> playerOpenBlock = new ConcurrentHashMap<String,BlockState>(100);
 	
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e)
