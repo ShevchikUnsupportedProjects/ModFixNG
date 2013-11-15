@@ -18,7 +18,7 @@
 package modfixng;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -158,10 +158,11 @@ public class FixFreecamBlocks implements Listener {
 			public void run()
 			{
 				if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
-				
-				HashSet<String> playerNamesToCheck = new HashSet<String>(playerOpenBlock.keySet());
-				for (String playername : playerNamesToCheck)
+
+				Iterator<String> namesIterator = playerOpenBlock.keySet().iterator();
+				while (namesIterator.hasNext());
 				{
+					String playername = namesIterator.next();
 					BlockState bs = playerOpenBlock.get(playername);
 					if (bs.getBlock().getType() != bs.getType())
 					{
