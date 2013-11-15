@@ -22,6 +22,7 @@ import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -76,8 +77,7 @@ public class FixFreecamBlocks implements Listener {
 		},0,1);
 	}
 	
-	private HashMap<String,Block> playerOpenBlock = new HashMap<String,Block>();
-	private HashMap<Block,Integer> openedBlockID = new  HashMap<Block,Integer>();
+	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
 	
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e)
@@ -87,8 +87,7 @@ public class FixFreecamBlocks implements Listener {
 		Block b = e.getClickedBlock();
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(Utils.getIDstring(b)))
 		{
-			playerOpenBlock.put(e.getPlayer().getName(), b);
-			openedBlockID.put(b, b.getTypeId());
+			playerOpenBlock.put(e.getPlayer().getName(), b.getState());
 		}
 	}
 	
@@ -110,16 +109,9 @@ public class FixFreecamBlocks implements Listener {
 						
 						if (e.getPlayer() == null) {return;}
 						
-						final String playername = e.getPlayer().getName();
-						Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable(){
-							public void run()
-							{
-								if (playerOpenBlock.containsKey(playername))
-								{
-									removePlayerFromLists(playername);
-								}
-							}
-						});
+						String playername = e.getPlayer().getName();
+						
+						removePlayerFromLists(playername);
 					}
 				});
 	}
@@ -139,26 +131,22 @@ public class FixFreecamBlocks implements Listener {
 						if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 						
 						String playername = e.getPlayer().getName();
-						if (playerOpenBlock.containsKey(playername))
-						{
-							removePlayerFromLists(playername);
-						}
+
+						removePlayerFromLists(playername);
 				    }
 				});
 	}
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e)
 	{
+		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
+		
 		String playername = e.getPlayer().getName();
-		if (playerOpenBlock.containsKey(playername))
-		{
-			removePlayerFromLists(playername);
-		}
+
+		removePlayerFromLists(playername);
 	}
 	private void removePlayerFromLists(String playername)
 	{
-		Block b = playerOpenBlock.get(playername);
-		openedBlockID.remove(b);
 		playerOpenBlock.remove(playername);
 	}
 	
@@ -174,11 +162,10 @@ public class FixFreecamBlocks implements Listener {
 				HashSet<String> playerNamesToCheck = new HashSet<String>(playerOpenBlock.keySet());
 				for (String playername : playerNamesToCheck)
 				{
-					Block b = playerOpenBlock.get(playername);
-					if (b.getTypeId() != openedBlockID.get(b))
+					BlockState bs = playerOpenBlock.get(playername);
+					if (bs.getBlock().getType() != bs.getType())
 					{
 						try {Bukkit.getPlayerExact(playername).closeInventory();} catch (Exception e) {}
-						openedBlockID.remove(b);
 						playerOpenBlock.remove(playername);
 					}
 				}
