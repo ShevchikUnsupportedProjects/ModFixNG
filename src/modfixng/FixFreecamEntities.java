@@ -18,9 +18,9 @@
 package modfixng;
 
 import java.util.HashMap;
-import java.util.Iterator;
-
+import java.util.HashSet;
 import org.bukkit.Bukkit;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -137,10 +137,9 @@ public class FixFreecamEntities implements Listener {
 			{
 				if (!config.fixFreecamEntitiesEnabled) {return;}
 
-				Iterator<String> namesIterator = playersopenedminecart.keySet().iterator();
-				while (namesIterator.hasNext())
+				HashSet<String> playerNames = new HashSet<String>(playersopenedminecart.keySet());
+				for (String playername : playerNames)
 				{
-					String playername = namesIterator.next();
 					Player player = Bukkit.getPlayerExact(playername);
 					Entity entity = playersopenedminecart.get(playername);
 					if (player != null && entity != null)
@@ -150,8 +149,8 @@ public class FixFreecamEntities implements Listener {
 							entity.getLocation().distanceSquared(player.getLocation()) > 36
 						)
 						{
-							playersopenedminecart.remove(playername);
 							player.closeInventory();
+							playersopenedminecart.remove(playername);
 						}
 					}
 				}
