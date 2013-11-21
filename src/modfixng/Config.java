@@ -37,10 +37,7 @@ public class Config {
 	protected boolean fixBag19Enabled = true;
 	protected HashSet<Integer> fixBag19BackPacks19IDs = new HashSet<Integer>();
 	protected boolean fixBag19CropanalyzerFixEnabled = true;
-	protected int fixBag19CropanalyzerID = 30122;	
-
-	protected boolean forceCloseInventoryOnChunkChangeTeleport = true;
-	protected boolean forceCloseInventoryOnChunkChangeMove = true;
+	protected int fixBag19CropanalyzerID = 30122;
 
 	protected boolean fixFreecamEntitiesEnabled = true;
 	protected HashSet<Short> fixFreecamEntitiesEntitiesIDs = new HashSet<Short>();
@@ -64,9 +61,6 @@ public class Config {
 		fixBag19BackPacks19IDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.19BlockIDs"));
 		fixBag19CropanalyzerFixEnabled = config.getBoolean("BackPackFix.CropanalyzerFix.enable",fixBag19CropanalyzerFixEnabled);
 		fixBag19CropanalyzerID = config.getInt("BackPackFix.CropanalyzerFix.ID",fixBag19CropanalyzerID);
-		
-		forceCloseInventoryOnChunkChangeTeleport = config.getBoolean("ChunkUnloadFix.enable.teleport",forceCloseInventoryOnChunkChangeTeleport);
-		forceCloseInventoryOnChunkChangeMove = config.getBoolean("ChunkUnloadFix.enable.movement",forceCloseInventoryOnChunkChangeMove);
 
 		fixFreecamEntitiesEnabled = config.getBoolean("MinecartPortalFix.enable", fixFreecamEntitiesEnabled);
 		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("MinecartPortalFix.cartsIDs"));
@@ -94,9 +88,6 @@ public class Config {
 		config.set("BackPackFix.19BlockIDs",new ArrayList<Integer>(fixBag19BackPacks19IDs));
 		config.set("BackPackFix.CropanalyzerFix.enable",fixBag19CropanalyzerFixEnabled);
 		config.set("BackPackFix.CropanalyzerFix.ID",fixBag19CropanalyzerID);
-
-		config.set("ChunkUnloadFix.enable.teleport",forceCloseInventoryOnChunkChangeTeleport);
-		config.set("ChunkUnloadFix.enable.movement",forceCloseInventoryOnChunkChangeMove);
 
 		config.set("MinecartPortalFix.enable", fixFreecamEntitiesEnabled);
 		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));

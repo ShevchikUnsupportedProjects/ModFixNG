@@ -31,7 +31,6 @@ public class ModFixNG extends JavaPlugin {
 	
 	private Commands commandl;
 	private FixBag19 bagl;
-	private ForceInventoryCloseOnChunkChange chunkl;
 	private FixFreecamEntities mpl;
 	private FixFreecamBlocks fciol;
 	private EjectPlayerInHopperMinecartOnLeave hpl;
@@ -40,7 +39,8 @@ public class ModFixNG extends JavaPlugin {
 	public ProtocolManager protocolManager = null;
 	
 	@Override
-	public void onEnable() {
+	public void onEnable() 
+	{
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		//init config
 		config = new Config(this);
@@ -52,9 +52,6 @@ public class ModFixNG extends JavaPlugin {
 		//init bag fix listener
 		bagl = new FixBag19(this,config);
 		getServer().getPluginManager().registerEvents(bagl, this);
-		//init chunk fix listener
-		chunkl = new ForceInventoryCloseOnChunkChange(this,config);
-		getServer().getPluginManager().registerEvents(chunkl, this);
 		//init entity freecam fix listener
 		mpl = new FixFreecamEntities(this,config);
 		getServer().getPluginManager().registerEvents(mpl, this);
@@ -69,7 +66,8 @@ public class ModFixNG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(bfil, this);
 	}	
 	@Override
-	public void onDisable() {
+	public void onDisable() 
+	{
 		for (Player p : getServer().getOnlinePlayers())
 		{
 			p.closeInventory();

@@ -161,7 +161,7 @@ public class FixFreecamBlocks implements Listener {
 		playerOpenBlock.remove(playername);
 	}
 	
-	//check if block is broken, is yes - force close inventory
+	//check if block is broken or player is too far away from it, if yes - force close inventory
 	private void initBlockCheck()
 	{
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
@@ -173,8 +173,13 @@ public class FixFreecamBlocks implements Listener {
 				HashSet<String> playerNames = new HashSet<String>(playerOpenBlock.keySet());
 				for (String playername : playerNames)
 				{
+					Player player = Bukkit.getPlayerExact(playername);
 					BlockState bs = playerOpenBlock.get(playername);
-					if (bs.getBlock().getType() != bs.getType())
+					Block b = bs.getBlock();
+					if (b.getType() != bs.getType() || 
+						!b.getWorld().getName().equals(player.getWorld().getName()) ||
+						b.getLocation().distanceSquared(player.getLocation()) > 36
+					)
 					{
 						try {Bukkit.getPlayerExact(playername).closeInventory();} catch (Exception e) {}
 						playerOpenBlock.remove(playername);
