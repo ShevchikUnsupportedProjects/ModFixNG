@@ -41,10 +41,9 @@ public class Config {
 
 	protected boolean fixFreecamEntitiesEnabled = true;
 	protected HashSet<Short> fixFreecamEntitiesEntitiesIDs = new HashSet<Short>();
-
-	protected boolean fixFreecamBlockZeroItemsCheckEnabled = true;
 	protected boolean fixFreecamBlockCloseInventoryOnBreakCheckEnabled = true;
 	protected HashSet<String> fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>();
+	protected boolean fixFreecamBlockZeroItemsCheckEnabled = true;
 	
 	protected boolean ejectPlayerInHopperMinecartOnLeaveEnabled = true;
 	protected short ejectPlayerInHopperMinecartOnLeaveHopperMinecartID = 46;
@@ -63,12 +62,11 @@ public class Config {
 		fixBag19CropanalyzerFixEnabled = config.getBoolean("BackPackFix.CropanalyzerFix.enable",fixBag19CropanalyzerFixEnabled);
 		fixBag19CropanalyzerID = config.getInt("BackPackFix.CropanalyzerFix.ID",fixBag19CropanalyzerID);
 
-		fixFreecamEntitiesEnabled = config.getBoolean("MinecartPortalFix.enable", fixFreecamEntitiesEnabled);
-		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("MinecartPortalFix.cartsIDs"));
-		
-		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("FreeCamInvFix.zeroItemsCheck.enabled",fixFreecamBlockZeroItemsCheckEnabled);
-		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("FreeCamInvFix.forceCloseInvOnBreak.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
-		fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>(config.getStringList("FreeCamInvFix.forceCloseInvOnBreak.BlockIDs"));
+		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enable",fixFreecamBlockZeroItemsCheckEnabled);
+		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.blocks.enable",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
+		fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>(config.getStringList("ProperlyCloseInventories.blocks.IDs"));
+		fixFreecamEntitiesEnabled = config.getBoolean("ProperlyCloseInventories.entities.enable", fixFreecamEntitiesEnabled);
+		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("ProperlyCloseInventories.entities.IDs"));
 		
 		ejectPlayerInHopperMinecartOnLeaveEnabled = config.getBoolean("HopperMinecartFix.enabled",ejectPlayerInHopperMinecartOnLeaveEnabled);
 		ejectPlayerInHopperMinecartOnLeaveHopperMinecartID = (short) config.getInt("HopperMinecartFix.HopperMinecartID",ejectPlayerInHopperMinecartOnLeaveHopperMinecartID);
@@ -91,12 +89,11 @@ public class Config {
 		config.set("BackPackFix.CropanalyzerFix.enable",fixBag19CropanalyzerFixEnabled);
 		config.set("BackPackFix.CropanalyzerFix.ID",fixBag19CropanalyzerID);
 
-		config.set("MinecartPortalFix.enable", fixFreecamEntitiesEnabled);
-		config.set("MinecartPortalFix.cartsIDs",new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));
-
-		config.set("FreeCamInvFix.zeroItemsCheck.enabled",fixFreecamBlockZeroItemsCheckEnabled);
-		config.set("FreeCamInvFix.forceCloseInvOnBreak.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
-		config.set("FreeCamInvFix.forceCloseInvOnBreak.BlockIDs",new ArrayList<String>(fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs));
+		config.set("ProperlyCloseInventories.removeZeroSizeItems.enable",fixFreecamBlockZeroItemsCheckEnabled);
+		config.set("ProperlyCloseInventories.checkBlocks.enable",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
+		config.set("ProperlyCloseInventories.checkBlocks.IDs",new ArrayList<String>(fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs));
+		config.set("ProperlyCloseInventories.checkEntities.enable", fixFreecamEntitiesEnabled);
+		config.set("ProperlyCloseInventories.checkEntities.IDs",new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));
 		
 		config.set("HopperMinecartFix.enabled",ejectPlayerInHopperMinecartOnLeaveEnabled);
 		config.set("HopperMinecartFix.HopperMinecartID",ejectPlayerInHopperMinecartOnLeaveHopperMinecartID);
