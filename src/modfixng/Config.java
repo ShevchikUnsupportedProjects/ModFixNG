@@ -99,10 +99,10 @@ public class Config {
 		config.set("HopperMinecartFix.HopperMinecartID",ejectPlayerInHopperMinecartOnLeaveHopperMinecartID);
 
 		config.set("BagFrameInsertFix.enabled",fixBagFrameInsertEnabled);
+		config.set("BagFrameInsertFix.fixType",fixBagFrameInsertFixType);
 		config.set("BagFrameInsertFix.bagIDs",new ArrayList<Integer>(fixBagFrameInsertBagIDs));
 		config.set("BagFrameInsertFix.frameentity",fixBagFrameInsertFrameentityID);
 		config.set("BagFrameInsertFix.gregIDs",new ArrayList<String>(fixBagFrameInsertGregIDs));
-		config.set("BagFrameInsertFix.fixType",fixBagFrameInsertFixType);
 		
 		try {
 			config.save(configfile);
