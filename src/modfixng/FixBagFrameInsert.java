@@ -17,6 +17,8 @@
 
 package modfixng;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -26,7 +28,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class FixBagFrameInsert implements Listener {
 
-	@SuppressWarnings("unused")
 	private ModFixNG main;
 	private Config config;
 
@@ -46,7 +47,21 @@ public class FixBagFrameInsert implements Listener {
 		{
 			if (config.fixBagFrameInsertGregIDs.contains(Utils.getIDstring(e.getClickedBlock())))
 			{
-				e.getPlayer().closeInventory();
+				final Player player = e.getPlayer();
+				if (config.fixBagFrameInsertFixType == 1)
+				{
+					e.setCancelled(true);
+				} else
+				if (config.fixBagFrameInsertFixType == 2)
+				{
+					Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+					{
+						public void run()
+						{
+							player.closeInventory();
+						}
+					});
+				}
 			}
 		}
 	}
@@ -60,7 +75,21 @@ public class FixBagFrameInsert implements Listener {
 		{
 			if (e.getRightClicked().getType().getTypeId() == config.fixBagFrameInsertFrameentityID)
 			{
-				e.getPlayer().closeInventory();
+				final Player player = e.getPlayer();
+				if (config.fixBagFrameInsertFixType == 1)
+				{
+					e.setCancelled(true);
+				} else
+				if (config.fixBagFrameInsertFixType == 2)
+				{
+					Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+					{
+						public void run()
+						{
+							player.closeInventory();
+						}
+					});
+				}
 			}
 		}
 	}
