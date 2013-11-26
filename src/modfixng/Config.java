@@ -53,7 +53,7 @@ public class Config {
 	protected HashSet<Integer> fixBagFrameInsertBagIDs = new HashSet<Integer>();
 	protected HashSet<String> fixBagFrameInsertGregIDs = new HashSet<String>();
 	protected short fixBagFrameInsertFrameentityID = 18;
-	protected int fixBagFrameInsertFixType = 1;
+	protected int fixBagFrameInsertFixType = 2;
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
