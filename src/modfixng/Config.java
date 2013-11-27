@@ -56,15 +56,15 @@ public class Config {
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 
-		fixBag19Enabled = config.getBoolean("BackPackFix.enable",fixBag19Enabled);
+		fixBag19Enabled = config.getBoolean("BackPackFix.enabled",fixBag19Enabled);
 		fixBag19BackPacks19IDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.19BlockIDs"));
-		fixBag19CropanalyzerFixEnabled = config.getBoolean("BackPackFix.CropanalyzerFix.enable",fixBag19CropanalyzerFixEnabled);
+		fixBag19CropanalyzerFixEnabled = config.getBoolean("BackPackFix.CropanalyzerFix.enabled",fixBag19CropanalyzerFixEnabled);
 		fixBag19CropanalyzerID = config.getInt("BackPackFix.CropanalyzerFix.ID",fixBag19CropanalyzerID);
 
-		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enable",fixFreecamBlockZeroItemsCheckEnabled);
-		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.blocks.enable",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
+		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
+		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.blocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>(config.getStringList("ProperlyCloseInventories.blocks.IDs"));
-		fixFreecamEntitiesEnabled = config.getBoolean("ProperlyCloseInventories.entities.enable", fixFreecamEntitiesEnabled);
+		fixFreecamEntitiesEnabled = config.getBoolean("ProperlyCloseInventories.entities.enabled", fixFreecamEntitiesEnabled);
 		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("ProperlyCloseInventories.entities.IDs"));
 		
 		fixHopperMinecart = config.getBoolean("HopperMinecartFix.enabled",fixHopperMinecart);
@@ -82,15 +82,15 @@ public class Config {
 	{
 		FileConfiguration config = new YamlConfiguration();
 		
-		config.set("BackPackFix.enable",fixBag19Enabled);
+		config.set("BackPackFix.enabled",fixBag19Enabled);
 		config.set("BackPackFix.19BlockIDs",new ArrayList<Integer>(fixBag19BackPacks19IDs));
-		config.set("BackPackFix.CropanalyzerFix.enable",fixBag19CropanalyzerFixEnabled);
+		config.set("BackPackFix.CropanalyzerFix.enabled",fixBag19CropanalyzerFixEnabled);
 		config.set("BackPackFix.CropanalyzerFix.ID",fixBag19CropanalyzerID);
 
-		config.set("ProperlyCloseInventories.removeZeroSizeItems.enable",fixFreecamBlockZeroItemsCheckEnabled);
-		config.set("ProperlyCloseInventories.checkBlocks.enable",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
+		config.set("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
+		config.set("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.IDs",new ArrayList<String>(fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs));
-		config.set("ProperlyCloseInventories.checkEntities.enable", fixFreecamEntitiesEnabled);
+		config.set("ProperlyCloseInventories.checkEntities.enabled", fixFreecamEntitiesEnabled);
 		config.set("ProperlyCloseInventories.checkEntities.IDs",new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));
 		
 		config.set("HopperMinecartFix.enabled",fixHopperMinecart);
