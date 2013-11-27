@@ -18,9 +18,8 @@
 package modfixng;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import org.bukkit.Bukkit;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,7 +46,7 @@ public class FixFreecamEntities implements Listener {
 		initEntitiesCheck();
 	}
 	
-	HashMap<String,Entity> playersopenedminecart = new HashMap<String,Entity>(100);
+	HashMap<String,Entity> playerOpenEntity = new HashMap<String,Entity>(100);
 	
 	//add player to list when he opens minecart
 	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
@@ -56,14 +55,15 @@ public class FixFreecamEntities implements Listener {
 		if (!config.fixFreecamEntitiesEnabled)  {return;}
 		
 		String playername = e.getPlayer().getName();
-		if (playersopenedminecart.containsKey(playername))
+		if (playerOpenEntity.containsKey(playername))
 		{
 			e.setCancelled(true);
+			return;
 		}
 		
 		if (config.fixFreecamEntitiesEntitiesIDs.contains(e.getRightClicked().getType().getTypeId()))
 		{
-			playersopenedminecart.put(e.getPlayer().getName(),e.getRightClicked());
+			playerOpenEntity.put(e.getPlayer().getName(),e.getRightClicked());
 		}
 	}
 
@@ -90,7 +90,7 @@ public class FixFreecamEntities implements Listener {
 						{
 							public void run()
 							{
-								removePlayer(playername);
+								removePlayerData(playername);
 							}
 						});
 					}
@@ -111,7 +111,7 @@ public class FixFreecamEntities implements Listener {
 					{
 						if (!config.fixFreecamEntitiesEnabled) {return;}
 						
-						removePlayer(e.getPlayer().getName());
+						removePlayerData(e.getPlayer().getName());
 				    }
 				});
 	}
@@ -120,13 +120,8 @@ public class FixFreecamEntities implements Listener {
 	{
 		if (!config.fixFreecamEntitiesEnabled) {return;}
 
-		removePlayer(e.getPlayer().getName());
+		removePlayerData(e.getPlayer().getName());
 	}
-	private void removePlayer(String playername)
-	{
-		playersopenedminecart.remove(playername);
-	}
-
 
 	//check if entity is not valid ot player is too far away from it, if yes - force close inventory
 	private void initEntitiesCheck()
@@ -137,25 +132,31 @@ public class FixFreecamEntities implements Listener {
 			{
 				if (!config.fixFreecamEntitiesEnabled) {return;}
 
-				HashSet<String> playerNames = new HashSet<String>(playersopenedminecart.keySet());
-				for (String playername : playerNames)
+				for (Player player : Bukkit.getOnlinePlayers())
 				{
-					Player player = Bukkit.getPlayerExact(playername);
-					Entity entity = playersopenedminecart.get(playername);
-					if (player != null && entity != null)
+					if (playerOpenEntity.containsKey(player))
 					{
-						if (!entity.isValid() || 
+						String playername = player.getName();
+						Entity entity = playerOpenEntity.get(playername);
+						if 
+						(
+							!entity.isValid() ||
 							!entity.getWorld().getName().equals(player.getWorld().getName()) ||
 							entity.getLocation().distanceSquared(player.getLocation()) > 36
 						)
 						{
 							player.closeInventory();
-							playersopenedminecart.remove(playername);
+							removePlayerData(playername);
 						}
 					}
 				}
 			}
 		},0,1);
+	}
+	
+	private void removePlayerData(String playername)
+	{
+		playerOpenEntity.remove(playername);
 	}
 	
 }

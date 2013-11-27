@@ -18,7 +18,6 @@
 package modfixng;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -77,6 +76,8 @@ public class FixFreecamBlocks implements Listener {
 		},0,1);
 	}
 	
+	
+	
 	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
 	
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
@@ -88,6 +89,7 @@ public class FixFreecamBlocks implements Listener {
 		if (playerOpenBlock.containsKey(playername))
 		{
 			e.setCancelled(true);
+			return;
 		}
 		
 		Block b = e.getClickedBlock();
@@ -120,7 +122,7 @@ public class FixFreecamBlocks implements Listener {
 						{
 							public void run()
 							{
-								removePlayer(playername);
+								removePlayerData(playername);
 							}
 						});
 					}
@@ -141,9 +143,7 @@ public class FixFreecamBlocks implements Listener {
 					{
 						if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 						
-						String playername = e.getPlayer().getName();
-
-						removePlayer(playername);
+						removePlayerData(e.getPlayer().getName());
 				    }
 				});
 	}
@@ -152,13 +152,7 @@ public class FixFreecamBlocks implements Listener {
 	{
 		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 		
-		String playername = e.getPlayer().getName();
-
-		removePlayer(playername);
-	}
-	private void removePlayer(String playername)
-	{
-		playerOpenBlock.remove(playername);
+		removePlayerData(e.getPlayer().getName());
 	}
 	
 	//check if block is broken or player is too far away from it, if yes - force close inventory
@@ -170,23 +164,32 @@ public class FixFreecamBlocks implements Listener {
 			{
 				if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 
-				HashSet<String> playerNames = new HashSet<String>(playerOpenBlock.keySet());
-				for (String playername : playerNames)
+				for (Player player : Bukkit.getOnlinePlayers())
 				{
-					Player player = Bukkit.getPlayerExact(playername);
-					BlockState bs = playerOpenBlock.get(playername);
-					Block b = bs.getBlock();
-					if (b.getType() != bs.getType() || 
-						!b.getWorld().getName().equals(player.getWorld().getName()) ||
-						b.getLocation().distanceSquared(player.getLocation()) > 36
-					)
+					if (playerOpenBlock.containsKey(player.getName()))
 					{
-						try {Bukkit.getPlayerExact(playername).closeInventory();} catch (Exception e) {}
-						playerOpenBlock.remove(playername);
+						String playername = player.getName();
+						BlockState bs = playerOpenBlock.get(playername);
+						Block b = bs.getBlock();
+						if 
+						(
+							b.getType() != bs.getType() || 
+							!b.getWorld().getName().equals(player.getWorld().getName()) ||
+							b.getLocation().distanceSquared(player.getLocation()) > 36
+						)
+						{
+							player.closeInventory();
+							removePlayerData(playername);
+						}
 					}
 				}
 			}
 		},0,1);
 	}
 
+	private void removePlayerData(String playername)
+	{
+		playerOpenBlock.remove(playername);
+	}
+	
 }
