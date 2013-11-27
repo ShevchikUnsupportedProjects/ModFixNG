@@ -45,8 +45,7 @@ public class Config {
 	protected HashSet<String> fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>();
 	protected boolean fixFreecamBlockZeroItemsCheckEnabled = true;
 	
-	protected boolean ejectPlayerInHopperMinecartOnLeaveEnabled = true;
-	protected short ejectPlayerInHopperMinecartOnLeaveHopperMinecartID = 46;
+	protected boolean fixHopperMinecart = true;
 
 	protected boolean fixBagFrameInsertEnabled = true;
 	protected HashSet<Integer> fixBagFrameInsertBagIDs = new HashSet<Integer>();
@@ -68,8 +67,7 @@ public class Config {
 		fixFreecamEntitiesEnabled = config.getBoolean("ProperlyCloseInventories.entities.enable", fixFreecamEntitiesEnabled);
 		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("ProperlyCloseInventories.entities.IDs"));
 		
-		ejectPlayerInHopperMinecartOnLeaveEnabled = config.getBoolean("HopperMinecartFix.enabled",ejectPlayerInHopperMinecartOnLeaveEnabled);
-		ejectPlayerInHopperMinecartOnLeaveHopperMinecartID = (short) config.getInt("HopperMinecartFix.HopperMinecartID",ejectPlayerInHopperMinecartOnLeaveHopperMinecartID);
+		fixHopperMinecart = config.getBoolean("HopperMinecartFix.enabled",fixHopperMinecart);
 		
 		fixBagFrameInsertEnabled = config.getBoolean("BagFrameInsertFix.enabled",fixBagFrameInsertEnabled);
 		fixBagFrameInsertFixType = config.getInt("BagFrameInsertFix.fixType",fixBagFrameInsertFixType);
@@ -95,8 +93,7 @@ public class Config {
 		config.set("ProperlyCloseInventories.checkEntities.enable", fixFreecamEntitiesEnabled);
 		config.set("ProperlyCloseInventories.checkEntities.IDs",new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));
 		
-		config.set("HopperMinecartFix.enabled",ejectPlayerInHopperMinecartOnLeaveEnabled);
-		config.set("HopperMinecartFix.HopperMinecartID",ejectPlayerInHopperMinecartOnLeaveHopperMinecartID);
+		config.set("HopperMinecartFix.enabled",fixHopperMinecart);
 
 		config.set("BagFrameInsertFix.enabled",fixBagFrameInsertEnabled);
 		config.set("BagFrameInsertFix.fixType",fixBagFrameInsertFixType);

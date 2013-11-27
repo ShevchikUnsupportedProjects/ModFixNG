@@ -17,18 +17,19 @@
 
 package modfixng;
 
+import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class EjectPlayerInHopperMinecartOnLeave implements Listener {
+public class FixHopperMinecart implements Listener {
 
 	@SuppressWarnings("unused")
 	private ModFixNG main;
 	private Config config;
 	
-	EjectPlayerInHopperMinecartOnLeave(ModFixNG main, Config config) {
+	FixHopperMinecart(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 	}
@@ -36,11 +37,11 @@ public class EjectPlayerInHopperMinecartOnLeave implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerLeave(PlayerQuitEvent e)
 	{
-		if (!config.ejectPlayerInHopperMinecartOnLeaveEnabled) {return;}
+		if (!config.fixHopperMinecart) {return;}
 		
-		if (e.getPlayer().isInsideVehicle() && e.getPlayer().getVehicle().getType().getTypeId() == config.ejectPlayerInHopperMinecartOnLeaveHopperMinecartID)
+		if (e.getPlayer().isInsideVehicle() && e.getPlayer().getVehicle() instanceof HopperMinecart)
 		{
-			e.getPlayer().eject();
+			e.getPlayer().closeInventory();
 		}
 	}
 	
