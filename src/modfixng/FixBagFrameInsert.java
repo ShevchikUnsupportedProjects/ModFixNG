@@ -48,20 +48,13 @@ public class FixBagFrameInsert implements Listener {
 			if (config.fixBagFrameInsertGregIDs.contains(Utils.getIDstring(e.getClickedBlock())))
 			{
 				final Player player = e.getPlayer();
-				if (config.fixBagFrameInsertFixType == 1)
+				Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
 				{
-					e.setCancelled(true);
-				} else
-				if (config.fixBagFrameInsertFixType == 2)
-				{
-					Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+					public void run()
 					{
-						public void run()
-						{
-							player.closeInventory();
-						}
-					});
-				}
+						player.closeInventory();
+					}
+				});
 			}
 		}
 	}
@@ -76,20 +69,13 @@ public class FixBagFrameInsert implements Listener {
 			if (e.getRightClicked().getType().getTypeId() == config.fixBagFrameInsertFrameentityID)
 			{
 				final Player player = e.getPlayer();
-				if (config.fixBagFrameInsertFixType == 1)
+				Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
 				{
-					e.setCancelled(true);
-				} else
-				if (config.fixBagFrameInsertFixType == 2)
-				{
-					Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+					public void run()
 					{
-						public void run()
-						{
-							player.closeInventory();
-						}
-					});
-				}
+						player.closeInventory();
+					}
+				});
 			}
 		}
 	}

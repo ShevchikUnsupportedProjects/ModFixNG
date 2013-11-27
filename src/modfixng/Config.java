@@ -51,7 +51,6 @@ public class Config {
 	protected HashSet<Integer> fixBagFrameInsertBagIDs = new HashSet<Integer>();
 	protected HashSet<String> fixBagFrameInsertGregIDs = new HashSet<String>();
 	protected short fixBagFrameInsertFrameentityID = 18;
-	protected int fixBagFrameInsertFixType = 2;
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
@@ -70,7 +69,6 @@ public class Config {
 		fixHopperMinecart = config.getBoolean("HopperMinecartFix.enabled",fixHopperMinecart);
 		
 		fixBagFrameInsertEnabled = config.getBoolean("BagFrameInsertFix.enabled",fixBagFrameInsertEnabled);
-		fixBagFrameInsertFixType = config.getInt("BagFrameInsertFix.fixType",fixBagFrameInsertFixType);
 		fixBagFrameInsertBagIDs = new HashSet<Integer>(config.getIntegerList("BagFrameInsertFix.bagIDs"));
 		fixBagFrameInsertFrameentityID = (short) config.getInt("BagFrameInsertFix.frameentity",fixBagFrameInsertFrameentityID);
 		fixBagFrameInsertGregIDs = new HashSet<String>(config.getStringList("BagFrameInsertFix.gregIDs"));
@@ -96,7 +94,6 @@ public class Config {
 		config.set("HopperMinecartFix.enabled",fixHopperMinecart);
 
 		config.set("BagFrameInsertFix.enabled",fixBagFrameInsertEnabled);
-		config.set("BagFrameInsertFix.fixType",fixBagFrameInsertFixType);
 		config.set("BagFrameInsertFix.bagIDs",new ArrayList<Integer>(fixBagFrameInsertBagIDs));
 		config.set("BagFrameInsertFix.frameentity",fixBagFrameInsertFrameentityID);
 		config.set("BagFrameInsertFix.gregIDs",new ArrayList<String>(fixBagFrameInsertGregIDs));
