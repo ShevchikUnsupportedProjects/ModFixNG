@@ -20,6 +20,7 @@ package modfixng;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -69,6 +70,14 @@ public class FixFreecamBlocks implements Listener {
 						if (item != null && item.getAmount() == 0)
 						{
 							p.getInventory().setItem(i, null);
+						}
+					}
+					//armor
+					for (ItemStack armor : p.getInventory().getArmorContents())
+					{
+						if (armor.getAmount() == 0)
+						{
+							armor.setType(Material.AIR);
 						}
 					}
 				}
