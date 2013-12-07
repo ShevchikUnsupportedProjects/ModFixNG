@@ -42,6 +42,7 @@ public class Config {
 	protected boolean fixFreecamEntitiesEnabled = true;
 	protected HashSet<Short> fixFreecamEntitiesEntitiesIDs = new HashSet<Short>();
 	protected boolean fixFreecamBlockCloseInventoryOnBreakCheckEnabled = true;
+	protected boolean fixFreecamBlockCloseInventoryOnBreakAutoDetectContainers = true;
 	protected HashSet<String> fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>();
 	protected boolean fixFreecamBlockZeroItemsCheckEnabled = true;
 	
@@ -62,6 +63,7 @@ public class Config {
 
 		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
+		fixFreecamBlockCloseInventoryOnBreakAutoDetectContainers = config.getBoolean("ProperlyCloseInventories.checkBlocks.autodetect",fixFreecamBlockCloseInventoryOnBreakAutoDetectContainers);
 		fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>(config.getStringList("ProperlyCloseInventories.checkBlocks.IDs"));
 		fixFreecamEntitiesEnabled = config.getBoolean("ProperlyCloseInventories.checkEntities.enabled", fixFreecamEntitiesEnabled);
 		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("ProperlyCloseInventories.checkEntities.IDs"));
@@ -87,6 +89,7 @@ public class Config {
 
 		config.set("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
+		config.set("ProperlyCloseInventories.checkBlocks.autodetect",fixFreecamBlockCloseInventoryOnBreakAutoDetectContainers);
 		config.set("ProperlyCloseInventories.checkBlocks.IDs",new ArrayList<String>(fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs));
 		config.set("ProperlyCloseInventories.checkEntities.enabled", fixFreecamEntitiesEnabled);
 		config.set("ProperlyCloseInventories.checkEntities.IDs",new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));
