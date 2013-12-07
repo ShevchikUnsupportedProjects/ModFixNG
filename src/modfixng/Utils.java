@@ -17,7 +17,12 @@
 
 package modfixng;
 
+import java.lang.reflect.Method;
+
+import org.bukkit.World;
 import org.bukkit.block.Block;
+
+import com.comphenix.protocol.utility.MinecraftReflection;
 
 public class Utils {
 
@@ -27,5 +32,23 @@ public class Utils {
 		String blstring = String.valueOf(bl.getTypeId());
 		if (bl.getData() !=0) {blstring += ":"+bl.getData();}
 		return blstring;
+	}
+	
+	public static boolean hasInventory(Block b)
+	{
+		try {
+			World world = b.getWorld();
+			Method getTEMethod = world.getClass().getDeclaredMethod("getTileEntityAt", int.class, int.class, int.class);
+			getTEMethod.setAccessible(true);
+			Object te = getTEMethod.invoke(world, b.getX(), b.getY(), b.getZ());
+			Class<?> invclass = MinecraftReflection.getMinecraftClass("IInventory");
+			if (te != null && invclass.isAssignableFrom(te.getClass()))
+			{
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

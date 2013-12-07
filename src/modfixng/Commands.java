@@ -20,6 +20,7 @@ package modfixng;
 import java.util.HashSet;
 
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -182,11 +183,13 @@ public class Commands implements  CommandExecutor,Listener{
 		Player pl = e.getPlayer();
 		if (plbinfoswitch.contains(pl.getName()))
 		{
-			String msg = ChatColor.BLUE+"Block id: "+e.getClickedBlock().getTypeId();
-			if (e.getClickedBlock().getData() !=0)
+			Block b = e.getClickedBlock();
+			String msg = ChatColor.BLUE+"Block id: "+b.getTypeId();
+			if (b.getData() !=0)
 			{
 				msg+=", subid: "+e.getClickedBlock().getData();
 			}
+			msg+=", has inventory: "+Utils.hasInventory(b);
 			pl.sendMessage(msg);
 			plbinfoswitch.remove(pl.getName());
 			e.setCancelled(true);
