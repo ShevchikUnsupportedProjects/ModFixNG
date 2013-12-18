@@ -53,6 +53,8 @@ public class Config {
 	protected HashSet<String> fixBagFrameInsertGregIDs = new HashSet<String>();
 	protected short fixBagFrameInsertFrameentityID = 18;
 	
+	protected boolean fixSlotDesyncEnabled = true;
+	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 
@@ -74,7 +76,9 @@ public class Config {
 		fixBagFrameInsertBagIDs = new HashSet<Integer>(config.getIntegerList("BagFrameInsertFix.bagIDs"));
 		fixBagFrameInsertFrameentityID = (short) config.getInt("BagFrameInsertFix.frameentity",fixBagFrameInsertFrameentityID);
 		fixBagFrameInsertGregIDs = new HashSet<String>(config.getStringList("BagFrameInsertFix.gregIDs"));
-				
+		
+		fixSlotDesyncEnabled = config.getBoolean("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
+		
 		saveConfig();
 	}
 	
@@ -101,8 +105,8 @@ public class Config {
 		config.set("BagFrameInsertFix.frameentity",fixBagFrameInsertFrameentityID);
 		config.set("BagFrameInsertFix.gregIDs",new ArrayList<String>(fixBagFrameInsertGregIDs));
 		
-		try {
-			config.save(configfile);
-		} catch (IOException e) {}
+		config.set("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
+		
+		try {config.save(configfile);} catch (IOException e) {}
 	}
 }

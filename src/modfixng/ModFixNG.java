@@ -18,7 +18,6 @@
 package modfixng;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -35,6 +34,8 @@ public class ModFixNG extends JavaPlugin {
 	private FixFreecamBlocks fciol;
 	private FixHopperMinecart hpl;
 	private FixBagFrameInsert bfil;
+	@SuppressWarnings("unused")
+	private FixSlotDesync fsl;
 	
 	public ProtocolManager protocolManager = null;
 	
@@ -64,6 +65,8 @@ public class ModFixNG extends JavaPlugin {
 		//init bag insert into frame fix listener
 		bfil = new FixBagFrameInsert(this,config);
 		getServer().getPluginManager().registerEvents(bfil, this);
+		//init armor slot desync fix
+		fsl = new FixSlotDesync(this, config);
 	}	
 	@Override
 	public void onDisable() 
@@ -74,11 +77,11 @@ public class ModFixNG extends JavaPlugin {
 		}
 		config = null;
 		commandl = null;
-		HandlerList.unregisterAll(this);
 		mpl = null;
 		fciol = null;
 		hpl = null;
 		bfil = null;
+		fsl = null;
 		protocolManager.removePacketListeners(this);
 		protocolManager = null;
 	}
