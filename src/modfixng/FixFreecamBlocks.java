@@ -104,7 +104,10 @@ public class FixFreecamBlocks implements Listener {
 		Block b = e.getClickedBlock();
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(Utils.getIDstring(b)) || (config.fixFreecamBlockCloseInventoryOnBreakAutoDetectContainers && Utils.hasInventory(b)))
 		{
-			playerOpenBlock.put(e.getPlayer().getName(), b.getState());
+			if (!config.fixFreecamBlockItemInhandExclusions.contains(Utils.getIDstring(e.getPlayer().getItemInHand())))
+			{
+				playerOpenBlock.put(e.getPlayer().getName(), b.getState());
+			}
 		}
 	}
 	

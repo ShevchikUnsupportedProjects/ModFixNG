@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.utility.MinecraftReflection;
 
@@ -33,6 +34,14 @@ public class Utils {
 		if (bl.getData() !=0) {blstring += ":"+bl.getData();}
 		return blstring;
 	}
+	
+	public static String getIDstring(ItemStack item)
+	{
+		String blstring = String.valueOf(item.getTypeId());
+		if (item.getDurability() !=0) {blstring += ":"+item.getDurability();}
+		return blstring;
+	}
+	
 	
 	public static boolean hasInventory(Block b)
 	{
