@@ -27,7 +27,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.comphenix.protocol.Packets;
+import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
@@ -82,7 +82,7 @@ public class FixBag19 implements Listener {
 		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
-						.params(main, Packets.Client.WINDOW_CLICK)
+						.params(main, PacketType.Play.Client.WINDOW_CLICK)
 						.clientSide()
 						.listenerPriority(ListenerPriority.HIGHEST)
 						.optionIntercept()

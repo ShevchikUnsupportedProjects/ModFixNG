@@ -23,7 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.comphenix.protocol.Packets;
+import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 
 public class FixSlotDesync {
@@ -59,7 +59,7 @@ public class FixSlotDesync {
 
     public void sendItemUpdate(Player player, int slot, ItemStack item)
     {
-    	PacketContainer updateslot = main.protocolManager.createPacket(Packets.Server.SET_SLOT);
+    	PacketContainer updateslot = main.protocolManager.createPacket(PacketType.Play.Server.SET_SLOT);
     	updateslot.getIntegers().write(0, 0);
     	updateslot.getIntegers().write(1, slot);
     	updateslot.getItemModifier().write(0, item);

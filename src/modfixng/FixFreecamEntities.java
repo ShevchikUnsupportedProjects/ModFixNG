@@ -28,7 +28,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.comphenix.protocol.Packets;
+import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
@@ -73,7 +73,7 @@ public class FixFreecamEntities implements Listener {
 		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
-						.params(main, Packets.Client.CLOSE_WINDOW)
+						.params(main, PacketType.Play.Client.CLOSE_WINDOW)
 						.clientSide()
 						.listenerPriority(ListenerPriority.HIGHEST)
 				) 
@@ -101,7 +101,7 @@ public class FixFreecamEntities implements Listener {
 		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
-						.params(main, Packets.Server.CLOSE_WINDOW)
+						.params(main, PacketType.Play.Server.CLOSE_WINDOW)
 						.serverSide()
 						.listenerPriority(ListenerPriority.HIGHEST)
 				) 
