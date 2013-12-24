@@ -17,12 +17,17 @@
 
 package modfixng;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.utility.MinecraftReflection;
 
 public class Utils {
@@ -60,4 +65,17 @@ public class Utils {
 		}
 		return false;
 	}
+	
+    public static void updateSlot(ProtocolManager protocolManager, Player player, int inventory, int slot, ItemStack item)
+    {
+    	PacketContainer updateslot = protocolManager.createPacket(PacketType.Play.Server.SET_SLOT);
+    	updateslot.getIntegers().write(0, inventory);
+    	updateslot.getIntegers().write(1, slot);
+    	updateslot.getItemModifier().write(0, item);
+        try {
+			protocolManager.sendServerPacket(player, updateslot);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+    }
 }
