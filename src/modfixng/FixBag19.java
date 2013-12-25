@@ -112,9 +112,8 @@ public class FixBag19 implements Listener {
 									  //update player inventory
 									  int inventory = e.getPacket().getIntegers().getValues().get(0);
 									  int clickedslot = e.getPacket().getIntegers().getValues().get(1);
-									  final ItemStack clickeditemstack = e.getPacket().getItemModifier().getValues().get(0);
 									  //update slot from
-									  Utils.updateSlot(main.protocolManager, player, inventory, clickedslot, clickeditemstack);
+									 // Utils.updateSlot(main.protocolManager, player, inventory, clickedslot, );
 									  //update slot to
 									  Utils.updateSlot(main.protocolManager, player, inventory, heldslot, player.getInventory().getItemInHand());
 								  }
