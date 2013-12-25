@@ -189,7 +189,7 @@ public class Commands implements  CommandExecutor,Listener{
 			{
 				msg+=", subid: "+e.getClickedBlock().getData();
 			}
-			msg+=", has inventory: "+Utils.hasInventory(b);
+			msg+=", has inventory: "+ModFixNGUtils.hasInventory(b);
 			pl.sendMessage(msg);
 			plbinfoswitch.remove(pl.getName());
 			e.setCancelled(true);

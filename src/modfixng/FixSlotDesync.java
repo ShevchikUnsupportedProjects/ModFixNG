@@ -42,10 +42,10 @@ public class FixSlotDesync {
 				
 				for (Player player : Bukkit.getOnlinePlayers())
 				{
-					Utils.updateSlot(main.protocolManager, player, 0, 5, player.getInventory().getHelmet());
-					Utils.updateSlot(main.protocolManager, player, 0, 6, player.getInventory().getChestplate());
-					Utils.updateSlot(main.protocolManager, player, 0, 7, player.getInventory().getLeggings());
-					Utils.updateSlot(main.protocolManager, player, 0, 8, player.getInventory().getBoots());
+					ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 5, player.getInventory().getHelmet());
+					ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 6, player.getInventory().getChestplate());
+					ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 7, player.getInventory().getLeggings());
+					ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 8, player.getInventory().getBoots());
 				}
 			}
 		}, 0, 20);

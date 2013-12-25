@@ -88,7 +88,8 @@ public class FixBag19 implements Listener {
 						.optionIntercept()
 				) 
 				{
-					  @Override
+					@SuppressWarnings("deprecation")
+					@Override
 					  public void onPacketReceiving(PacketEvent e) 
 					  {
 						  if (!config.fixBag19Enabled) {return;}
@@ -110,12 +111,7 @@ public class FixBag19 implements Listener {
 									  //cancel
 									  e.setCancelled(true);
 									  //update player inventory
-									  int inventory = e.getPacket().getIntegers().getValues().get(0);
-									  int clickedslot = e.getPacket().getIntegers().getValues().get(1);
-									  //update slot from
-									 // Utils.updateSlot(main.protocolManager, player, inventory, clickedslot, );
-									  //update slot to
-									  Utils.updateSlot(main.protocolManager, player, inventory, heldslot, player.getInventory().getItemInHand());
+									  player.updateInventory();
 								  }
 							  }
 						  }

@@ -45,7 +45,7 @@ public class FixBagFrameInsert implements Listener {
 		
 		if (config.fixBagFrameInsertBagIDs.contains(e.getPlayer().getItemInHand().getTypeId()))
 		{
-			if (config.fixBagFrameInsertGregIDs.contains(Utils.getIDstring(e.getClickedBlock())))
+			if (config.fixBagFrameInsertGregIDs.contains(ModFixNGUtils.getIDstring(e.getClickedBlock())))
 			{
 				final Player player = e.getPlayer();
 				Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
