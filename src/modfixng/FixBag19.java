@@ -76,7 +76,7 @@ public class FixBag19 implements Listener {
 	}
 
 	
-	//restrict using 1-9 buttons in modded inventories
+	//restrict using 1-9 buttons in bags from mods if it will move bag to another slot
 	private void initBag19BugFixListener()
 	{
 		main.protocolManager.addPacketListener(
@@ -88,31 +88,38 @@ public class FixBag19 implements Listener {
 						.optionIntercept()
 				) 
 				{
-					  @SuppressWarnings("deprecation")
 					  @Override
 					  public void onPacketReceiving(PacketEvent e) 
 					  {
-						  try {
-							  if (!config.fixBag19Enabled) {return;}
+						  if (!config.fixBag19Enabled) {return;}
 
-							  if (e.getPlayer() == null) {return;}
+						  if (e.getPlayer() == null) {return;}
 						  
-							  final Player player = e.getPlayer();					  
-							  //if item in hand is one of the bad ids - check buttons
-							  if (config.fixBag19BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
+						  final Player player = e.getPlayer();					  
+						  //if item in hand is one of the bad ids - check buttons
+						  if (config.fixBag19BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
+						  {
+							  //check click type
+							  if (e.getPacket().getIntegers().getValues().get(3) == 2)
 							  {
-								  //restrict illegal bag moving
-								  //check click type , 2 ==  1..9 buttons (e.getPacket().getIntegers().getValues().get(3) - action type)
-								  if (e.getPacket().getIntegers().getValues().get(3) == 2)
-								  {//check to which slot we want to move item (if to bag slot - block action)
-									  if (player.getInventory().getHeldItemSlot() == e.getPacket().getIntegers().getValues().get(2))
-									  {
-										  e.setCancelled(true);
-										  player.updateInventory();
-									  }
+								  //check to which slot we want to move item
+								  final int heldslot = player.getInventory().getHeldItemSlot();
+								  if (heldslot == e.getPacket().getIntegers().getValues().get(2))
+								  {
+									  //illegal bag movement
+									  //cancel
+									  e.setCancelled(true);
+									  //update player inventory
+									  int inventory = e.getPacket().getIntegers().getValues().get(0);
+									  int clickedslot = e.getPacket().getIntegers().getValues().get(1);
+									  final ItemStack clickeditemstack = e.getPacket().getItemModifier().getValues().get(0);
+									  //update slot from
+									  Utils.updateSlot(main.protocolManager, player, inventory, clickedslot, clickeditemstack);
+									  //update slot to
+									  Utils.updateSlot(main.protocolManager, player, inventory, heldslot, player.getInventory().getItemInHand());
 								  }
 							  }
-						  } catch (Exception ex) {ex.printStackTrace();}
+						  }
 					  }
 				});
 	}	
