@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -93,6 +94,8 @@ public class FixFreecamBlocks implements Listener {
 	public void onPlayerOpenedBlock(PlayerInteractEvent e)
 	{
 		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
+		
+		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
 
 		Block b = e.getClickedBlock();
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || (config.fixFreecamBlockCloseInventoryOnBreakAutoDetectContainers && ModFixNGUtils.hasInventory(b)))
