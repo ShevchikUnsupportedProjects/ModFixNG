@@ -102,6 +102,8 @@ public class FixFreecamBlocks implements Listener {
 					@Override
 					public void onPacketSending(PacketEvent e) 
 					{
+						if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
+						
 						String playername = e.getPlayer().getName();
 						if (playerOpenBlock.containsKey(playername))
 						{
