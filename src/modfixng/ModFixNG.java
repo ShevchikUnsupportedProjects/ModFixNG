@@ -34,6 +34,7 @@ public class ModFixNG extends JavaPlugin {
 	private FixFreecamBlocks fciol;
 	private FixHopperMinecart hpl;
 	private FixBagFrameInsert bfil;
+	private RestrictBreakWhileOpen rbwol;
 	@SuppressWarnings("unused")
 	private FixSlotDesync fsl;
 	
@@ -43,30 +44,24 @@ public class ModFixNG extends JavaPlugin {
 	public void onEnable() 
 	{
 		protocolManager = ProtocolLibrary.getProtocolManager();
-		//init config
 		config = new Config(this);
 		config.loadConfig();
-		//init command listener
 		commandl = new Commands(this,config);
 		getCommand("modfix").setExecutor(commandl);
 		getServer().getPluginManager().registerEvents(commandl, this);
-		//init bag fix listener
 		bagl = new FixBag19(this,config);
 		getServer().getPluginManager().registerEvents(bagl, this);
-		//init entity freecam fix listener
 		mpl = new FixFreecamEntities(this,config);
 		getServer().getPluginManager().registerEvents(mpl, this);
-		//init block freecam  fix listener
 		fciol = new FixFreecamBlocks(this,config);
 		getServer().getPluginManager().registerEvents(fciol, this);
-		//init hopper minecart fix listener
 		hpl = new FixHopperMinecart(this,config);
 		getServer().getPluginManager().registerEvents(hpl, this);
-		//init bag insert into frame fix listener
 		bfil = new FixBagFrameInsert(this,config);
 		getServer().getPluginManager().registerEvents(bfil, this);
-		//init armor slot desync fix
 		fsl = new FixSlotDesync(this, config);
+		rbwol = new RestrictBreakWhileOpen(this, config);
+		getServer().getPluginManager().registerEvents(rbwol, this);
 	}	
 	@Override
 	public void onDisable() 

@@ -47,6 +47,9 @@ public class Config {
 	protected HashSet<String> fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>();
 	protected boolean fixFreecamBlockZeroItemsCheckEnabled = true;
 	
+	protected boolean restrictBlockBreakWhileOpenEnabled = true;
+	protected HashSet<String> restrictBlockBreakWhileOpenEnabledIDs = new HashSet<String>();
+	
 	protected boolean fixHopperMinecart = true;
 
 	protected boolean fixBagFrameInsertEnabled = true;
