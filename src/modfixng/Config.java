@@ -75,6 +75,9 @@ public class Config {
 		fixFreecamEntitiesEnabled = config.getBoolean("ProperlyCloseInventories.checkEntities.enabled", fixFreecamEntitiesEnabled);
 		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("ProperlyCloseInventories.checkEntities.IDs"));
 		
+		restrictBlockBreakWhileOpenEnabled = config.getBoolean("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
+		restrictBlockBreakWhileOpenEnabledIDs = new HashSet<String>(config.getStringList("RestrictBlockBreakWhileOpen.IDs"));
+		
 		fixHopperMinecart = config.getBoolean("HopperMinecartFix.enabled",fixHopperMinecart);
 		
 		fixBagFrameInsertEnabled = config.getBoolean("BagFrameInsertFix.enabled",fixBagFrameInsertEnabled);
@@ -103,6 +106,9 @@ public class Config {
 
 		config.set("ProperlyCloseInventories.checkEntities.enabled", fixFreecamEntitiesEnabled);
 		config.set("ProperlyCloseInventories.checkEntities.IDs",new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));
+		
+		config.set("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
+		config.set("RestrictBlockBreakWhileOpen.IDs", new ArrayList<String>(restrictBlockBreakWhileOpenEnabledIDs));
 		
 		config.set("HopperMinecartFix.enabled",fixHopperMinecart);
 
