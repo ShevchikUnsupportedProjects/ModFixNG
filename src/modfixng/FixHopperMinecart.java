@@ -34,6 +34,7 @@ public class FixHopperMinecart implements Listener {
 		this.config = config;
 	}
 	
+	//force close player inventory if he was in hopper minecart on quit
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerLeave(PlayerQuitEvent e)
 	{

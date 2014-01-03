@@ -124,7 +124,7 @@ public class FixFreecamEntities implements Listener {
 		removePlayerData(e.getPlayer().getName());
 	}
 
-	//check if entity is not valid ot player is too far away from it, if yes - force close inventory
+	//check if entity is not valid or player is too far away from it, if yes - force close inventory
 	private void initEntitiesCheck()
 	{
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()

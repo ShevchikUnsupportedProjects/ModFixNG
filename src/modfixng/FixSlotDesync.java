@@ -31,7 +31,7 @@ public class FixSlotDesync {
 		startInvSync();
 	}
 	
-	
+	//resend armor slot items every tick
 	private void startInvSync()
 	{
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
