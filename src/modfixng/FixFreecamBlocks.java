@@ -47,7 +47,6 @@ public class FixFreecamBlocks implements Listener {
 		//zeroItemsCheck
 		initInvCheck();
 		//forceCloseInv
-		initOpenInventoryFixListener();
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
 		initBlockCheck();
