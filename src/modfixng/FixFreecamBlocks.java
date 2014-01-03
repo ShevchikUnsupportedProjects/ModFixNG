@@ -110,6 +110,7 @@ public class FixFreecamBlocks implements Listener {
 							return;
 						}
 						
+						@SuppressWarnings("deprecation")
 						Block b = e.getPlayer().getTargetBlock(null, 7);
 						if (b != null && config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || (config.fixFreecamBlockCloseInventoryOnBreakAutoDetectContainers && ModFixNGUtils.hasInventory(b)))
 						{

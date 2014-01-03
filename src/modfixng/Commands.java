@@ -120,6 +120,7 @@ public class Commands implements  CommandExecutor,Listener{
 		if (sender instanceof Player)
 		{
 			Player pl = (Player) sender;
+			@SuppressWarnings("deprecation")
 			String msg =ChatColor.BLUE+"Item id: "+pl.getItemInHand().getTypeId();
 			if (pl.getItemInHand().getDurability() !=0 )
 			{
@@ -162,6 +163,7 @@ public class Commands implements  CommandExecutor,Listener{
 	}
 	
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
 	public void onPlayerCheckEntityID(PlayerInteractEntityEvent e)
 	{
@@ -175,6 +177,7 @@ public class Commands implements  CommandExecutor,Listener{
 	}
 	
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
 	public void onPlayerCheckBlockID(PlayerInteractEvent e)
 	{

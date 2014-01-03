@@ -33,6 +33,7 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 public class ModFixNGUtils {
 
 	
+	@SuppressWarnings("deprecation")
 	public static String getIDstring(Block bl)
 	{
 		String blstring = String.valueOf(bl.getTypeId());
@@ -42,6 +43,7 @@ public class ModFixNGUtils {
 	
 	public static String getIDstring(ItemStack item)
 	{
+		@SuppressWarnings("deprecation")
 		String blstring = String.valueOf(item.getTypeId());
 		if (item.getDurability() !=0) {blstring += ":"+item.getDurability();}
 		return blstring;
