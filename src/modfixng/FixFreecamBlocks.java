@@ -95,7 +95,7 @@ public class FixFreecamBlocks implements Listener {
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, PacketType.Play.Server.OPEN_WINDOW)
-						.clientSide()
+						.serverSide()
 						.listenerPriority(ListenerPriority.HIGHEST)
 				) 
 				{
