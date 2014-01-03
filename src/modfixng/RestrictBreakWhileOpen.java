@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.comphenix.protocol.PacketType;
@@ -25,42 +26,26 @@ public class RestrictBreakWhileOpen implements Listener {
 	RestrictBreakWhileOpen(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
-		initOpenInventoryFixListener();
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
 	}
 
 
 	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
-	private void initOpenInventoryFixListener()
+
+	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+	public void onPlayerOpenedBlock(PlayerInteractEvent e)
 	{
-		main.protocolManager.addPacketListener(
-				new PacketAdapter(
-						PacketAdapter
-						.params(main, PacketType.Play.Server.OPEN_WINDOW)
-						.serverSide()
-						.listenerPriority(ListenerPriority.HIGHEST)
-				) 
-				{
-					@Override
-					public void onPacketSending(PacketEvent e) 
-					{
-						if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
-						
-						String playername = e.getPlayer().getName();
-						if (playerOpenBlock.containsKey(playername))
-						{
-							playerOpenBlock.remove(playername);
-						}
-						
-						@SuppressWarnings("deprecation")
-						Block b = e.getPlayer().getTargetBlock(null, 7);
-						if (b != null && config.restrictBlockBreakWhileOpenEnabledIDs.contains(ModFixNGUtils.getIDstring(b)))
-						{
-							playerOpenBlock.put(e.getPlayer().getName(), b.getState());
-						}
-					}
-				});
+		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
+
+		Block b = e.getClickedBlock();
+		if (config.restrictBlockBreakWhileOpenEnabledIDs.contains(ModFixNGUtils.getIDstring(b)))
+		{
+			if (!config.restrictBlockBreakWhileOpenItemInhandExclusions.contains(ModFixNGUtils.getIDstring(e.getPlayer().getItemInHand())))
+			{
+				playerOpenBlock.put(e.getPlayer().getName(), b.getState());
+			}
+		}
 	}
 	
 	//remove player from list when he closes inventory
