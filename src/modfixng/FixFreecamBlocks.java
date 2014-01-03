@@ -27,7 +27,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -47,6 +46,7 @@ public class FixFreecamBlocks implements Listener {
 		//zeroItemsCheck
 		initInvCheck();
 		//forceCloseInv
+		initOpenInventoryFixListener();
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
 		initBlockCheck();
@@ -89,26 +89,34 @@ public class FixFreecamBlocks implements Listener {
 	
 	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
 	
-	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
-	public void onPlayerOpenedBlock(PlayerInteractEvent e)
+	private void initOpenInventoryFixListener()
 	{
-		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
-		
-		String playername = e.getPlayer().getName();
-		if (playerOpenBlock.containsKey(playername))
-		{
-			e.setCancelled(true);
-			return;
-		}
-		
-		Block b = e.getClickedBlock();
-		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || (config.fixFreecamBlockCloseInventoryOnBreakAutoDetectContainers && ModFixNGUtils.hasInventory(b)))
-		{
-			if (!config.fixFreecamBlockItemInhandExclusions.contains(ModFixNGUtils.getIDstring(e.getPlayer().getItemInHand())))
-			{
-				playerOpenBlock.put(e.getPlayer().getName(), b.getState());
-			}
-		}
+		main.protocolManager.addPacketListener(
+				new PacketAdapter(
+						PacketAdapter
+						.params(main, PacketType.Play.Server.OPEN_WINDOW)
+						.clientSide()
+						.listenerPriority(ListenerPriority.HIGHEST)
+				) 
+				{
+					@Override
+					public void onPacketSending(PacketEvent e) 
+					{
+						String playername = e.getPlayer().getName();
+						if (playerOpenBlock.containsKey(playername))
+						{
+							e.setCancelled(true);
+							e.getPlayer().closeInventory();
+							return;
+						}
+						
+						Block b = e.getPlayer().getTargetBlock(null, 7);
+						if (b != null && config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || (config.fixFreecamBlockCloseInventoryOnBreakAutoDetectContainers && ModFixNGUtils.hasInventory(b)))
+						{
+							playerOpenBlock.put(e.getPlayer().getName(), b.getState());
+						}
+					}
+				});
 	}
 	
 	//remove player from list when he closes inventory
