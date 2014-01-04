@@ -6,11 +6,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -119,6 +121,26 @@ public class RestrictBreakWhileOpen implements Listener {
 		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 		
 		playerOpenBlock.remove(e.getPlayer().getName());
+	}
+	
+	//force close player inventory on block place to avoid 1 strange bug
+	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+	public void onPlayerPlacedBlock(BlockPlaceEvent e)
+	{
+		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
+		
+		final Player p = e.getPlayer();
+		Block b = e.getBlockPlaced();
+		if (config.restrictBlockBreakWhileOpenIDs.contains(ModFixNGUtils.getIDstring(b)))
+		{
+			Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+			{
+				public void run()
+				{
+					p.closeInventory();
+				}
+			});
+		}
 	}
 	
 	//restrict block break while block is open

@@ -28,6 +28,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -167,6 +168,26 @@ public class FixFreecamBlocks implements Listener {
 		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 		
 		playerOpenBlock.remove(e.getPlayer().getName());
+	}
+	
+	//force close player inventory on block place to avoid 1 strange bug
+	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+	public void onPlayerPlacedBlock(BlockPlaceEvent e)
+	{
+		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
+		
+		final Player p = e.getPlayer();
+		Block b = e.getBlockPlaced();
+		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b))
+		{
+			Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+			{
+				public void run()
+				{
+					p.closeInventory();
+				}
+			});
+		}
 	}
 	
 	//check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory
