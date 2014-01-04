@@ -56,21 +56,17 @@ public class RestrictBreakWhileOpen implements Listener {
 		Block b = e.getClickedBlock();
 		if (config.restrictBlockBreakWhileOpenIDs.contains(ModFixNGUtils.getIDstring(b)))
 		{
-			ItemStack i = e.getPlayer().getItemInHand();
-			if (!config.restrictBlockBreakWhileOpenWrehchesIDs.contains(i.getTypeId()) && !ModFixNGUtils.isWrench(i))
+			playerOpenBlock.put(playername, b.getState());
+			Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
 			{
-				playerOpenBlock.put(playername, b.getState());
-				Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+				public void run()
 				{
-					public void run()
+					if (!ModFixNGUtils.isInventoryOpen(player))
 					{
-						if (!ModFixNGUtils.isInventoryOpen(player))
-						{
-							playerOpenBlock.remove(playername);
-						}
-					}	
-				});
-			}
+						playerOpenBlock.remove(playername);
+					}
+				}	
+			});
 		}
 		
 	}
