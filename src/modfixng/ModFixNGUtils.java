@@ -33,7 +33,6 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 public class ModFixNGUtils {
 
 	
-	@SuppressWarnings("deprecation")
 	public static String getIDstring(Block bl)
 	{
 		String blstring = String.valueOf(bl.getTypeId());
@@ -43,7 +42,6 @@ public class ModFixNGUtils {
 	
 	public static String getIDstring(ItemStack item)
 	{
-		@SuppressWarnings("deprecation")
 		String blstring = String.valueOf(item.getTypeId());
 		if (item.getDurability() !=0) {blstring += ":"+item.getDurability();}
 		return blstring;
@@ -61,6 +59,24 @@ public class ModFixNGUtils {
 			if (te != null && invclass.isAssignableFrom(te.getClass()))
 			{
 				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static boolean isWrench(ItemStack i)
+	{
+		try {
+			Object onmsi = MinecraftReflection.getMinecraftItemStack(i);
+			if (onmsi.getClass().getName().equals("net.minecraft.item.ItemStack"))
+			{
+				net.minecraft.server.v1_5_R3.ItemStack nmsi = (net.minecraft.server.v1_5_R3.ItemStack) MinecraftReflection.getMinecraftItemStack(i);
+				if (nmsi.getName().toLowerCase().contains("wrench"))
+				{
+					return true;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

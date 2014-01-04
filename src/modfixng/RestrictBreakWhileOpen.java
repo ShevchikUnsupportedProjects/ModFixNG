@@ -13,6 +13,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -35,7 +36,6 @@ public class RestrictBreakWhileOpen implements Listener {
 
 	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e)
 	{
@@ -49,11 +49,12 @@ public class RestrictBreakWhileOpen implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		
+
 		Block b = e.getClickedBlock();
 		if (config.restrictBlockBreakWhileOpenIDs.contains(ModFixNGUtils.getIDstring(b)))
 		{
-			if (!config.restrictBlockBreakWhileOpenWrehchesIDs.contains(e.getPlayer().getItemInHand().getTypeId()))
+			ItemStack i = e.getPlayer().getItemInHand();
+			if (!config.restrictBlockBreakWhileOpenWrehchesIDs.contains(i.getTypeId()) && !ModFixNGUtils.isWrench(i))
 			{
 				playerOpenBlock.put(playername, b.getState());
 			}
@@ -139,13 +140,13 @@ public class RestrictBreakWhileOpen implements Listener {
 	}
 	
 	//restrict block interact using wrenches
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
 	public void onWrenchInteract(PlayerInteractEvent e)
 	{
 		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 		
-		if (config.restrictBlockBreakWhileOpenWrehchesIDs.contains(e.getPlayer().getItemInHand().getTypeId()))
+		ItemStack i = e.getPlayer().getItemInHand();
+		if (config.restrictBlockBreakWhileOpenWrehchesIDs.contains(i.getTypeId()) || ModFixNGUtils.isWrench(i))
 		{
 			Block brokenblock = e.getClickedBlock();
 			for (BlockState bs : playerOpenBlock.values())

@@ -36,7 +36,6 @@ public class FixBagFrameInsert implements Listener {
 		this.config = config;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerClickedFrame(PlayerInteractEvent e)
 	{
@@ -60,7 +59,6 @@ public class FixBagFrameInsert implements Listener {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerClickedFrame(PlayerInteractEntityEvent e)
 	{

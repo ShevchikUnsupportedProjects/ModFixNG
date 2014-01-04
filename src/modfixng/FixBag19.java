@@ -44,7 +44,6 @@ public class FixBag19 implements Listener {
 	}
 	
 	//close inventory on death
-	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent event) 
 	{

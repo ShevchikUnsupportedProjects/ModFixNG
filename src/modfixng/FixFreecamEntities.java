@@ -48,7 +48,6 @@ public class FixFreecamEntities implements Listener {
 	HashMap<String,Entity> playerOpenEntity = new HashMap<String,Entity>(100);
 	
 	//add player to list when he opens minecart
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedMinecart(PlayerInteractEntityEvent e)
 	{
