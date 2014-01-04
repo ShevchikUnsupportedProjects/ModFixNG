@@ -49,8 +49,8 @@ public class Config {
 	protected boolean fixFreecamBlockZeroItemsCheckEnabled = true;
 	
 	protected boolean restrictBlockBreakWhileOpenEnabled = true;
-	protected HashSet<String> restrictBlockBreakWhileOpenEnabledIDs = new HashSet<String>();
-	protected HashSet<String> restrictBlockBreakWhileOpenItemInhandExclusions = new HashSet<String>();
+	protected HashSet<String> restrictBlockBreakWhileOpenIDs = new HashSet<String>();
+	protected HashSet<String> restrictBlockBreakWhileOpenWrehchesIDs = new HashSet<String>();
 	
 	protected boolean fixHopperMinecart = true;
 
@@ -79,8 +79,8 @@ public class Config {
 		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("ProperlyCloseInventories.checkEntities.IDs"));
 		
 		restrictBlockBreakWhileOpenEnabled = config.getBoolean("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
-		restrictBlockBreakWhileOpenEnabledIDs = new HashSet<String>(config.getStringList("RestrictBlockBreakWhileOpen.IDs"));
-		restrictBlockBreakWhileOpenItemInhandExclusions = new HashSet<String>(config.getStringList("RestrictBlockBreakWhileOpen.excludeIfItemInHandIDs"));
+		restrictBlockBreakWhileOpenIDs = new HashSet<String>(config.getStringList("RestrictBlockBreakWhileOpen.IDs"));
+		restrictBlockBreakWhileOpenWrehchesIDs = new HashSet<String>(config.getStringList("RestrictBlockBreakWhileOpen.WrenchesIDs"));
 		
 		fixHopperMinecart = config.getBoolean("HopperMinecartFix.enabled",fixHopperMinecart);
 		
@@ -113,8 +113,8 @@ public class Config {
 		config.set("ProperlyCloseInventories.checkEntities.IDs",new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));
 		
 		config.set("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
-		config.set("RestrictBlockBreakWhileOpen.IDs", new ArrayList<String>(restrictBlockBreakWhileOpenEnabledIDs));
-		config.set("RestrictBlockBreakWhileOpen.excludeIfItemInHandIDs", new ArrayList<String>(restrictBlockBreakWhileOpenItemInhandExclusions));
+		config.set("RestrictBlockBreakWhileOpen.IDs", new ArrayList<String>(restrictBlockBreakWhileOpenIDs));
+		config.set("RestrictBlockBreakWhileOpen.WrenchesIDs", new ArrayList<String>(restrictBlockBreakWhileOpenWrehchesIDs));
 		
 		config.set("HopperMinecartFix.enabled",fixHopperMinecart);
 

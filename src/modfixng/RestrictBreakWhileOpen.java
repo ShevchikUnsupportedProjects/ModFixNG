@@ -32,7 +32,7 @@ public class RestrictBreakWhileOpen implements Listener {
 
 
 	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
-
+	
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e)
 	{
@@ -48,9 +48,9 @@ public class RestrictBreakWhileOpen implements Listener {
 		}
 		
 		Block b = e.getClickedBlock();
-		if (config.restrictBlockBreakWhileOpenEnabledIDs.contains(ModFixNGUtils.getIDstring(b)))
+		if (config.restrictBlockBreakWhileOpenIDs.contains(ModFixNGUtils.getIDstring(b)))
 		{
-			if (!config.restrictBlockBreakWhileOpenItemInhandExclusions.contains(ModFixNGUtils.getIDstring(e.getPlayer().getItemInHand())))
+			if (!config.restrictBlockBreakWhileOpenWrehchesIDs.contains(ModFixNGUtils.getIDstring(e.getPlayer().getItemInHand())))
 			{
 				playerOpenBlock.put(playername, b.getState());
 			}
@@ -112,7 +112,7 @@ public class RestrictBreakWhileOpen implements Listener {
 	}
 	
 	//restrict block break while block is open
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
 	public void onBlockBreak(BlockBreakEvent e)
 	{
 		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
@@ -125,6 +125,27 @@ public class RestrictBreakWhileOpen implements Listener {
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED+"Вы не можете сломать этот блок пока он открыт другим игроком");
 				return;
+			}
+		}
+	}
+	
+	//restrict block interact using wrenches
+	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+	public void onWrenchInteract(PlayerInteractEvent e)
+	{
+		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
+		
+		if (config.restrictBlockBreakWhileOpenWrehchesIDs.contains(ModFixNGUtils.getIDstring(e.getPlayer().getItemInHand())))
+		{
+			Block brokenblock = e.getClickedBlock();
+			for (BlockState bs : playerOpenBlock.values())
+			{
+				if (bs.getBlock().equals(brokenblock))
+				{
+					e.setCancelled(true);
+					e.getPlayer().sendMessage(ChatColor.RED+"Вы не можете сломать этот блок пока он открыт другим игроком");
+					return;
+				}
 			}
 		}
 	}
