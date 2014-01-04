@@ -44,7 +44,7 @@ public class Config {
 
 	protected boolean fixFreecamBlockCloseInventoryOnBreakCheckEnabled = true;
 	protected HashSet<String> fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>();
-	protected HashSet<String> fixFreecamBlockCloseInventoryOnBreakWrenchesIDs = new HashSet<String>();
+	protected HashSet<Integer> fixFreecamBlockCloseInventoryOnBreakWrenchesIDs = new HashSet<Integer>();
 	protected boolean fixFreecamBlockZeroItemsCheckEnabled = true;
 	
 	protected boolean restrictBlockBreakWhileOpenEnabled = true;
@@ -71,7 +71,7 @@ public class Config {
 		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>(config.getStringList("ProperlyCloseInventories.checkBlocks.IDs"));
-		fixFreecamBlockCloseInventoryOnBreakWrenchesIDs = new HashSet<String>(config.getStringList("ProperlyCloseInventories.checkBlocks.WrenchesIDs"));
+		fixFreecamBlockCloseInventoryOnBreakWrenchesIDs = new HashSet<Integer>(config.getIntegerList("ProperlyCloseInventories.checkBlocks.WrenchesIDs"));
 		
 		fixFreecamEntitiesEnabled = config.getBoolean("ProperlyCloseInventories.checkEntities.enabled", fixFreecamEntitiesEnabled);
 		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("ProperlyCloseInventories.checkEntities.IDs"));
@@ -104,7 +104,7 @@ public class Config {
 		config.set("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.IDs",new ArrayList<String>(fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs));
-		config.set("ProperlyCloseInventories.checkBlocks.WrenchesIDs", new ArrayList<String>(fixFreecamBlockCloseInventoryOnBreakWrenchesIDs));
+		config.set("ProperlyCloseInventories.checkBlocks.WrenchesIDs", new ArrayList<Integer>(fixFreecamBlockCloseInventoryOnBreakWrenchesIDs));
 
 		config.set("ProperlyCloseInventories.checkEntities.enabled", fixFreecamEntitiesEnabled);
 		config.set("ProperlyCloseInventories.checkEntities.IDs",new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));
