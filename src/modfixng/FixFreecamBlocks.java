@@ -109,7 +109,7 @@ public class FixFreecamBlocks implements Listener {
 		{
 			if (!config.fixFreecamBlockItemInhandExclusions.contains(ModFixNGUtils.getIDstring(e.getPlayer().getItemInHand())))
 			{
-				playerOpenBlock.put(e.getPlayer().getName(), b.getState());
+				playerOpenBlock.put(playername, b.getState());
 			}
 		}
 	}
