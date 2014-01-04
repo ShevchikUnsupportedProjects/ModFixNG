@@ -89,7 +89,7 @@ public class FixFreecamEntities implements Listener {
 						{
 							public void run()
 							{
-								removePlayerData(playername);
+								playerOpenEntity.remove(playername);
 							}
 						});
 					}
@@ -109,7 +109,7 @@ public class FixFreecamEntities implements Listener {
 					{
 						if (!config.fixFreecamEntitiesEnabled) {return;}
 						
-						removePlayerData(e.getPlayer().getName());
+						playerOpenEntity.remove(e.getPlayer().getName());
 				    }
 				});
 	}
@@ -118,7 +118,7 @@ public class FixFreecamEntities implements Listener {
 	{
 		if (!config.fixFreecamEntitiesEnabled) {return;}
 
-		removePlayerData(e.getPlayer().getName());
+		playerOpenEntity.remove(e.getPlayer().getName());
 	}
 
 	//check if entity is not valid or player is too far away from it, if yes - force close inventory
@@ -144,17 +144,12 @@ public class FixFreecamEntities implements Listener {
 						)
 						{
 							player.closeInventory();
-							removePlayerData(playername);
+							playerOpenEntity.remove(playername);
 						}
 					}
 				}
 			}
 		},0,1);
-	}
-	
-	private void removePlayerData(String playername)
-	{
-		playerOpenEntity.remove(playername);
 	}
 	
 }

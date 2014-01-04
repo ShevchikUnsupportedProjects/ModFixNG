@@ -136,7 +136,7 @@ public class FixFreecamBlocks implements Listener {
 						{
 							public void run()
 							{
-								removePlayerData(playername);
+								playerOpenBlock.remove(playername);
 							}
 						});
 					}
@@ -156,7 +156,7 @@ public class FixFreecamBlocks implements Listener {
 					{
 						if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 						
-						removePlayerData(e.getPlayer().getName());
+						playerOpenBlock.remove(e.getPlayer().getName());
 				    }
 				});
 	}
@@ -165,7 +165,7 @@ public class FixFreecamBlocks implements Listener {
 	{
 		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 		
-		removePlayerData(e.getPlayer().getName());
+		playerOpenBlock.remove(e.getPlayer().getName());
 	}
 	
 	//check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory
@@ -192,7 +192,7 @@ public class FixFreecamBlocks implements Listener {
 						)
 						{
 							player.closeInventory();
-							removePlayerData(playername);
+							playerOpenBlock.remove(playername);
 						}
 					}
 				}
@@ -200,9 +200,4 @@ public class FixFreecamBlocks implements Listener {
 		},0,1);
 	}
 
-	private void removePlayerData(String playername)
-	{
-		playerOpenBlock.remove(playername);
-	}
-	
 }

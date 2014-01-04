@@ -79,7 +79,7 @@ public class RestrictBreakWhileOpen implements Listener {
 						{
 							public void run()
 							{
-								removePlayerBlock(playername);
+								playerOpenBlock.remove(playername);
 							}
 						});
 					}
@@ -99,7 +99,7 @@ public class RestrictBreakWhileOpen implements Listener {
 					{
 						if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 						
-						removePlayerBlock(e.getPlayer().getName());
+						playerOpenBlock.remove(e.getPlayer().getName());
 				    }
 				});
 	}
@@ -108,12 +108,7 @@ public class RestrictBreakWhileOpen implements Listener {
 	{
 		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 		
-		removePlayerBlock(e.getPlayer().getName());
-	}
-	
-	private void removePlayerBlock(String playername)
-	{
-		playerOpenBlock.remove(playername);
+		playerOpenBlock.remove(e.getPlayer().getName());
 	}
 	
 	//restrict block break while block is open
