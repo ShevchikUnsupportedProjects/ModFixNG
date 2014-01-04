@@ -35,6 +35,7 @@ public class RestrictBreakWhileOpen implements Listener {
 
 	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e)
 	{
@@ -52,7 +53,7 @@ public class RestrictBreakWhileOpen implements Listener {
 		Block b = e.getClickedBlock();
 		if (config.restrictBlockBreakWhileOpenIDs.contains(ModFixNGUtils.getIDstring(b)))
 		{
-			if (!config.restrictBlockBreakWhileOpenWrehchesIDs.contains(ModFixNGUtils.getIDstring(e.getPlayer().getItemInHand())))
+			if (!config.restrictBlockBreakWhileOpenWrehchesIDs.contains(e.getPlayer().getItemInHand().getTypeId()))
 			{
 				playerOpenBlock.put(playername, b.getState());
 			}
@@ -138,12 +139,13 @@ public class RestrictBreakWhileOpen implements Listener {
 	}
 	
 	//restrict block interact using wrenches
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
 	public void onWrenchInteract(PlayerInteractEvent e)
 	{
 		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 		
-		if (config.restrictBlockBreakWhileOpenWrehchesIDs.contains(ModFixNGUtils.getIDstring(e.getPlayer().getItemInHand())))
+		if (config.restrictBlockBreakWhileOpenWrehchesIDs.contains(e.getPlayer().getItemInHand().getTypeId()))
 		{
 			Block brokenblock = e.getClickedBlock();
 			for (BlockState bs : playerOpenBlock.values())
