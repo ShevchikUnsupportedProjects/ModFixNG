@@ -96,7 +96,9 @@ public class FixFreecamBlocks implements Listener {
 		
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
 
-		String playername = e.getPlayer().getName();
+		final Player player = e.getPlayer();
+		final String playername = player.getName();
+		
 		if (playerOpenBlock.containsKey(playername))
 		{
 			e.setCancelled(true);
@@ -110,6 +112,16 @@ public class FixFreecamBlocks implements Listener {
 			if (!config.fixFreecamBlockCloseInventoryOnBreakWrenchesIDs.contains(i.getTypeId()) && !ModFixNGUtils.isWrench(i))
 			{
 				playerOpenBlock.put(playername, b.getState());
+				Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+				{
+					public void run()
+					{
+						if (!ModFixNGUtils.isInventoryOpen(player))
+						{
+							playerOpenBlock.remove(playername);
+						}
+					}	
+				});
 			}
 		}
 	}

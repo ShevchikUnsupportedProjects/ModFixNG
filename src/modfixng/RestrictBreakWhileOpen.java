@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -43,7 +44,9 @@ public class RestrictBreakWhileOpen implements Listener {
 
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
 		
-		String playername = e.getPlayer().getName();
+		final Player player = e.getPlayer();
+		final String playername = player.getName();
+		
 		if (playerOpenBlock.containsKey(playername))
 		{
 			e.setCancelled(true);
@@ -57,8 +60,19 @@ public class RestrictBreakWhileOpen implements Listener {
 			if (!config.restrictBlockBreakWhileOpenWrehchesIDs.contains(i.getTypeId()) && !ModFixNGUtils.isWrench(i))
 			{
 				playerOpenBlock.put(playername, b.getState());
+				Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+				{
+					public void run()
+					{
+						if (!ModFixNGUtils.isInventoryOpen(player))
+						{
+							playerOpenBlock.remove(playername);
+						}
+					}	
+				});
 			}
 		}
+		
 	}
 	
 	//remove player from list when he closes inventory

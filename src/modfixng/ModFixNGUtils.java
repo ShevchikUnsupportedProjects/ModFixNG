@@ -20,9 +20,11 @@ package modfixng;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.PacketType;
@@ -82,6 +84,26 @@ public class ModFixNGUtils {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public static boolean isInventoryOpen(Player p)
+	{
+		if (MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP"))
+		{
+			org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer cplayer = (org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer) p;
+			net.minecraft.server.v1_5_R3.EntityPlayer nmsplayer = cplayer.getHandle();
+			net.minecraft.server.v1_5_R3.EntityHuman nmshuman = (net.minecraft.server.v1_5_R3.EntityHuman) nmsplayer;
+			return !nmshuman.activeContainer.getClass().getName().equals("net.minecraft.inventory.ContainerPlayer");
+		} else 
+		{
+			if (p.getGameMode() != GameMode.CREATIVE)
+			{
+				return p.getOpenInventory().getType() != InventoryType.CRAFTING;
+			} else
+			{
+				return p.getOpenInventory().getType() != InventoryType.CREATIVE;
+			}
+		}
 	}
 	
     public static void updateSlot(ProtocolManager protocolManager, Player player, int inventory, int slot, ItemStack item)
