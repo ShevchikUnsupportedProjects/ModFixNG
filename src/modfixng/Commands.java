@@ -33,6 +33,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class Commands implements  CommandExecutor,Listener{
 	@SuppressWarnings("unused")
@@ -120,11 +121,13 @@ public class Commands implements  CommandExecutor,Listener{
 		if (sender instanceof Player)
 		{
 			Player pl = (Player) sender;
-			String msg =ChatColor.BLUE+"Item id: "+pl.getItemInHand().getTypeId();
-			if (pl.getItemInHand().getDurability() !=0 )
+			ItemStack i = pl.getItemInHand();
+			String msg = ChatColor.BLUE+"Item id: "+pl.getItemInHand().getTypeId();
+			if (pl.getItemInHand().getDurability() != 0)
 			{
-				msg+=", subid: "+pl.getItemInHand().getDurability();
+				msg+= ", subid: "+pl.getItemInHand().getDurability();
 			}
+			msg += ", is wrench: "+ModFixNGUtils.isWrench(i);
 			pl.sendMessage(msg);
 		}
 		else
