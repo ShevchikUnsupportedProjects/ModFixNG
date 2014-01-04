@@ -64,7 +64,7 @@ public class FixFreecamEntities implements Listener {
 		
 		if (config.fixFreecamEntitiesEntitiesIDs.contains(e.getRightClicked().getType().getTypeId()))
 		{
-			playerOpenEntity.put(e.getPlayer().getName(),e.getRightClicked());
+			playerOpenEntity.put(playername,e.getRightClicked());
 		}
 	}
 
