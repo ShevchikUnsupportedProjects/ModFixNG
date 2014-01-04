@@ -2,6 +2,7 @@ package modfixng;
 
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -59,28 +60,39 @@ public class RestrictBreakWhileOpen implements Listener {
 	//remove player from list when he closes inventory
 	private void initClientCloseInventoryFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, PacketType.Play.Client.CLOSE_WINDOW)
-				)
+						.clientSide()
+				) 
 				{
 					@Override
 					public void onPacketReceiving(PacketEvent e) 
 					{
 						if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 						
-						playerOpenBlock.remove(e.getPlayer().getName());
+						if (e.getPlayer() == null) {return;}
+						
+						final String playername = e.getPlayer().getName();
+						Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+						{
+							public void run()
+							{
+								playerOpenBlock.remove(playername);
+							}
+						});
 					}
-				}).syncStart();
+				});
 	}
 	private void initServerCloseInventoryFixListener()
 	{
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, PacketType.Play.Server.CLOSE_WINDOW)
-				)
+						.serverSide()
+				) 
 				{
 					@Override
 					public void onPacketSending(PacketEvent e) 
@@ -89,7 +101,7 @@ public class RestrictBreakWhileOpen implements Listener {
 						
 						playerOpenBlock.remove(e.getPlayer().getName());
 				    }
-				}).syncStart();
+				});
 	}
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e)
