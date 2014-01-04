@@ -15,8 +15,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.injector.GamePhase;
 
 public class RestrictBreakWhileOpen implements Listener {
 
@@ -65,6 +67,9 @@ public class RestrictBreakWhileOpen implements Listener {
 						PacketAdapter
 						.params(main, PacketType.Play.Client.CLOSE_WINDOW)
 						.clientSide()
+						.optionManualGamePhase()
+						.gamePhase(GamePhase.PLAYING)
+						.listenerPriority(ListenerPriority.LOWEST)
 				) 
 				{
 					@Override
@@ -92,6 +97,9 @@ public class RestrictBreakWhileOpen implements Listener {
 						PacketAdapter
 						.params(main, PacketType.Play.Server.CLOSE_WINDOW)
 						.serverSide()
+						.optionManualGamePhase()
+						.gamePhase(GamePhase.PLAYING)
+						.listenerPriority(ListenerPriority.LOWEST)
 				) 
 				{
 					@Override
