@@ -71,7 +71,7 @@ public class Config {
 		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>(config.getStringList("ProperlyCloseInventories.checkBlocks.IDs"));
-		fixFreecamBlockItemInhandExclusions = new HashSet<String>(config.getStringList("ProperlyCloseInventories.checkBlocks.excludeIfItemInHandIDs"));
+		fixFreecamBlockItemInhandExclusions = new HashSet<String>(config.getStringList("ProperlyCloseInventories.checkBlocks.WrenchesIDs"));
 		
 		fixFreecamEntitiesEnabled = config.getBoolean("ProperlyCloseInventories.checkEntities.enabled", fixFreecamEntitiesEnabled);
 		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("ProperlyCloseInventories.checkEntities.IDs"));
@@ -104,7 +104,7 @@ public class Config {
 		config.set("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.IDs",new ArrayList<String>(fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs));
-		config.set("ProperlyCloseInventories.checkBlocks.excludeIfItemInHandIDs", new ArrayList<String>(fixFreecamBlockItemInhandExclusions));
+		config.set("ProperlyCloseInventories.checkBlocks.WrenchesIDs", new ArrayList<String>(fixFreecamBlockItemInhandExclusions));
 
 		config.set("ProperlyCloseInventories.checkEntities.enabled", fixFreecamEntitiesEnabled);
 		config.set("ProperlyCloseInventories.checkEntities.IDs",new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));
