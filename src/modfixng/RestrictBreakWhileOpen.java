@@ -139,7 +139,7 @@ public class RestrictBreakWhileOpen implements Listener {
 				{
 					p.closeInventory();
 				}
-			});
+			},2);
 		}
 	}
 	

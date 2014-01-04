@@ -186,7 +186,7 @@ public class FixFreecamBlocks implements Listener {
 				{
 					p.closeInventory();
 				}
-			});
+			},2);
 		}
 	}
 	
