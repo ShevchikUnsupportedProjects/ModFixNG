@@ -41,6 +41,13 @@ public class RestrictBreakWhileOpen implements Listener {
 
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
 		
+		String playername = e.getPlayer().getName();
+		if (playerOpenBlock.containsKey(playername))
+		{
+			e.setCancelled(true);
+			return;
+		}
+		
 		Block b = e.getClickedBlock();
 		if (config.restrictBlockBreakWhileOpenEnabledIDs.contains(ModFixNGUtils.getIDstring(b)))
 		{

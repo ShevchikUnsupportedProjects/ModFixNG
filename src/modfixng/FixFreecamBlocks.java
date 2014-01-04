@@ -97,6 +97,13 @@ public class FixFreecamBlocks implements Listener {
 		
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
 
+		String playername = e.getPlayer().getName();
+		if (playerOpenBlock.containsKey(playername))
+		{
+			e.setCancelled(true);
+			return;
+		}
+		
 		Block b = e.getClickedBlock();
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || (config.fixFreecamBlockCloseInventoryOnBreakAutoDetectContainers && ModFixNGUtils.hasInventory(b)))
 		{
