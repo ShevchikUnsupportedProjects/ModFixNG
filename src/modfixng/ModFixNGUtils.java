@@ -70,7 +70,7 @@ public class ModFixNGUtils {
 	{
 		try {
 			Object onmsi = MinecraftReflection.getMinecraftItemStack(i);
-			if (onmsi.getClass().getName().equals("net.minecraft.item.ItemStack"))
+			if (onmsi != null && onmsi.getClass().getName().equals("net.minecraft.item.ItemStack"))
 			{
 				net.minecraft.server.v1_5_R3.ItemStack nmsi = (net.minecraft.server.v1_5_R3.ItemStack) MinecraftReflection.getMinecraftItemStack(i);
 				if (nmsi.getName().toLowerCase().contains("wrench"))
