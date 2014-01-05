@@ -122,12 +122,11 @@ public class Commands implements  CommandExecutor,Listener{
 		{
 			Player pl = (Player) sender;
 			ItemStack i = pl.getItemInHand();
-			String msg = ChatColor.BLUE+"Item id: "+pl.getItemInHand().getTypeId();
-			if (pl.getItemInHand().getDurability() != 0)
+			String msg = ChatColor.BLUE+"Item id: "+i.getTypeId();
+			if (i.getDurability() != 0)
 			{
 				msg+= ", subid: "+pl.getItemInHand().getDurability();
 			}
-			msg += ", is wrench: "+ModFixNGUtils.isWrench(i);
 			pl.sendMessage(msg);
 		}
 		else

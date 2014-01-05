@@ -25,7 +25,6 @@ import java.util.List;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_5_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
@@ -79,23 +78,6 @@ public class ModFixNGUtils {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	public static boolean isWrench(ItemStack i)
-	{
-		if (isRunningMCPC())
-		{
-			Object onmsi = MinecraftReflection.getMinecraftItemStack(i);
-			if (onmsi != null)
-			{
-				net.minecraft.server.v1_5_R3.ItemStack nmsi = CraftItemStack.asNMSCopy(i);
-				if (nmsi.getName().toLowerCase().contains("wrench"))
-				{
-					return true;
-				}
-			}
 		}
 		return false;
 	}

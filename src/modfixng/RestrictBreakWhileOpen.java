@@ -155,8 +155,10 @@ public class RestrictBreakWhileOpen implements Listener {
 	{
 		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 		
+		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
+		
 		ItemStack i = e.getPlayer().getItemInHand();
-		if (config.restrictBlockBreakWhileOpenWrehchesIDs.contains(i.getTypeId()) || ModFixNGUtils.isWrench(i))
+		if (config.restrictBlockBreakWhileOpenWrehchesIDs.contains(i.getTypeId()))
 		{
 			Block brokenblock = e.getClickedBlock();
 			for (BlockState bs : playerOpenBlock.values())
