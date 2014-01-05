@@ -17,16 +17,12 @@
 
 package modfixng;
 
-import java.util.Iterator;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -50,19 +46,18 @@ public class FixBag19 implements Listener {
 		if (!config.fixBag19Enabled) {return;}
 		
 		Player p = (Player) event.getEntity();
-		p.closeInventory();
 		if (config.fixBag19CropanalyzerFixEnabled) 
 		{
-			Iterator<ItemStack> it = event.getDrops().iterator();
-			while (it.hasNext())
+			if (ModFixNGUtils.isCropanalyzerOpen(p))
 			{
-				ItemStack i = it.next();
-				if (i.getTypeId() == config.fixBag19CropanalyzerID)
-				{
-					it.remove();
+				try {
+					ModFixNGUtils.findAndFixOpenCropanalyzer(p, event.getDrops());
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}
+		p.closeInventory();
 	}
 	
 	

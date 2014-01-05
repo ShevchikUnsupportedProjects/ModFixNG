@@ -37,7 +37,6 @@ public class Config {
 	protected boolean fixBag19Enabled = true;
 	protected HashSet<Integer> fixBag19BackPacks19IDs = new HashSet<Integer>();
 	protected boolean fixBag19CropanalyzerFixEnabled = true;
-	protected int fixBag19CropanalyzerID = 30122;
 
 	protected boolean fixFreecamEntitiesEnabled = true;
 	protected HashSet<Short> fixFreecamEntitiesEntitiesIDs = new HashSet<Short>();
@@ -65,7 +64,6 @@ public class Config {
 		fixBag19Enabled = config.getBoolean("BackPackFix.enabled",fixBag19Enabled);
 		fixBag19BackPacks19IDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.19BlockIDs"));
 		fixBag19CropanalyzerFixEnabled = config.getBoolean("BackPackFix.CropanalyzerFix.enabled",fixBag19CropanalyzerFixEnabled);
-		fixBag19CropanalyzerID = config.getInt("BackPackFix.CropanalyzerFix.ID",fixBag19CropanalyzerID);
 
 		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
@@ -97,7 +95,6 @@ public class Config {
 		config.set("BackPackFix.enabled",fixBag19Enabled);
 		config.set("BackPackFix.19BlockIDs",new ArrayList<Integer>(fixBag19BackPacks19IDs));
 		config.set("BackPackFix.CropanalyzerFix.enabled",fixBag19CropanalyzerFixEnabled);
-		config.set("BackPackFix.CropanalyzerFix.ID",fixBag19CropanalyzerID);
 
 		config.set("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);

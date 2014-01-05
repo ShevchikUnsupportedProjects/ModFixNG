@@ -17,12 +17,15 @@
 
 package modfixng;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_5_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
@@ -49,6 +52,18 @@ public class ModFixNGUtils {
 		return blstring;
 	}
 	
+    public static void updateSlot(ProtocolManager protocolManager, Player player, int inventory, int slot, ItemStack item)
+    {
+    	PacketContainer updateslot = protocolManager.createPacket(PacketType.Play.Server.SET_SLOT);
+    	updateslot.getIntegers().write(0, inventory);
+    	updateslot.getIntegers().write(1, slot);
+    	updateslot.getItemModifier().write(0, item);
+        try {
+			protocolManager.sendServerPacket(player, updateslot);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+    }
 	
 	public static boolean hasInventory(Block b)
 	{
@@ -70,30 +85,26 @@ public class ModFixNGUtils {
 	
 	public static boolean isWrench(ItemStack i)
 	{
-		try {
+		if (isRunningMCPC())
+		{
 			Object onmsi = MinecraftReflection.getMinecraftItemStack(i);
-			if (onmsi != null && onmsi.getClass().getName().equals("net.minecraft.item.ItemStack"))
+			if (onmsi != null)
 			{
-				net.minecraft.server.v1_5_R3.ItemStack nmsi = (net.minecraft.server.v1_5_R3.ItemStack) MinecraftReflection.getMinecraftItemStack(i);
+				net.minecraft.server.v1_5_R3.ItemStack nmsi = CraftItemStack.asNMSCopy(i);
 				if (nmsi.getName().toLowerCase().contains("wrench"))
 				{
 					return true;
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return false;
 	}
 	
 	public static boolean isInventoryOpen(Player p)
 	{
-		if (MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP"))
+		if (isRunningMCPC())
 		{
-			org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer cplayer = (org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer) p;
-			net.minecraft.server.v1_5_R3.EntityPlayer nmsplayer = cplayer.getHandle();
-			net.minecraft.server.v1_5_R3.EntityHuman nmshuman = (net.minecraft.server.v1_5_R3.EntityHuman) nmsplayer;
-			return !nmshuman.activeContainer.getClass().getName().equals("net.minecraft.inventory.ContainerPlayer");
+			return !getPlayerContainer(p).getClass().getName().equals("net.minecraft.inventory.ContainerPlayer");
 		} else 
 		{
 			if (p.getGameMode() != GameMode.CREATIVE)
@@ -105,17 +116,80 @@ public class ModFixNGUtils {
 			}
 		}
 	}
-	
-    public static void updateSlot(ProtocolManager protocolManager, Player player, int inventory, int slot, ItemStack item)
+    
+    public static boolean isCropanalyzerOpen(Player p)
     {
-    	PacketContainer updateslot = protocolManager.createPacket(PacketType.Play.Server.SET_SLOT);
-    	updateslot.getIntegers().write(0, inventory);
-    	updateslot.getIntegers().write(1, slot);
-    	updateslot.getItemModifier().write(0, item);
-        try {
-			protocolManager.sendServerPacket(player, updateslot);
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+    	if (isRunningMCPC())
+		{
+			return getPlayerContainer(p).getClass().getName().equals("ic2.core.item.tool.ContainerCropnalyzer");
+		}
+    	return false;
+    }
+    
+    public static void findAndFixOpenCropanalyzer(Player p, List<ItemStack> drops) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+    {
+	    net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
+		Field cropanalyzerField = container.getClass().getDeclaredField("cropnalyzer");
+		cropanalyzerField.setAccessible(true);
+		Object cropanalyzer = cropanalyzerField.get(container);
+		Field itemStackField = cropanalyzer.getClass().getDeclaredField("itemStack");
+		itemStackField.setAccessible(true);
+		Field inventoryField = cropanalyzer.getClass().getDeclaredField("inventory");
+		inventoryField.setAccessible(true);
+		net.minecraft.server.v1_5_R3.ItemStack[] oldcropanalyzerinventory = (net.minecraft.server.v1_5_R3.ItemStack[]) inventoryField.get(cropanalyzer);
+		net.minecraft.server.v1_5_R3.ItemStack oldcropanalyzeritemstack = (net.minecraft.server.v1_5_R3.ItemStack) itemStackField.get(cropanalyzer);
+		int cropanalyzeritemstackuid = oldcropanalyzeritemstack.getTag().getInt("uid");
+		for (ItemStack item : drops)
+		{
+			if (item.getTypeId() == oldcropanalyzeritemstack.id)
+			{
+				net.minecraft.server.v1_5_R3.ItemStack nmsi = getNMSItemStack(item);
+				if (nmsi.getTag().hasKey("uid"))
+				{
+					int nmsiuid = nmsi.getTag().getInt("uid");
+					if (nmsiuid == cropanalyzeritemstackuid)
+					{
+						net.minecraft.server.v1_5_R3.NBTTagCompound cropanalyzeritemstacktagcompound = new net.minecraft.server.v1_5_R3.NBTTagCompound();
+						net.minecraft.server.v1_5_R3.NBTTagList taglist = new net.minecraft.server.v1_5_R3.NBTTagList();
+					    for (int i = 0; i < oldcropanalyzerinventory.length; i++)
+					    {
+					    	net.minecraft.server.v1_5_R3.ItemStack itemstack = oldcropanalyzerinventory[i];
+					    	if (itemstack != null)
+					    	{
+								net.minecraft.server.v1_5_R3.NBTTagCompound nbtTagCompoundSlot = new net.minecraft.server.v1_5_R3.NBTTagCompound();
+								nbtTagCompoundSlot.setByte("Slot", (byte) i);
+								itemstack.save(nbtTagCompoundSlot);
+								taglist.add(nbtTagCompoundSlot);
+					    	}
+					    }
+						cropanalyzeritemstacktagcompound.set("Items", taglist);
+						nmsi.setTag(cropanalyzeritemstacktagcompound);
+						return;
+					}
+				}	
+			}
 		}
     }
+    
+    
+    private static boolean isRunningMCPC()
+    {
+    	return (MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP"));
+    }
+    
+    private static net.minecraft.server.v1_5_R3.Container getPlayerContainer(Player p)
+    {
+    	org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer cplayer = (org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer) p;
+		net.minecraft.server.v1_5_R3.EntityPlayer nmsplayer = cplayer.getHandle();
+		net.minecraft.server.v1_5_R3.EntityHuman nmshuman = (net.minecraft.server.v1_5_R3.EntityHuman) nmsplayer;
+		return nmshuman.activeContainer;
+    }
+    
+    private static net.minecraft.server.v1_5_R3.ItemStack getNMSItemStack(ItemStack i) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+    {
+		Field handleField = i.getClass().getDeclaredField("handle");
+		handleField.setAccessible(true);
+		return  (net.minecraft.server.v1_5_R3.ItemStack) handleField.get(i);
+    }
+    
 }
