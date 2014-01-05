@@ -88,6 +88,7 @@ public class FixFreecamBlocks implements Listener {
 	
 	
 	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
+	private HashMap<String,Integer> playerOpenBlockInvOpenCheckTask = new HashMap<String,Integer>(100);
 	
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e)
@@ -105,20 +106,27 @@ public class FixFreecamBlocks implements Listener {
 			return;
 		}
 		
-		Block b = e.getClickedBlock();
+		final Block b = e.getClickedBlock();
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b))
 		{
-			playerOpenBlock.put(playername, b.getState());
-			Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+			if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
+			{
+				int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
+				Bukkit.getScheduler().cancelTask(taskID);
+				playerOpenBlockInvOpenCheckTask.remove(playername);
+			}
+			int taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
 			{
 				public void run()
 				{
-					if (!ModFixNGUtils.isInventoryOpen(player))
+					if (ModFixNGUtils.isInventoryOpen(player))
 					{
-						playerOpenBlock.remove(playername);
+						playerOpenBlock.put(playername, b.getState());
+						playerOpenBlockInvOpenCheckTask.remove(playername);
 					}
 				}	
 			});
+			playerOpenBlockInvOpenCheckTask.put(playername, taskID);
 		}
 	}
 
@@ -146,6 +154,12 @@ public class FixFreecamBlocks implements Listener {
 							public void run()
 							{
 								playerOpenBlock.remove(playername);
+								if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
+								{
+									int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
+									Bukkit.getScheduler().cancelTask(taskID);
+									playerOpenBlockInvOpenCheckTask.remove(playername);
+								}
 							}
 						});
 					}
@@ -165,7 +179,14 @@ public class FixFreecamBlocks implements Listener {
 					{
 						if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 						
-						playerOpenBlock.remove(e.getPlayer().getName());
+						String playername = e.getPlayer().getName();
+						playerOpenBlock.remove(playername);
+						if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
+						{
+							int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
+							Bukkit.getScheduler().cancelTask(taskID);
+							playerOpenBlockInvOpenCheckTask.remove(playername);
+						}
 				    }
 				});
 	}
@@ -174,7 +195,14 @@ public class FixFreecamBlocks implements Listener {
 	{
 		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 		
-		playerOpenBlock.remove(e.getPlayer().getName());
+		String playername = e.getPlayer().getName();
+		playerOpenBlock.remove(playername);
+		if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
+		{
+			int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
+			Bukkit.getScheduler().cancelTask(taskID);
+			playerOpenBlockInvOpenCheckTask.remove(playername);
+		}
 	}
 	
 	//check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory

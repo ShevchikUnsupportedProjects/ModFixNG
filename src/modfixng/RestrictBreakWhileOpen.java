@@ -39,7 +39,8 @@ public class RestrictBreakWhileOpen implements Listener {
 	}
 
 
-	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
+	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);	
+	private HashMap<String,Integer> playerOpenBlockInvOpenCheckTask = new HashMap<String,Integer>(100);
 	
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e)
@@ -57,20 +58,27 @@ public class RestrictBreakWhileOpen implements Listener {
 			return;
 		}
 
-		Block b = e.getClickedBlock();
+		final Block b = e.getClickedBlock();
 		if (config.restrictBlockBreakWhileOpenIDs.contains(ModFixNGUtils.getIDstring(b)))
 		{
-			playerOpenBlock.put(playername, b.getState());
-			Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+			if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
+			{
+				int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
+				Bukkit.getScheduler().cancelTask(taskID);
+				playerOpenBlockInvOpenCheckTask.remove(playername);
+			}
+			int taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
 			{
 				public void run()
 				{
-					if (!ModFixNGUtils.isInventoryOpen(player))
+					if (ModFixNGUtils.isInventoryOpen(player))
 					{
-						playerOpenBlock.remove(playername);
+						playerOpenBlock.put(playername, b.getState());
+						playerOpenBlockInvOpenCheckTask.remove(playername);
 					}
 				}	
 			});
+			playerOpenBlockInvOpenCheckTask.put(playername, taskID);
 		}
 		
 	}
@@ -101,6 +109,12 @@ public class RestrictBreakWhileOpen implements Listener {
 							public void run()
 							{
 								playerOpenBlock.remove(playername);
+								if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
+								{
+									int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
+									Bukkit.getScheduler().cancelTask(taskID);
+									playerOpenBlockInvOpenCheckTask.remove(playername);
+								}
 							}
 						});
 					}
@@ -123,7 +137,14 @@ public class RestrictBreakWhileOpen implements Listener {
 					{
 						if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 						
-						playerOpenBlock.remove(e.getPlayer().getName());
+						String playername = e.getPlayer().getName();
+						playerOpenBlock.remove(playername);
+						if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
+						{
+							int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
+							Bukkit.getScheduler().cancelTask(taskID);
+							playerOpenBlockInvOpenCheckTask.remove(playername);
+						}
 				    }
 				});
 	}
@@ -132,7 +153,14 @@ public class RestrictBreakWhileOpen implements Listener {
 	{
 		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 		
-		playerOpenBlock.remove(e.getPlayer().getName());
+		String playername = e.getPlayer().getName();
+		playerOpenBlock.remove(playername);
+		if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
+		{
+			int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
+			Bukkit.getScheduler().cancelTask(taskID);
+			playerOpenBlockInvOpenCheckTask.remove(playername);
+		};
 	}
 	
 	//restrict block break while block is open
