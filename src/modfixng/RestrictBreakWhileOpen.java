@@ -14,7 +14,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -145,30 +144,6 @@ public class RestrictBreakWhileOpen implements Listener {
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED+"Вы не можете сломать этот блок пока он открыт другим игроком");
 				return;
-			}
-		}
-	}
-	
-	//restrict block interact using wrenches
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-	public void onWrenchInteract(PlayerInteractEvent e)
-	{
-		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
-		
-		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
-		
-		ItemStack i = e.getPlayer().getItemInHand();
-		if (config.restrictBlockBreakWhileOpenWrehchesIDs.contains(i.getTypeId()))
-		{
-			Block brokenblock = e.getClickedBlock();
-			for (BlockState bs : playerOpenBlock.values())
-			{
-				if (bs.getBlock().equals(brokenblock))
-				{
-					e.setCancelled(true);
-					e.getPlayer().sendMessage(ChatColor.RED+"Вы не можете сломать этот блок пока он открыт другим игроком");
-					return;
-				}
 			}
 		}
 	}

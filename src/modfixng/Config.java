@@ -47,7 +47,6 @@ public class Config {
 	
 	protected boolean restrictBlockBreakWhileOpenEnabled = true;
 	protected HashSet<String> restrictBlockBreakWhileOpenIDs = new HashSet<String>();
-	protected HashSet<Integer> restrictBlockBreakWhileOpenWrehchesIDs = new HashSet<Integer>();
 	
 	protected boolean fixHopperMinecart = true;
 
@@ -74,7 +73,6 @@ public class Config {
 		
 		restrictBlockBreakWhileOpenEnabled = config.getBoolean("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
 		restrictBlockBreakWhileOpenIDs = new HashSet<String>(config.getStringList("RestrictBlockBreakWhileOpen.IDs"));
-		restrictBlockBreakWhileOpenWrehchesIDs = new HashSet<Integer>(config.getIntegerList("RestrictBlockBreakWhileOpen.WrenchesIDs"));
 		
 		fixHopperMinecart = config.getBoolean("HopperMinecartFix.enabled",fixHopperMinecart);
 		
@@ -105,7 +103,6 @@ public class Config {
 		
 		config.set("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
 		config.set("RestrictBlockBreakWhileOpen.IDs", new ArrayList<String>(restrictBlockBreakWhileOpenIDs));
-		config.set("RestrictBlockBreakWhileOpen.WrenchesIDs", new ArrayList<Integer>(restrictBlockBreakWhileOpenWrehchesIDs));
 		
 		config.set("HopperMinecartFix.enabled",fixHopperMinecart);
 
