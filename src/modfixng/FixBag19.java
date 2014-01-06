@@ -40,7 +40,7 @@ public class FixBag19 implements Listener {
 	}
 	
 	//close inventory on death
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerDeath(PlayerDeathEvent event) 
 	{
 		if (!config.fixBag19Enabled) {return;}
@@ -62,7 +62,7 @@ public class FixBag19 implements Listener {
 	
 	
 	//close inventory on quit
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerExit(PlayerQuitEvent event) 
 	{
 		if (!config.fixBag19Enabled) {return;}
