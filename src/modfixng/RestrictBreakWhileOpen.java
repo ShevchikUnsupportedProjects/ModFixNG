@@ -35,7 +35,6 @@ public class RestrictBreakWhileOpen implements Listener {
 		this.config = config;
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
-		initBlockConsistencyCheck();
 	}
 
 
@@ -108,13 +107,7 @@ public class RestrictBreakWhileOpen implements Listener {
 						{
 							public void run()
 							{
-								playerOpenBlock.remove(playername);
-								if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
-								{
-									int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
-									Bukkit.getScheduler().cancelTask(taskID);
-									playerOpenBlockInvOpenCheckTask.remove(playername);
-								}
+								removeData(playername);
 							}
 						});
 					}
@@ -137,14 +130,17 @@ public class RestrictBreakWhileOpen implements Listener {
 					{
 						if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 						
-						String playername = e.getPlayer().getName();
-						playerOpenBlock.remove(playername);
-						if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
+						final String playername = e.getPlayer().getName();
+						if (playerOpenBlock.containsKey(playername) && config.restrictBlockBreakWhileOpenClearDropIfBlockBroken)
 						{
-							int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
-							Bukkit.getScheduler().cancelTask(taskID);
-							playerOpenBlockInvOpenCheckTask.remove(playername);
+							BlockState bs = playerOpenBlock.get(playername);
+							Block b = bs.getBlock();
+							if (bs.getType() != b.getType())
+							{
+								clearNearbyDrop(b);
+							}
 						}
+						removeData(playername);
 				    }
 				});
 	}
@@ -154,6 +150,11 @@ public class RestrictBreakWhileOpen implements Listener {
 		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 		
 		String playername = e.getPlayer().getName();
+		removeData(playername);
+	}
+	
+	private void removeData(String playername)
+	{
 		playerOpenBlock.remove(playername);
 		if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
 		{
@@ -182,35 +183,7 @@ public class RestrictBreakWhileOpen implements Listener {
 	}
 	
 	
-	//clear drops near block if it was broken somehow
-	private void initBlockConsistencyCheck()
-	{
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
-		{
-			public void run()
-			{
-				if (!config.restrictBlockBreakWhileOpenClearDropIfBlockBroken) {return;}
-
-				for (Player player : Bukkit.getOnlinePlayers())
-				{
-					if (playerOpenBlock.containsKey(player.getName()))
-					{
-						String playername = player.getName();
-						BlockState bs = playerOpenBlock.get(playername);
-						Block b = bs.getBlock();
-						if 
-						(
-							b.getType() != bs.getType()
-						)
-						{
-							clearNearbyDrop(b);
-							playerOpenBlock.remove(playername);
-						}
-					}
-				}
-			}
-		},0,1);
-	}
+	//function to clear drops near block
 	private void clearNearbyDrop(Block b)
 	{
 		Entity arrow = b.getWorld().spawnArrow(b.getLocation(), new Vector(0, 0, 0), 0, 0);
