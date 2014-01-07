@@ -96,7 +96,7 @@ public class FixBag implements Listener {
 		
 		if (event.getTo().getBlock().getType() == Material.PORTAL)
 		{
-			//event.getPlayer().closeInventory();
+			event.getPlayer().closeInventory();
 		}
 		
 	}
