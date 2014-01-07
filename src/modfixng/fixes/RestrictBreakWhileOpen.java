@@ -45,7 +45,7 @@ public class RestrictBreakWhileOpen implements Listener {
 	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);	
 	private HashMap<String,Integer> playerOpenBlockInvOpenCheckTask = new HashMap<String,Integer>(100);
 	
-	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e)
 	{
 		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
