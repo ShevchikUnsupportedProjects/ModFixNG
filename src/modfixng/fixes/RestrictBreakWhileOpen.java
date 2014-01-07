@@ -1,7 +1,11 @@
-package modfixng;
+package modfixng.fixes;
 
 import java.util.HashMap;
 import java.util.List;
+
+import modfixng.main.Config;
+import modfixng.main.ModFixNG;
+import modfixng.utils.ModFixNGUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,7 +34,7 @@ public class RestrictBreakWhileOpen implements Listener {
 	private ModFixNG main;
 	private Config config;
 
-	RestrictBreakWhileOpen(ModFixNG main, Config config) {
+	public RestrictBreakWhileOpen(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		initClientCloseInventoryFixListener();

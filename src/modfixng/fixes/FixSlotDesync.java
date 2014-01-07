@@ -15,7 +15,11 @@
  *
  */
 
-package modfixng;
+package modfixng.fixes;
+
+import modfixng.main.Config;
+import modfixng.main.ModFixNG;
+import modfixng.utils.ModFixNGUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

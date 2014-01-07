@@ -15,7 +15,15 @@
 *
 */
 
-package modfixng;
+package modfixng.main;
+
+import modfixng.fixes.FixBag19;
+import modfixng.fixes.FixBagFrameInsert;
+import modfixng.fixes.FixFreecamBlocks;
+import modfixng.fixes.FixFreecamEntities;
+import modfixng.fixes.FixHopperMinecart;
+import modfixng.fixes.FixSlotDesync;
+import modfixng.fixes.RestrictBreakWhileOpen;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;

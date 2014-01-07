@@ -15,7 +15,7 @@
  *
  */
 
-package modfixng;
+package modfixng.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

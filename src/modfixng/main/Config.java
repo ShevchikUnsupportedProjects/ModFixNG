@@ -15,7 +15,7 @@
  *
  */
 
-package modfixng;
+package modfixng.main;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,34 +29,34 @@ public class Config {
 	@SuppressWarnings("unused")
 	private ModFixNG main;
 	private File configfile;
-	Config(ModFixNG main) {
+	public Config(ModFixNG main) {
 		this.main = main;
 		configfile = new File(main.getDataFolder(),"config.yml");
 	}
 
-	protected boolean fixBag19Enabled = true;
-	protected HashSet<Integer> fixBag19BackPacks19IDs = new HashSet<Integer>();
-	protected boolean fixBag19CropanalyzerFixEnabled = true;
+	public boolean fixBag19Enabled = true;
+	public HashSet<Integer> fixBag19BackPacks19IDs = new HashSet<Integer>();
+	public boolean fixBag19CropanalyzerFixEnabled = true;
 
-	protected boolean fixFreecamEntitiesEnabled = true;
-	protected HashSet<Short> fixFreecamEntitiesEntitiesIDs = new HashSet<Short>();
+	public boolean fixFreecamEntitiesEnabled = true;
+	public HashSet<Short> fixFreecamEntitiesEntitiesIDs = new HashSet<Short>();
 
-	protected boolean fixFreecamBlockCloseInventoryOnBreakCheckEnabled = true;
-	protected HashSet<String> fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>();
-	protected boolean fixFreecamBlockZeroItemsCheckEnabled = true;
+	public boolean fixFreecamBlockCloseInventoryOnBreakCheckEnabled = true;
+	public HashSet<String> fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>();
+	public boolean fixFreecamBlockZeroItemsCheckEnabled = true;
 	
-	protected boolean restrictBlockBreakWhileOpenEnabled = true;
-	protected HashSet<String> restrictBlockBreakWhileOpenIDs = new HashSet<String>();
-	protected boolean restrictBlockBreakWhileOpenClearDropIfBlockBroken = true;
+	public boolean restrictBlockBreakWhileOpenEnabled = true;
+	public HashSet<String> restrictBlockBreakWhileOpenIDs = new HashSet<String>();
+	public boolean restrictBlockBreakWhileOpenClearDropIfBlockBroken = true;
 	
-	protected boolean fixHopperMinecart = true;
+	public boolean fixHopperMinecart = true;
 
-	protected boolean fixBagFrameInsertEnabled = true;
-	protected HashSet<Integer> fixBagFrameInsertBagIDs = new HashSet<Integer>();
-	protected HashSet<String> fixBagFrameInsertGregIDs = new HashSet<String>();
-	protected short fixBagFrameInsertFrameentityID = 18;
+	public boolean fixBagFrameInsertEnabled = true;
+	public HashSet<Integer> fixBagFrameInsertBagIDs = new HashSet<Integer>();
+	public HashSet<String> fixBagFrameInsertGregIDs = new HashSet<String>();
+	public short fixBagFrameInsertFrameentityID = 18;
 	
-	protected boolean fixSlotDesyncEnabled = true;
+	public boolean fixSlotDesyncEnabled = true;
 	
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);

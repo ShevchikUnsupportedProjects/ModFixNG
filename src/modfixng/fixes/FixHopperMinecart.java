@@ -15,7 +15,10 @@
  *
  */
 
-package modfixng;
+package modfixng.fixes;
+
+import modfixng.main.Config;
+import modfixng.main.ModFixNG;
 
 import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.event.EventHandler;
@@ -29,7 +32,7 @@ public class FixHopperMinecart implements Listener {
 	private ModFixNG main;
 	private Config config;
 	
-	FixHopperMinecart(ModFixNG main, Config config) {
+	public FixHopperMinecart(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

@@ -15,9 +15,11 @@
  *
  */
 
-package modfixng;
+package modfixng.main;
 
 import java.util.HashSet;
+
+import modfixng.utils.ModFixNGUtils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -40,7 +42,7 @@ public class Commands implements  CommandExecutor,Listener{
 	private ModFixNG main;
 	private Config config;
 	
-	Commands(ModFixNG main, Config config) {
+	public Commands(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 	}

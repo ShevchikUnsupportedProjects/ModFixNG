@@ -15,9 +15,12 @@
  *
  */
 
-package modfixng;
+package modfixng.fixes;
 
 import java.util.HashMap;
+
+import modfixng.main.Config;
+import modfixng.main.ModFixNG;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -37,7 +40,7 @@ public class FixFreecamEntities implements Listener {
 	private ModFixNG main;
 	private Config config;
 	
-	FixFreecamEntities(ModFixNG main, Config config) {
+	public FixFreecamEntities(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		initClientCloseInventoryFixListener();

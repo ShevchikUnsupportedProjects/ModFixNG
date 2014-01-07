@@ -15,7 +15,11 @@
  *
  */
 
-package modfixng;
+package modfixng.fixes;
+
+import modfixng.main.Config;
+import modfixng.main.ModFixNG;
+import modfixng.utils.ModFixNGUtils;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +27,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -33,7 +38,7 @@ public class FixBag19 implements Listener {
 	private ModFixNG main;
 	private Config config;
 	
-	FixBag19(ModFixNG main, Config config) {
+	public FixBag19(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		initBag19BugFixListener();

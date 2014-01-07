@@ -15,9 +15,13 @@
  *
  */
 
-package modfixng;
+package modfixng.fixes;
 
 import java.util.HashMap;
+
+import modfixng.main.Config;
+import modfixng.main.ModFixNG;
+import modfixng.utils.ModFixNGUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -41,7 +45,7 @@ public class FixFreecamBlocks implements Listener {
 	private ModFixNG main;
 	private Config config;
 
-	FixFreecamBlocks(ModFixNG main, Config config) {
+	public FixFreecamBlocks(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		//zeroItemsCheck
