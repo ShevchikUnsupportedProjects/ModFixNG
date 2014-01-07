@@ -26,7 +26,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -36,11 +38,11 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 
 // BackPack fix
-public class FixBag19 implements Listener {
+public class FixBag implements Listener {
 	private ModFixNG main;
 	private Config config;
 	
-	public FixBag19(ModFixNG main, Config config) {
+	public FixBag(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		initBag19BugFixListener();
@@ -66,6 +68,23 @@ public class FixBag19 implements Listener {
 		}
 		p.closeInventory();
 	}
+	
+	@EventHandler(priority=EventPriority.MONITOR)
+	public void onPlayerOpenedBlock(PlayerInteractEvent event)
+	{
+		if (!config.fixBagCloseInventryOnInteractIfAlreadyOpened) {return;}
+		
+		if (ModFixNGUtils.isInventoryOpen(event.getPlayer()))
+		{
+			if (
+					(event.getAction() == Action.RIGHT_CLICK_BLOCK && !event.isCancelled()) ||
+					(event.getAction() == Action.RIGHT_CLICK_AIR)
+				)
+			{
+				event.getPlayer().closeInventory();
+			}
+		}
+	}
 
 	//close inventory on portal enter
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -77,7 +96,7 @@ public class FixBag19 implements Listener {
 		
 		if (event.getTo().getBlock().getType() == Material.PORTAL)
 		{
-			event.getPlayer().closeInventory();
+			//event.getPlayer().closeInventory();
 		}
 		
 	}

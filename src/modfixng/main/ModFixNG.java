@@ -17,7 +17,7 @@
 
 package modfixng.main;
 
-import modfixng.fixes.FixBag19;
+import modfixng.fixes.FixBag;
 import modfixng.fixes.FixBagFrameInsert;
 import modfixng.fixes.FixFreecamBlocks;
 import modfixng.fixes.FixFreecamEntities;
@@ -37,7 +37,7 @@ public class ModFixNG extends JavaPlugin {
 	private Config config;
 	
 	private Commands commandl;
-	private FixBag19 bagl;
+	private FixBag bagl;
 	private FixFreecamEntities mpl;
 	private FixFreecamBlocks fciol;
 	private FixHopperMinecart hpl;
@@ -57,7 +57,7 @@ public class ModFixNG extends JavaPlugin {
 		commandl = new Commands(this,config);
 		getCommand("modfix").setExecutor(commandl);
 		getServer().getPluginManager().registerEvents(commandl, this);
-		bagl = new FixBag19(this,config);
+		bagl = new FixBag(this,config);
 		getServer().getPluginManager().registerEvents(bagl, this);
 		mpl = new FixFreecamEntities(this,config);
 		getServer().getPluginManager().registerEvents(mpl, this);

@@ -35,6 +35,7 @@ public class Config {
 	}
 
 	public boolean fixBagEnabled = true;
+	public boolean fixBagCloseInventryOnInteractIfAlreadyOpened = true;
 	public HashSet<Integer> fixBag19BackPacks19IDs = new HashSet<Integer>();
 	public boolean fixBag19CropanalyzerFixEnabled = true;
 
@@ -64,6 +65,7 @@ public class Config {
 		fixBagEnabled = config.getBoolean("BackPackFix.enabled",fixBagEnabled);
 		fixBag19BackPacks19IDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.19BlockIDs"));
 		fixBag19CropanalyzerFixEnabled = config.getBoolean("BackPackFix.CropanalyzerFix.enabled",fixBag19CropanalyzerFixEnabled);
+		fixBagCloseInventryOnInteractIfAlreadyOpened = config.getBoolean("BackPackFix.closePreviousInventoryOnInteractIfAlreadyOpened.enabled",fixBagCloseInventryOnInteractIfAlreadyOpened);
 
 		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
@@ -94,7 +96,9 @@ public class Config {
 		
 		config.set("BackPackFix.enabled",fixBagEnabled);
 		config.set("BackPackFix.19BlockIDs",new ArrayList<Integer>(fixBag19BackPacks19IDs));
+		config.set("BackPackFix.closePreviousInventoryOnInteractIfAlreadyOpened.enabled",fixBagCloseInventryOnInteractIfAlreadyOpened);
 		config.set("BackPackFix.CropanalyzerFix.enabled",fixBag19CropanalyzerFixEnabled);
+
 
 		config.set("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
