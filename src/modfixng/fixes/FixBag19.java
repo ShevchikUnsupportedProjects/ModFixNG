@@ -21,11 +21,13 @@ import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.comphenix.protocol.PacketType;
@@ -48,7 +50,7 @@ public class FixBag19 implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerDeath(PlayerDeathEvent event) 
 	{
-		if (!config.fixBag19Enabled) {return;}
+		if (!config.fixBagEnabled) {return;}
 		
 		Player p = (Player) event.getEntity();
 		if (config.fixBag19CropanalyzerFixEnabled) 
@@ -64,13 +66,27 @@ public class FixBag19 implements Listener {
 		}
 		p.closeInventory();
 	}
-	
+
+	//close inventory on portal enter
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	public void onMove(PlayerMoveEvent event)
+	{
+		if (!config.fixBagEnabled) {return;}
+		
+		if (event.getFrom().getBlock().equals(event.getTo().getBlock())) {return;}
+		
+		if (event.getTo().getBlock().getType() == Material.PORTAL)
+		{
+			event.getPlayer().closeInventory();
+		}
+		
+	}
 	
 	//close inventory on quit
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerExit(PlayerQuitEvent event) 
 	{
-		if (!config.fixBag19Enabled) {return;}
+		if (!config.fixBagEnabled) {return;}
 		
 		event.getPlayer().closeInventory();
 	}
@@ -92,7 +108,7 @@ public class FixBag19 implements Listener {
 					@Override
 					  public void onPacketReceiving(PacketEvent e) 
 					  {
-						  if (!config.fixBag19Enabled) {return;}
+						  if (!config.fixBagEnabled) {return;}
 
 						  if (e.getPlayer() == null) {return;}
 						  

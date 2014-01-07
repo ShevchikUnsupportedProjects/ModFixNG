@@ -34,7 +34,7 @@ public class Config {
 		configfile = new File(main.getDataFolder(),"config.yml");
 	}
 
-	public boolean fixBag19Enabled = true;
+	public boolean fixBagEnabled = true;
 	public HashSet<Integer> fixBag19BackPacks19IDs = new HashSet<Integer>();
 	public boolean fixBag19CropanalyzerFixEnabled = true;
 
@@ -61,7 +61,7 @@ public class Config {
 	public void loadConfig(){
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 
-		fixBag19Enabled = config.getBoolean("BackPackFix.enabled",fixBag19Enabled);
+		fixBagEnabled = config.getBoolean("BackPackFix.enabled",fixBagEnabled);
 		fixBag19BackPacks19IDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.19BlockIDs"));
 		fixBag19CropanalyzerFixEnabled = config.getBoolean("BackPackFix.CropanalyzerFix.enabled",fixBag19CropanalyzerFixEnabled);
 
@@ -92,7 +92,7 @@ public class Config {
 	{
 		FileConfiguration config = new YamlConfiguration();
 		
-		config.set("BackPackFix.enabled",fixBag19Enabled);
+		config.set("BackPackFix.enabled",fixBagEnabled);
 		config.set("BackPackFix.19BlockIDs",new ArrayList<Integer>(fixBag19BackPacks19IDs));
 		config.set("BackPackFix.CropanalyzerFix.enabled",fixBag19CropanalyzerFixEnabled);
 
