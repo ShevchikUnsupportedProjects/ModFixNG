@@ -8,6 +8,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class PlainNMSUtils {
 
+	protected static boolean isInventoryOpen(Player p)
+	{
+		return !getPlayerContainer(p).getClass().getName().equals("net.minecraft.inventory.ContainerPlayer");
+	}
+	
     protected static void findAndFixOpenCropanalyzer(Player p, List<ItemStack> drops) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
     {
 	    net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);

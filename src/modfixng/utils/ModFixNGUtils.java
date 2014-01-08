@@ -85,7 +85,7 @@ public class ModFixNGUtils {
 	{
 		if (isRunningMCPC())
 		{
-			return !PlainNMSUtils.getPlayerContainer(p).getClass().getName().equals("net.minecraft.inventory.ContainerPlayer");
+			return PlainNMSUtils.isInventoryOpen(p);
 		} else 
 		{
 			if (p.getGameMode() != GameMode.CREATIVE)
