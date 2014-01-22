@@ -70,16 +70,32 @@ public class FixBag implements Listener {
 	}
 	
 	@EventHandler(priority=EventPriority.MONITOR)
+	public void onPlayerShitClickBlock(PlayerInteractEvent event) 
+	{
+		if (!config.fixBagEnabled) {return;}
+		
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
+		
+		Player player = event.getPlayer();
+		if (player.isSneaking() && config.fixBag19BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
+		{
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority=EventPriority.MONITOR)
 	public void onPlayerOpenedBlock(PlayerInteractEvent event)
 	{
+		if (!config.fixBagEnabled) {return;}
 		if (!config.fixBagCloseInventryOnInteractIfAlreadyOpened) {return;}
 		
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer()))
 		{
-			if (
+			if 
+			(
 					(event.getAction() == Action.RIGHT_CLICK_BLOCK && !event.isCancelled()) ||
 					(event.getAction() == Action.RIGHT_CLICK_AIR)
-				)
+			)
 			{
 				event.getPlayer().closeInventory();
 			}
