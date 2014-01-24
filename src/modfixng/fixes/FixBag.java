@@ -37,28 +37,27 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 
-// BackPack fix
 public class FixBag implements Listener {
 	private ModFixNG main;
 	private Config config;
-	
+
 	public FixBag(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		initBag19BugFixListener();
+		initCropnalyzerAndTooBoxDropListener();
 	}
-	
-	//close inventory on death
+
+	// close inventory on death and also fix dropped cropanalyzer
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerDeath(PlayerDeathEvent event) 
-	{
-		if (!config.fixBagEnabled) {return;}
-		
+	public void onPlayerDeath(PlayerDeathEvent event) {
+		if (!config.fixBagEnabled) {
+			return;
+		}
+
 		Player p = (Player) event.getEntity();
-		if (config.fixBag19CropanalyzerFixEnabled) 
-		{
-			if (ModFixNGUtils.isCropanalyzerOpen(p))
-			{
+		if (config.fixBagCropanalyzerFixEnabled) {
+			if (ModFixNGUtils.isCropanalyzerOpen(p)) {
 				try {
 					ModFixNGUtils.findAndFixOpenCropanalyzer(p, event.getDrops());
 				} catch (Exception e) {
@@ -68,105 +67,165 @@ public class FixBag implements Listener {
 		}
 		p.closeInventory();
 	}
-	
-	@EventHandler(priority=EventPriority.MONITOR)
-	public void onPlayerShitClickBlock(PlayerInteractEvent event) 
-	{
-		if (!config.fixBagEnabled) {return;}
-		
-		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
-		
+
+	// restrict shift-click on block with some bags
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerShitClickBlock(PlayerInteractEvent event) {
+		if (!config.fixBagEnabled) {
+			return;
+		}
+
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
+
 		Player player = event.getPlayer();
-		if (player.isSneaking() && config.fixBag19BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
-		{
+		if (player.isSneaking() && config.fixBagShiftBlockRestrictBagIDs.contains(player.getItemInHand().getTypeId())) {
 			event.setCancelled(true);
 		}
 	}
-	
-	@EventHandler(priority=EventPriority.MONITOR)
-	public void onPlayerOpenedBlock(PlayerInteractEvent event)
-	{
-		if (!config.fixBagEnabled) {return;}
-		if (!config.fixBagCloseInventryOnInteractIfAlreadyOpened) {return;}
-		
-		if (ModFixNGUtils.isInventoryOpen(event.getPlayer()))
-		{
-			if 
-			(
-					(event.getAction() == Action.RIGHT_CLICK_BLOCK && !event.isCancelled()) ||
-					(event.getAction() == Action.RIGHT_CLICK_AIR)
-			)
-			{
+
+	// close inventory before opening another one
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerOpenedBlock(PlayerInteractEvent event) {
+		if (!config.fixBagEnabled) {
+			return;
+		}
+		if (!config.fixBagCloseInventryOnInteractIfAlreadyOpened) {
+			return;
+		}
+
+		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+			if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && !event.isCancelled()) || (event.getAction() == Action.RIGHT_CLICK_AIR)) {
 				event.getPlayer().closeInventory();
 			}
 		}
 	}
 
-	//close inventory on portal enter
+	// close inventory on portal enter
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onMove(PlayerMoveEvent event)
-	{
-		if (!config.fixBagEnabled) {return;}
-		
-		if (event.getFrom().getBlock().equals(event.getTo().getBlock())) {return;}
-		
-		if (event.getTo().getBlock().getType() == Material.PORTAL)
-		{
+	public void onMove(PlayerMoveEvent event) {
+		if (!config.fixBagEnabled) {
+			return;
+		}
+
+		if (event.getFrom().getBlock().equals(event.getTo().getBlock())) {
+			return;
+		}
+
+		if (event.getTo().getBlock().getType() == Material.PORTAL) {
 			event.getPlayer().closeInventory();
 		}
-		
+
 	}
-	
-	//close inventory on quit
+
+	// close inventory on quit
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerExit(PlayerQuitEvent event) 
-	{
-		if (!config.fixBagEnabled) {return;}
-		
+	public void onPlayerExit(PlayerQuitEvent event) {
+		if (!config.fixBagEnabled) {
+			return;
+		}
+
 		event.getPlayer().closeInventory();
 	}
 
-	
-	//restrict using 1-9 buttons in bags from mods if it will move bag to another slot
-	private void initBag19BugFixListener()
-	{
-		main.protocolManager.addPacketListener(
-				new PacketAdapter(
-						PacketAdapter
-						.params(main, PacketType.Play.Client.WINDOW_CLICK)
-						.clientSide()
-						.listenerPriority(ListenerPriority.HIGHEST)
-						.optionIntercept()
-				) 
-				{
-					@SuppressWarnings("deprecation")
-					@Override
-					  public void onPacketReceiving(PacketEvent e) 
-					  {
-						  if (!config.fixBagEnabled) {return;}
+	// restrict using 1-9 buttons in bags from mods if it will move bag to
+	// another slot
+	private void initBag19BugFixListener() {
+		main.protocolManager.addPacketListener(new PacketAdapter(
+				PacketAdapter
+				.params(main, PacketType.Play.Client.WINDOW_CLICK)
+				.clientSide()
+				.listenerPriority(ListenerPriority.HIGHEST)
+				.optionIntercept()
+			) {
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onPacketReceiving(PacketEvent e) {
+				if (!config.fixBagEnabled) {
+					return;
+				}
+				
+				if (!config.fixBag19ButtonClickEnabled) {
+					return;
+				}
 
-						  if (e.getPlayer() == null) {return;}
-						  
-						  final Player player = e.getPlayer();					  
-						  //if item in hand is one of the bad ids - check buttons
-						  if (config.fixBag19BackPacks19IDs.contains(player.getItemInHand().getTypeId())) 
-						  {
-							  //check click type
-							  if (e.getPacket().getIntegers().getValues().get(3) == 2)
-							  {
-								  //check to which slot we want to move item
-								  final int heldslot = player.getInventory().getHeldItemSlot();
-								  if (heldslot == e.getPacket().getIntegers().getValues().get(2))
-								  {
-									  //illegal bag movement
-									  //cancel
-									  e.setCancelled(true);
-									  //update player inventory
-									  player.updateInventory();
-								  }
-							  }
-						  }
-					  }
-				});
-	}	
+				if (e.getPlayer() == null) {
+					return;
+				}
+
+				final Player player = e.getPlayer();
+				// if item in hand is one of the bad ids - check buttons
+				if (config.fixBag19ButtonClickBagIDs.contains(player.getItemInHand().getTypeId())) {
+					// check click type(checking for shift+button)
+					if (e.getPacket().getIntegers().getValues().get(3) == 2) {
+						// check to which slot we want to move item(checking if it is the holding bag slot)
+						final int heldslot = player.getInventory().getHeldItemSlot();
+						if (heldslot == e.getPacket().getIntegers().getValues().get(2)) {
+							e.setCancelled(true);
+							player.updateInventory();
+						}
+					}
+				}
+			}
+		});
+	}
+
+	// restrict q and ctrl+q buttin in cropanalyzer and toobox
+	private void initCropnalyzerAndTooBoxDropListener() {
+		main.protocolManager.addPacketListener(new PacketAdapter(
+				PacketAdapter
+				.params(main, PacketType.Play.Client.WINDOW_CLICK)
+				.clientSide()
+				.listenerPriority(ListenerPriority.HIGHEST)
+				.optionIntercept()
+			) {
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onPacketReceiving(PacketEvent e) {
+				if (!config.fixBagEnabled) {
+					return;
+				}
+
+				if (e.getPlayer() == null) {
+					return;
+				}
+
+				Player player = e.getPlayer();
+				int clickedslot = e.getPacket().getIntegers().getValues().get(1);
+				
+				// check click type(checking for q or ctrl+q)
+				if (e.getPacket().getIntegers().getValues().get(3) == 4 && clickedslot != -999) {
+					// first check for cropnalyzer
+					if (config.fixBagCropanalyzerFixEnabled) {
+						if (ModFixNGUtils.isCropanalyzerOpen(player)) {
+							try {
+								if (ModFixNGUtils.isTryingToDropOpenCropanalyzer(player, clickedslot)) {
+									e.setCancelled(true);
+									player.updateInventory();
+									return;
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+						}
+					}
+					// then check for toolbox
+					if (config.fixBagToolboxFixEnabled) {
+						if (ModFixNGUtils.isToolboxOpen(player)) {
+							try {
+								if (ModFixNGUtils.isTryingToDropOpenToolBox(player, clickedslot)) {
+									e.setCancelled(true);
+									player.updateInventory();
+									return;
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+						}
+					}
+				}
+			}
+		});
+	}
 }

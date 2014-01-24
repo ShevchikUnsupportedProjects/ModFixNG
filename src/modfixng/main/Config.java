@@ -36,8 +36,12 @@ public class Config {
 
 	public boolean fixBagEnabled = true;
 	public boolean fixBagCloseInventryOnInteractIfAlreadyOpened = true;
-	public HashSet<Integer> fixBag19BackPacks19IDs = new HashSet<Integer>();
-	public boolean fixBag19CropanalyzerFixEnabled = true;
+	public boolean fixBag19ButtonClickEnabled = true;
+	public HashSet<Integer> fixBag19ButtonClickBagIDs = new HashSet<Integer>();
+	public boolean fixBagShiftBlockRestrictEnabled = true;
+	public HashSet<Integer> fixBagShiftBlockRestrictBagIDs = new HashSet<Integer>();
+	public boolean fixBagCropanalyzerFixEnabled = true;
+	public boolean fixBagToolboxFixEnabled = true;
 
 	public boolean fixFreecamEntitiesEnabled = true;
 	public HashSet<Short> fixFreecamEntitiesEntitiesIDs = new HashSet<Short>();
@@ -63,8 +67,12 @@ public class Config {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 
 		fixBagEnabled = config.getBoolean("BackPackFix.enabled",fixBagEnabled);
-		fixBag19BackPacks19IDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.19BlockIDs"));
-		fixBag19CropanalyzerFixEnabled = config.getBoolean("BackPackFix.CropanalyzerFix.enabled",fixBag19CropanalyzerFixEnabled);
+		fixBag19ButtonClickEnabled = config.getBoolean("BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
+		fixBag19ButtonClickBagIDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.restrict19ButtonClick.BagIDs"));
+		fixBagShiftBlockRestrictEnabled = config.getBoolean("BackPackFix.restrictBlockShiftClick.enabled", fixBagShiftBlockRestrictEnabled);
+		fixBagShiftBlockRestrictBagIDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.restrictBlockShiftClick.BagIDs"));
+		fixBagCropanalyzerFixEnabled = config.getBoolean("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
+		fixBagToolboxFixEnabled = config.getBoolean("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 		fixBagCloseInventryOnInteractIfAlreadyOpened = config.getBoolean("BackPackFix.closePreviousInventoryOnInteractIfAlreadyOpened.enabled",fixBagCloseInventryOnInteractIfAlreadyOpened);
 
 		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
@@ -95,10 +103,13 @@ public class Config {
 		FileConfiguration config = new YamlConfiguration();
 		
 		config.set("BackPackFix.enabled",fixBagEnabled);
-		config.set("BackPackFix.19BlockIDs",new ArrayList<Integer>(fixBag19BackPacks19IDs));
+		config.set("BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
+		config.set("BackPackFix.restrict19ButtonClick.BagIDs", new ArrayList<Integer>(fixBag19ButtonClickBagIDs));
+		config.set("BackPackFix.restrictBlockShiftClick.enabled", fixBagShiftBlockRestrictEnabled);
+		config.set("BackPackFix.restrictBlockShiftClick.BagIDs",new ArrayList<Integer>(fixBagShiftBlockRestrictBagIDs));
+		config.set("BackPackFix.fixCropanalyzer.enabled",fixBagCropanalyzerFixEnabled);
+		config.set("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 		config.set("BackPackFix.closePreviousInventoryOnInteractIfAlreadyOpened.enabled",fixBagCloseInventryOnInteractIfAlreadyOpened);
-		config.set("BackPackFix.CropanalyzerFix.enabled",fixBag19CropanalyzerFixEnabled);
-
 
 		config.set("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);

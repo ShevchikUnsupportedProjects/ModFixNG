@@ -107,11 +107,29 @@ public class ModFixNGUtils {
     	return false;
     }
     
+    public static boolean isTryingToDropOpenCropanalyzer(Player p, int index) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+    {
+    	return PlainNMSUtils.isTryingToDropOpenCropanalyzer(p, index);
+    }
+    
     public static void findAndFixOpenCropanalyzer(Player p, List<ItemStack> drops) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
     {
     	PlainNMSUtils.findAndFixOpenCropanalyzer(p, drops);
     }
     
+    public static boolean isToolboxOpen(Player p)
+    {
+    	if (isRunningMCPC())
+    	{
+    		return PlainNMSUtils.getPlayerContainer(p).getClass().getName().equals("ic2.core.item.tool.ContainerToolbox");
+    	}
+    	return false;
+    }
+    
+    public static boolean isTryingToDropOpenToolBox(Player p, int index) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+    {
+    	return PlainNMSUtils.isTryingToDropOpenToolBox(p, index);
+    }
     
     private static boolean isRunningMCPC()
     {
