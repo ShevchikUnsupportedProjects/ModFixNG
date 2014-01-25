@@ -63,7 +63,10 @@ public class Config {
 	
 	public boolean fixSlotDesyncEnabled = true;
 	
-	public void loadConfig(){
+	public boolean fixIC2EnergyStorage = true;
+	
+	public void loadConfig()
+	{
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 
 		fixBagEnabled = config.getBoolean("BackPackFix.enabled",fixBagEnabled);
@@ -94,6 +97,8 @@ public class Config {
 		fixBagFrameInsertGregIDs = new HashSet<String>(config.getStringList("BagFrameInsertFix.gregIDs"));
 		
 		fixSlotDesyncEnabled = config.getBoolean("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
+		
+		fixIC2EnergyStorage = config.getBoolean("IC2EnergyStorageFix.enabled", fixIC2EnergyStorage);
 		
 		saveConfig();
 	}
@@ -130,6 +135,8 @@ public class Config {
 		config.set("BagFrameInsertFix.gregIDs",new ArrayList<String>(fixBagFrameInsertGregIDs));
 		
 		config.set("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
+		
+		config.set("IC2EnergyStorageFix.enabled", fixIC2EnergyStorage);
 		
 		try {config.save(configfile);} catch (IOException e) {}
 	}

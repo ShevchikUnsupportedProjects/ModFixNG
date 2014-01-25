@@ -44,7 +44,7 @@ public class FixBag implements Listener {
 	public FixBag(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
-		initBag19ButtonInventoryClickListener();
+		init19ButtonInventoryClickListener();
 		initDropButtonInventoryClickListener();
 		initDropButtonPlayClickListener();
 	}
@@ -131,7 +131,7 @@ public class FixBag implements Listener {
 	}
 
 	// restrict using 1-9 buttons in bags inventories if it will move bag to another slot
-	private void initBag19ButtonInventoryClickListener() {
+	private void init19ButtonInventoryClickListener() {
 		main.protocolManager.addPacketListener(new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)
@@ -154,7 +154,7 @@ public class FixBag implements Listener {
 					return;
 				}
 
-				final Player player = e.getPlayer();
+				Player player = e.getPlayer();
 				// if item in hand is one of the bad ids - check buttons
 				if (config.fixBag19ButtonClickBagIDs.contains(player.getItemInHand().getTypeId())) {
 					// check click type(checking for shift+button)

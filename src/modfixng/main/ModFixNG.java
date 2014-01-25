@@ -22,7 +22,8 @@ import modfixng.fixes.FixBagFrameInsert;
 import modfixng.fixes.FixFreecamBlocks;
 import modfixng.fixes.FixFreecamEntities;
 import modfixng.fixes.FixHopperMinecart;
-import modfixng.fixes.FixSlotDesync;
+import modfixng.fixes.RestrictIC2EnergyStorageArmorSlot19Click;
+import modfixng.fixes.FixPlayerArmorSlotDesync;
 import modfixng.fixes.RestrictBreakWhileOpen;
 
 import org.bukkit.entity.Player;
@@ -44,7 +45,8 @@ public class ModFixNG extends JavaPlugin {
 	private FixBagFrameInsert bfil;
 	private RestrictBreakWhileOpen rbwol;
 	@SuppressWarnings("unused")
-	private FixSlotDesync fsl;
+	private FixPlayerArmorSlotDesync fsl;
+	private RestrictIC2EnergyStorageArmorSlot19Click fic2esasl;
 	
 	public ProtocolManager protocolManager = null;
 	
@@ -67,9 +69,10 @@ public class ModFixNG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(hpl, this);
 		bfil = new FixBagFrameInsert(this,config);
 		getServer().getPluginManager().registerEvents(bfil, this);
-		fsl = new FixSlotDesync(this, config);
 		rbwol = new RestrictBreakWhileOpen(this, config);
 		getServer().getPluginManager().registerEvents(rbwol, this);
+		fsl = new FixPlayerArmorSlotDesync(this, config);
+		fic2esasl = new RestrictIC2EnergyStorageArmorSlot19Click(this, config);
 	}	
 	@Override
 	public void onDisable() 
@@ -85,6 +88,7 @@ public class ModFixNG extends JavaPlugin {
 		hpl = null;
 		bfil = null;
 		fsl = null;
+		fic2esasl = null;
 		protocolManager.removePacketListeners(this);
 		protocolManager = null;
 	}

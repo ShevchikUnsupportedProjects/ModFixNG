@@ -24,11 +24,11 @@ import modfixng.utils.ModFixNGUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class FixSlotDesync {
+public class FixPlayerArmorSlotDesync {
 
 	private ModFixNG main;
 	private Config config;
-	public FixSlotDesync(ModFixNG main, Config config)
+	public FixPlayerArmorSlotDesync(ModFixNG main, Config config)
 	{
 		this.main = main;
 		this.config = config;

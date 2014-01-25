@@ -136,6 +136,20 @@ public class ModFixNGUtils {
     	return PlainNMSUtils.isTryingToDropOpenToolBox(p, item);
     }
     
+    public static boolean isElectricContainerOpen(Player p)
+    {
+    	if (isRunningMCPC())
+		{
+			return PlainNMSUtils.getPlayerContainer(p).getClass().getName().equals("ic2.core.block.wiring.ContainerElectricBlock");
+		}
+    	return false;
+    }
+    
+    public static boolean isClickedNonEmptyArmorSlot(Player p, int clickedslot)
+    {
+    	return PlainNMSUtils.isClickedNonEmptyArmorSlot(p, clickedslot);
+    }
+    
     private static boolean isRunningMCPC()
     {
     	return (MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP"));
