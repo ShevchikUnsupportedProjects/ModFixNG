@@ -94,20 +94,31 @@ public class PlainNMSUtils {
     	return false;
     }
     
-    public static boolean isTryingToDropOpenToolBox(Player p, int index) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+    protected static boolean isTryingToDropOpenToolBox(Player p, int clickedslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
     {
-    	net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
-    	Field tooboxField = container.getClass().getDeclaredField("Toolbox");
-    	tooboxField.setAccessible(true);
-    	Object toolbox = tooboxField.get(container);
-		Field itemStackField = toolbox.getClass().getSuperclass().getDeclaredField("itemStack");
-		itemStackField.setAccessible(true);
-		net.minecraft.server.v1_5_R3.ItemStack opentoolbox = (net.minecraft.server.v1_5_R3.ItemStack) itemStackField.get(toolbox);
-		net.minecraft.server.v1_5_R3.ItemStack clickeditem = (net.minecraft.server.v1_5_R3.ItemStack) PlainNMSUtils.getPlayerContainer(p).b.get(index);
-		int openuid = opentoolbox.getTag().getInt("uid");
+		net.minecraft.server.v1_5_R3.ItemStack clickeditem = (net.minecraft.server.v1_5_R3.ItemStack) PlainNMSUtils.getPlayerContainer(p).b.get(clickedslot);
+		return isTryingToDropOpenToolBox(p, clickeditem);
+    }
+    
+    protected static boolean isTryingToDropOpenToolBox(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+    {
+    	net.minecraft.server.v1_5_R3.ItemStack clickeditem = getNMSItemStack(item);
+    	return isTryingToDropOpenToolBox(p, clickeditem);
+    }
+    
+    private static boolean isTryingToDropOpenToolBox(Player p, net.minecraft.server.v1_5_R3.ItemStack clickeditem) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+    {
     	if (clickeditem.getTag().hasKey("uid"))
     	{
     		int clickeduid = clickeditem.getTag().getInt("uid");
+	    	net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
+	    	Field tooboxField = container.getClass().getDeclaredField("Toolbox");
+	    	tooboxField.setAccessible(true);
+	    	Object toolbox = tooboxField.get(container);
+			Field itemStackField = toolbox.getClass().getSuperclass().getDeclaredField("itemStack");
+			itemStackField.setAccessible(true);
+			net.minecraft.server.v1_5_R3.ItemStack opentoolbox = (net.minecraft.server.v1_5_R3.ItemStack) itemStackField.get(toolbox);
+			int openuid = opentoolbox.getTag().getInt("uid");
     		return openuid == clickeduid;
     	}
     	return false;

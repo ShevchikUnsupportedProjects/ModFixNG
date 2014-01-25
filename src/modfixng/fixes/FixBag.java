@@ -44,8 +44,9 @@ public class FixBag implements Listener {
 	public FixBag(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
-		initBag19BugFixListener();
-		initCropnalyzerAndTooBoxDropListener();
+		initBag19ButtonInventoryClickListener();
+		initDropButtonInventoryClickListener();
+		initDropButtonPlayClickListener();
 	}
 
 	// close inventory on death and also fix dropped cropanalyzer
@@ -129,9 +130,8 @@ public class FixBag implements Listener {
 		event.getPlayer().closeInventory();
 	}
 
-	// restrict using 1-9 buttons in bags from mods if it will move bag to
-	// another slot
-	private void initBag19BugFixListener() {
+	// restrict using 1-9 buttons in bags inventories if it will move bag to another slot
+	private void initBag19ButtonInventoryClickListener() {
 		main.protocolManager.addPacketListener(new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)
@@ -171,8 +171,8 @@ public class FixBag implements Listener {
 		});
 	}
 
-	// restrict q and ctrl+q buttin in cropanalyzer and toobox
-	private void initCropnalyzerAndTooBoxDropListener() {
+	// restrict q and ctrl+q button in cropanalyzer and toobox inventory if trying to drop opened toolbox or cropnalyzer
+	private void initDropButtonInventoryClickListener() {
 		main.protocolManager.addPacketListener(new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)
@@ -228,4 +228,51 @@ public class FixBag implements Listener {
 			}
 		});
 	}
+	
+	//restrict dropping toolbox using q (while inventory is not yet open clientside) but open serverside.
+	private void initDropButtonPlayClickListener() {
+		main.protocolManager.addPacketListener(new PacketAdapter(
+				PacketAdapter
+				.params(main, PacketType.Play.Client.BLOCK_DIG)
+				.clientSide()
+				.listenerPriority(ListenerPriority.HIGHEST)
+				.optionIntercept()
+			) {
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onPacketReceiving(PacketEvent e) {
+				if (!config.fixBagEnabled) {
+					return;
+				}
+				
+				if (!config.fixBagToolboxFixEnabled) {
+					return;
+				}
+
+				if (e.getPlayer() == null) {
+					return;
+				}
+
+				Player player = e.getPlayer();
+				
+				// check click type(checking for q)
+				int actiontype = e.getPacket().getIntegers().getValues().get(4);
+				if (actiontype == 3 || actiontype == 4) {
+					// then check for toolbox
+					if (ModFixNGUtils.isToolboxOpen(player)) {
+						try {
+							if (ModFixNGUtils.isTryingToDropOpenToolBox(player, player.getItemInHand())) {
+								e.setCancelled(true);
+								player.updateInventory();
+								return;
+							}
+						} catch (Exception ex) {
+							ex.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+	}
+	
 }

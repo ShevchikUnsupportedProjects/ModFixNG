@@ -131,6 +131,11 @@ public class ModFixNGUtils {
     	return PlainNMSUtils.isTryingToDropOpenToolBox(p, index);
     }
     
+    public static boolean isTryingToDropOpenToolBox(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+    {
+    	return PlainNMSUtils.isTryingToDropOpenToolBox(p, item);
+    }
+    
     private static boolean isRunningMCPC()
     {
     	return (MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP"));
