@@ -35,21 +35,20 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 
 public class ModFixNGUtils {
 
-	
 	public static String getIDstring(Block bl)
 	{
 		String blstring = String.valueOf(bl.getTypeId());
 		if (bl.getData() !=0) {blstring += ":"+bl.getData();}
 		return blstring;
 	}
-	
+
 	public static String getIDstring(ItemStack item)
 	{
 		String blstring = String.valueOf(item.getTypeId());
 		if (item.getDurability() !=0) {blstring += ":"+item.getDurability();}
 		return blstring;
 	}
-	
+
     public static void updateSlot(ProtocolManager protocolManager, Player player, int inventory, int slot, ItemStack item)
     {
     	PacketContainer updateslot = protocolManager.createPacket(PacketType.Play.Server.SET_SLOT);
@@ -62,7 +61,7 @@ public class ModFixNGUtils {
 			e.printStackTrace();
 		}
     }
-	
+
 	public static boolean hasInventory(Block b)
 	{
 		try {
@@ -80,7 +79,7 @@ public class ModFixNGUtils {
 		}
 		return false;
 	}
-	
+
 	public static boolean isInventoryOpen(Player p)
 	{
 		if (isRunningMCPC())
@@ -97,7 +96,7 @@ public class ModFixNGUtils {
 			}
 		}
 	}
-    
+
     public static boolean isCropanalyzerOpen(Player p)
     {
     	if (isRunningMCPC())
@@ -106,17 +105,17 @@ public class ModFixNGUtils {
 		}
     	return false;
     }
-    
-    public static boolean isTryingToDropOpenCropanalyzer(Player p, int index) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+
+    public static boolean isTryingToDropOpenCropanalyzer(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
     {
-    	return PlainNMSUtils.isTryingToDropOpenCropanalyzer(p, index);
+    	return PlainNMSUtils.isTryingToDropOpenCropanalyzer(p, item);
     }
-    
+
     public static void findAndFixOpenCropanalyzer(Player p, List<ItemStack> drops) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
     {
     	PlainNMSUtils.findAndFixOpenCropanalyzer(p, drops);
     }
-    
+
     public static boolean isToolboxOpen(Player p)
     {
     	if (isRunningMCPC())
@@ -124,18 +123,13 @@ public class ModFixNGUtils {
     		return PlainNMSUtils.getPlayerContainer(p).getClass().getName().equals("ic2.core.item.tool.ContainerToolbox");
     	}
     	return false;
-    }
-    
-    public static boolean isTryingToDropOpenToolBox(Player p, int index) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
-    {
-    	return PlainNMSUtils.isTryingToDropOpenToolBox(p, index);
-    }
-    
+	}
+
     public static boolean isTryingToDropOpenToolBox(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
     {
     	return PlainNMSUtils.isTryingToDropOpenToolBox(p, item);
     }
-    
+
     public static boolean isElectricContainerOpen(Player p)
     {
     	if (isRunningMCPC())
@@ -144,15 +138,15 @@ public class ModFixNGUtils {
 		}
     	return false;
     }
-    
+
     public static boolean isClickedNonEmptyArmorSlot(Player p, int clickedslot)
     {
     	return PlainNMSUtils.isClickedNonEmptyArmorSlot(p, clickedslot);
     }
-    
+
     private static boolean isRunningMCPC()
     {
     	return (MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP"));
     }
-    
+
 }

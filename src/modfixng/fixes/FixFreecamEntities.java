@@ -134,7 +134,7 @@ public class FixFreecamEntities implements Listener {
 
 				for (Player player : Bukkit.getOnlinePlayers())
 				{
-					if (playerOpenEntity.containsKey(player))
+					if (playerOpenEntity.containsKey(player.getName()))
 					{
 						String playername = player.getName();
 						Entity entity = playerOpenEntity.get(playername);

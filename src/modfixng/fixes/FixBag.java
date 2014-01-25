@@ -28,9 +28,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -45,8 +47,6 @@ public class FixBag implements Listener {
 		this.main = main;
 		this.config = config;
 		init19ButtonInventoryClickListener();
-		initDropButtonInventoryClickListener();
-		initDropButtonPlayClickListener();
 	}
 
 	// close inventory on death and also fix dropped cropanalyzer
@@ -170,109 +170,39 @@ public class FixBag implements Listener {
 			}
 		});
 	}
-
-	// restrict q and ctrl+q button in cropanalyzer and toobox inventory if trying to drop opened toolbox or cropnalyzer
-	private void initDropButtonInventoryClickListener() {
-		main.protocolManager.addPacketListener(new PacketAdapter(
-				PacketAdapter
-				.params(main, PacketType.Play.Client.WINDOW_CLICK)
-				.clientSide()
-				.listenerPriority(ListenerPriority.HIGHEST)
-				.optionIntercept()
-			) {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void onPacketReceiving(PacketEvent e) {
-				if (!config.fixBagEnabled) {
-					return;
-				}
-
-				if (e.getPlayer() == null) {
-					return;
-				}
-
-				Player player = e.getPlayer();
-				int clickedslot = e.getPacket().getIntegers().getValues().get(1);
-				
-				// check click type(checking for q or ctrl+q)
-				if (e.getPacket().getIntegers().getValues().get(3) == 4 && clickedslot != -999) {
-					// first check for cropnalyzer
-					if (config.fixBagCropanalyzerFixEnabled) {
-						if (ModFixNGUtils.isCropanalyzerOpen(player)) {
-							try {
-								if (ModFixNGUtils.isTryingToDropOpenCropanalyzer(player, clickedslot)) {
-									e.setCancelled(true);
-									player.updateInventory();
-									return;
-								}
-							} catch (Exception ex) {
-								ex.printStackTrace();
-							}
-						}
-					}
-					// then check for toolbox
-					if (config.fixBagToolboxFixEnabled) {
-						if (ModFixNGUtils.isToolboxOpen(player)) {
-							try {
-								if (ModFixNGUtils.isTryingToDropOpenToolBox(player, clickedslot)) {
-									e.setCancelled(true);
-									player.updateInventory();
-									return;
-								}
-							} catch (Exception ex) {
-								ex.printStackTrace();
-							}
-						}
-					}
-				}
-			}
-		});
-	}
 	
-	//restrict dropping toolbox using q (while inventory is not yet open clientside) but open serverside.
-	private void initDropButtonPlayClickListener() {
-		main.protocolManager.addPacketListener(new PacketAdapter(
-				PacketAdapter
-				.params(main, PacketType.Play.Client.BLOCK_DIG)
-				.clientSide()
-				.listenerPriority(ListenerPriority.HIGHEST)
-				.optionIntercept()
-			) {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void onPacketReceiving(PacketEvent e) {
-				if (!config.fixBagEnabled) {
-					return;
-				}
-				
-				if (!config.fixBagToolboxFixEnabled) {
-					return;
-				}
-
-				if (e.getPlayer() == null) {
-					return;
-				}
-
-				Player player = e.getPlayer();
-				
-				// check click type(checking for q)
-				int actiontype = e.getPacket().getIntegers().getValues().get(4);
-				if (actiontype == 3 || actiontype == 4) {
-					// then check for toolbox
-					if (ModFixNGUtils.isToolboxOpen(player)) {
-						try {
-							if (ModFixNGUtils.isTryingToDropOpenToolBox(player, player.getItemInHand())) {
-								e.setCancelled(true);
-								player.updateInventory();
-								return;
-							}
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
+	//restrict dropping if trying to drop opened toolbox or cropnalyzer
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
+	public void onPlayerDropItem(PlayerDropItemEvent event) {
+		Player player = event.getPlayer();
+		ItemStack droppeditem = event.getItemDrop().getItemStack();
+		if (config.fixBagCropanalyzerFixEnabled) {
+			if (ModFixNGUtils.isCropanalyzerOpen(player)) {
+				try {
+					if (ModFixNGUtils.isTryingToDropOpenCropanalyzer(player, droppeditem)) {
+						event.setCancelled(true);
+						player.updateInventory();
+						return;
 					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
 				}
 			}
-		});
+		}
+		if (config.fixBagToolboxFixEnabled) {
+			if (ModFixNGUtils.isToolboxOpen(player)) {
+				try {
+					if (ModFixNGUtils.isTryingToDropOpenToolBox(player, droppeditem)) {
+						event.setCancelled(true);
+						player.updateInventory();
+						return;
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
 	}
 	
 }

@@ -27,7 +27,10 @@ public class PlainNMSUtils {
 
 	protected static boolean isInventoryOpen(Player p) 
 	{
-		return !getPlayerContainer(p).getClass().getName().equals("net.minecraft.inventory.ContainerPlayer");
+		org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer cplayer = (org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer) p;
+		net.minecraft.server.v1_5_R3.EntityPlayer nmsplayer = cplayer.getHandle();
+		net.minecraft.server.v1_5_R3.EntityHuman nmshuman = (net.minecraft.server.v1_5_R3.EntityHuman) nmsplayer;
+		return !nmshuman.activeContainer.getClass().getName().equals(nmshuman.defaultContainer.getClass().getName());
 	}
 
 	protected static void findAndFixOpenCropanalyzer(Player p, List<ItemStack> drops) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException 
@@ -74,38 +77,28 @@ public class PlainNMSUtils {
 		}
 	}
 
-	protected static boolean isTryingToDropOpenCropanalyzer(Player p, int index) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException 
+	protected static boolean isTryingToDropOpenCropanalyzer(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException 
 	{
-		net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
-		Field cropanalyzerField = container.getClass().getDeclaredField("cropnalyzer");
-		cropanalyzerField.setAccessible(true);
-		Object cropanalyzer = cropanalyzerField.get(container);
-		Field itemStackField = cropanalyzer.getClass().getDeclaredField("itemStack");
-		itemStackField.setAccessible(true);
-		net.minecraft.server.v1_5_R3.ItemStack opencropanalyzeritemstack = (net.minecraft.server.v1_5_R3.ItemStack) itemStackField.get(cropanalyzer);
-		net.minecraft.server.v1_5_R3.ItemStack clickeditem = (net.minecraft.server.v1_5_R3.ItemStack) getPlayerContainer(p).b.get(index);
-		int openuid = opencropanalyzeritemstack.getTag().getInt("uid");
-		if (clickeditem.getTag().hasKey("uid")) {
+		net.minecraft.server.v1_5_R3.ItemStack clickeditem = getNMSItemStack(item);
+		if (clickeditem.getTag().hasKey("uid")) 
+		{
 			int clickeduid = clickeditem.getTag().getInt("uid");
+			net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
+			Field cropanalyzerField = container.getClass().getDeclaredField("cropnalyzer");
+			cropanalyzerField.setAccessible(true);
+			Object cropanalyzer = cropanalyzerField.get(container);
+			Field itemStackField = cropanalyzer.getClass().getDeclaredField("itemStack");
+			itemStackField.setAccessible(true);
+			net.minecraft.server.v1_5_R3.ItemStack opencropanalyzeritemstack = (net.minecraft.server.v1_5_R3.ItemStack) itemStackField.get(cropanalyzer);
+			int openuid = opencropanalyzeritemstack.getTag().getInt("uid");
 			return openuid == clickeduid;
 		}
 		return false;
 	}
 
-	protected static boolean isTryingToDropOpenToolBox(Player p, int clickedslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException 
-	{
-		net.minecraft.server.v1_5_R3.ItemStack clickeditem = (net.minecraft.server.v1_5_R3.ItemStack) getPlayerContainer(p).b.get(clickedslot);
-		return isTryingToDropOpenToolBox(p, clickeditem);
-	}
-
 	protected static boolean isTryingToDropOpenToolBox(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException 
 	{
 		net.minecraft.server.v1_5_R3.ItemStack clickeditem = getNMSItemStack(item);
-		return isTryingToDropOpenToolBox(p, clickeditem);
-	}
-
-	private static boolean isTryingToDropOpenToolBox(Player p, net.minecraft.server.v1_5_R3.ItemStack clickeditem)throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException 
-	{
 		if (clickeditem.getTag().hasKey("uid")) 
 		{
 			int clickeduid = clickeditem.getTag().getInt("uid");

@@ -1,6 +1,5 @@
 package modfixng.fixes;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;
@@ -11,7 +10,6 @@ import com.comphenix.protocol.events.PacketEvent;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
-import modfixng.utils.PlainNMSUtils;
 
 public class RestrictIC2EnergyStorageArmorSlot19Click {
 

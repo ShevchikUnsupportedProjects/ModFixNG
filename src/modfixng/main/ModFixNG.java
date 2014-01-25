@@ -46,6 +46,7 @@ public class ModFixNG extends JavaPlugin {
 	private RestrictBreakWhileOpen rbwol;
 	@SuppressWarnings("unused")
 	private FixPlayerArmorSlotDesync fsl;
+	@SuppressWarnings("unused")
 	private RestrictIC2EnergyStorageArmorSlot19Click fic2esasl;
 	
 	public ProtocolManager protocolManager = null;
