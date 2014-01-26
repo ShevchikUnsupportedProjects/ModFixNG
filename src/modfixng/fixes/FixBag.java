@@ -87,51 +87,43 @@ public class FixBag implements Listener {
 		}
 	}
 	
-	//deny block interact if inventory already opened
+	//deny entity interact if inventory already opened or close previous
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractBlock(PlayerInteractEvent event) {
 		if (!config.fixBagEnabled) {
 			return;
 		}
 		
-		if (!config.fixBagRestrictInteractIfInventoryOpen) {
-			return;
-		}
-		
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
-			event.setCancelled(true);
+			if (config.fixBagCloseInventryOnInteractIfAlreadyOpened) {
+				event.getPlayer().closeInventory();
+				return;
+			}
+		
+			if (config.fixBagRestrictInteractIfInventoryOpen) {
+				event.setCancelled(true);
+				return;
+			}
 		}
 	}
 	
-	//deny entity interact if inventory already opened
+	//deny entity interact if inventory already opened or close previous
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if (!config.fixBagEnabled) {
 			return;
 		}
 		
-		if (!config.fixBagRestrictInteractIfInventoryOpen) {
-			return;
-		}
 		
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
-			event.setCancelled(true);
-		}
-	}
-
-	// close inventory before opening another one
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerOpenedBlock(PlayerInteractEvent event) {
-		if (!config.fixBagEnabled) {
-			return;
-		}
-		if (!config.fixBagCloseInventryOnInteractIfAlreadyOpened) {
-			return;
-		}
-
-		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
-			if ((event.getAction() == Action.RIGHT_CLICK_BLOCK && !event.isCancelled()) || (event.getAction() == Action.RIGHT_CLICK_AIR)) {
+			if (config.fixBagCloseInventryOnInteractIfAlreadyOpened) {
 				event.getPlayer().closeInventory();
+				return;
+			}
+		
+			if (config.fixBagRestrictInteractIfInventoryOpen) {
+				event.setCancelled(true);
+				return;
 			}
 		}
 	}
