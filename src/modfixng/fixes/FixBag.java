@@ -29,6 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -82,6 +83,38 @@ public class FixBag implements Listener {
 
 		Player player = event.getPlayer();
 		if (player.isSneaking() && config.fixBagShiftBlockRestrictBagIDs.contains(player.getItemInHand().getTypeId())) {
+			event.setCancelled(true);
+		}
+	}
+	
+	//deny block interact if inventory already opened
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerInteractBlock(PlayerInteractEvent event) {
+		if (!config.fixBagEnabled) {
+			return;
+		}
+		
+		if (!config.fixBagRestrictInteractIfInventoryOpen) {
+			return;
+		}
+		
+		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+			event.setCancelled(true);
+		}
+	}
+	
+	//deny entity interact if inventory already opened
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+		if (!config.fixBagEnabled) {
+			return;
+		}
+		
+		if (!config.fixBagRestrictInteractIfInventoryOpen) {
+			return;
+		}
+		
+		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 		}
 	}
