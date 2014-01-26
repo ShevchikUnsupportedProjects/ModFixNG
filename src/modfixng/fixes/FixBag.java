@@ -26,7 +26,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -67,24 +66,8 @@ public class FixBag implements Listener {
 				}
 			}
 		}
+		
 		p.closeInventory();
-	}
-
-	// restrict shift-click on block with some bags
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerShitClickBlock(PlayerInteractEvent event) {
-		if (!config.fixBagEnabled) {
-			return;
-		}
-
-		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
-			return;
-		}
-
-		Player player = event.getPlayer();
-		if (player.isSneaking() && config.fixBagShiftBlockRestrictBagIDs.contains(player.getItemInHand().getTypeId())) {
-			event.setCancelled(true);
-		}
 	}
 	
 	//deny entity interact if inventory already opened or close previous

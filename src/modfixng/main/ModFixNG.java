@@ -18,7 +18,6 @@
 package modfixng.main;
 
 import modfixng.fixes.FixBag;
-import modfixng.fixes.FixBagFrameInsert;
 import modfixng.fixes.FixFreecamBlocks;
 import modfixng.fixes.FixFreecamEntities;
 import modfixng.fixes.FixHopperMinecart;
@@ -42,7 +41,6 @@ public class ModFixNG extends JavaPlugin {
 	private FixFreecamEntities mpl;
 	private FixFreecamBlocks fciol;
 	private FixHopperMinecart hpl;
-	private FixBagFrameInsert bfil;
 	private RestrictBreakWhileOpen rbwol;
 	@SuppressWarnings("unused")
 	private FixPlayerArmorSlotDesync fsl;
@@ -68,8 +66,6 @@ public class ModFixNG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(fciol, this);
 		hpl = new FixHopperMinecart(this,config);
 		getServer().getPluginManager().registerEvents(hpl, this);
-		bfil = new FixBagFrameInsert(this,config);
-		getServer().getPluginManager().registerEvents(bfil, this);
 		rbwol = new RestrictBreakWhileOpen(this, config);
 		getServer().getPluginManager().registerEvents(rbwol, this);
 		fsl = new FixPlayerArmorSlotDesync(this, config);
@@ -87,7 +83,6 @@ public class ModFixNG extends JavaPlugin {
 		mpl = null;
 		fciol = null;
 		hpl = null;
-		bfil = null;
 		fsl = null;
 		fic2esasl = null;
 		protocolManager.removePacketListeners(this);

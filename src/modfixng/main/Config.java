@@ -56,11 +56,6 @@ public class Config {
 	public boolean restrictBlockBreakWhileOpenClearDropIfBlockBroken = true;
 	
 	public boolean fixHopperMinecart = true;
-
-	public boolean fixBagFrameInsertEnabled = true;
-	public HashSet<Integer> fixBagFrameInsertBagIDs = new HashSet<Integer>();
-	public HashSet<String> fixBagFrameInsertGregIDs = new HashSet<String>();
-	public short fixBagFrameInsertFrameentityID = 18;
 	
 	public boolean fixSlotDesyncEnabled = true;
 	
@@ -73,8 +68,6 @@ public class Config {
 		fixBagEnabled = config.getBoolean("BackPackFix.enabled",fixBagEnabled);
 		fixBag19ButtonClickEnabled = config.getBoolean("BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
 		fixBag19ButtonClickBagIDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.restrict19ButtonClick.BagIDs"));
-		fixBagShiftBlockRestrictEnabled = config.getBoolean("BackPackFix.restrictBlockShiftClick.enabled", fixBagShiftBlockRestrictEnabled);
-		fixBagShiftBlockRestrictBagIDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.restrictBlockShiftClick.BagIDs"));
 		fixBagCropanalyzerFixEnabled = config.getBoolean("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
 		fixBagToolboxFixEnabled = config.getBoolean("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 		fixBagCloseInventryOnInteractIfAlreadyOpened = config.getBoolean("BackPackFix.closePreviousInventoryOnInteractIfAlreadyOpened.enabled",fixBagCloseInventryOnInteractIfAlreadyOpened);
@@ -92,11 +85,6 @@ public class Config {
 		restrictBlockBreakWhileOpenClearDropIfBlockBroken = config.getBoolean("RestrictBlockBreakWhileOpen.clearDropIfBlockWasBrokenSomehow", restrictBlockBreakWhileOpenClearDropIfBlockBroken);
 		
 		fixHopperMinecart = config.getBoolean("HopperMinecartFix.enabled",fixHopperMinecart);
-		
-		fixBagFrameInsertEnabled = config.getBoolean("BagFrameInsertFix.enabled",fixBagFrameInsertEnabled);
-		fixBagFrameInsertBagIDs = new HashSet<Integer>(config.getIntegerList("BagFrameInsertFix.bagIDs"));
-		fixBagFrameInsertFrameentityID = (short) config.getInt("BagFrameInsertFix.frameentity",fixBagFrameInsertFrameentityID);
-		fixBagFrameInsertGregIDs = new HashSet<String>(config.getStringList("BagFrameInsertFix.gregIDs"));
 		
 		fixSlotDesyncEnabled = config.getBoolean("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 		
@@ -131,11 +119,6 @@ public class Config {
 		config.set("RestrictBlockBreakWhileOpen.clearDropIfBlockWasBrokenSomehow", restrictBlockBreakWhileOpenClearDropIfBlockBroken);
 		
 		config.set("HopperMinecartFix.enabled",fixHopperMinecart);
-
-		config.set("BagFrameInsertFix.enabled",fixBagFrameInsertEnabled);
-		config.set("BagFrameInsertFix.bagIDs",new ArrayList<Integer>(fixBagFrameInsertBagIDs));
-		config.set("BagFrameInsertFix.frameentity",fixBagFrameInsertFrameentityID);
-		config.set("BagFrameInsertFix.gregIDs",new ArrayList<String>(fixBagFrameInsertGregIDs));
 		
 		config.set("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 		
