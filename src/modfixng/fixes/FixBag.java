@@ -78,11 +78,6 @@ public class FixBag implements Listener {
 		}
 		
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
-			if (config.fixBagCloseInventryOnInteractIfAlreadyOpened) {
-				event.getPlayer().closeInventory();
-				return;
-			}
-		
 			if (config.fixBagRestrictInteractIfInventoryOpen) {
 				event.setCancelled(true);
 				return;
@@ -97,13 +92,7 @@ public class FixBag implements Listener {
 			return;
 		}
 		
-		
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
-			if (config.fixBagCloseInventryOnInteractIfAlreadyOpened) {
-				event.getPlayer().closeInventory();
-				return;
-			}
-		
 			if (config.fixBagRestrictInteractIfInventoryOpen) {
 				event.setCancelled(true);
 				return;

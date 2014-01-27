@@ -35,7 +35,6 @@ public class Config {
 	}
 
 	public boolean fixBagEnabled = true;
-	public boolean fixBagCloseInventryOnInteractIfAlreadyOpened = true;
 	public boolean fixBagRestrictInteractIfInventoryOpen = true;
 	public boolean fixBag19ButtonClickEnabled = true;
 	public HashSet<Integer> fixBag19ButtonClickBagIDs = new HashSet<Integer>();
@@ -70,8 +69,7 @@ public class Config {
 		fixBag19ButtonClickBagIDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.restrict19ButtonClick.BagIDs"));
 		fixBagCropanalyzerFixEnabled = config.getBoolean("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
 		fixBagToolboxFixEnabled = config.getBoolean("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
-		fixBagCloseInventryOnInteractIfAlreadyOpened = config.getBoolean("BackPackFix.closePreviousInventoryOnInteractIfAlreadyOpened.enabled",fixBagCloseInventryOnInteractIfAlreadyOpened);
-		fixBagRestrictInteractIfInventoryOpen = config.getBoolean("BackPackFix.restrictInteractfInventoryOpen", fixBagRestrictInteractIfInventoryOpen);
+		fixBagRestrictInteractIfInventoryOpen = config.getBoolean("BackPackFix.restrictInteractIfInventoryOpen.enabled", fixBagRestrictInteractIfInventoryOpen);
 
 		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
@@ -104,8 +102,7 @@ public class Config {
 		config.set("BackPackFix.restrictBlockShiftClick.BagIDs",new ArrayList<Integer>(fixBagShiftBlockRestrictBagIDs));
 		config.set("BackPackFix.fixCropanalyzer.enabled",fixBagCropanalyzerFixEnabled);
 		config.set("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
-		config.set("BackPackFix.closePreviousInventoryOnInteractIfAlreadyOpened.enabled",fixBagCloseInventryOnInteractIfAlreadyOpened);
-		config.set("BackPackFix.restrictInteractfInventoryOpen", fixBagRestrictInteractIfInventoryOpen);
+		config.set("BackPackFix.restrictInteractIfInventoryOpen.enabled", fixBagRestrictInteractIfInventoryOpen);
 
 		config.set("ProperlyCloseInventories.removeZeroSizeItems.enabled",fixFreecamBlockZeroItemsCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.enabled",fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
