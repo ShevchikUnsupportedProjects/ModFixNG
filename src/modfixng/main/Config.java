@@ -38,8 +38,6 @@ public class Config {
 	public boolean fixBagRestrictInteractIfInventoryOpen = true;
 	public boolean fixBag19ButtonClickEnabled = true;
 	public HashSet<Integer> fixBag19ButtonClickBagIDs = new HashSet<Integer>();
-	public boolean fixBagShiftBlockRestrictEnabled = true;
-	public HashSet<Integer> fixBagShiftBlockRestrictBagIDs = new HashSet<Integer>();
 	public boolean fixBagCropanalyzerFixEnabled = true;
 	public boolean fixBagToolboxFixEnabled = true;
 
@@ -98,8 +96,6 @@ public class Config {
 		config.set("BackPackFix.enabled",fixBagEnabled);
 		config.set("BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
 		config.set("BackPackFix.restrict19ButtonClick.BagIDs", new ArrayList<Integer>(fixBag19ButtonClickBagIDs));
-		config.set("BackPackFix.restrictBlockShiftClick.enabled", fixBagShiftBlockRestrictEnabled);
-		config.set("BackPackFix.restrictBlockShiftClick.BagIDs",new ArrayList<Integer>(fixBagShiftBlockRestrictBagIDs));
 		config.set("BackPackFix.fixCropanalyzer.enabled",fixBagCropanalyzerFixEnabled);
 		config.set("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 		config.set("BackPackFix.restrictInteractIfInventoryOpen.enabled", fixBagRestrictInteractIfInventoryOpen);
