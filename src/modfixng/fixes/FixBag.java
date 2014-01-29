@@ -177,7 +177,7 @@ public class FixBag implements Listener {
 			if (ModFixNGUtils.isCropanalyzerOpen(player)) {
 				try {
 					if (ModFixNGUtils.isTryingToDropOpenCropanalyzer(player, droppeditem)) {
-						player.closeInventory();
+						event.setCancelled(true);
 						return;
 					}
 				} catch (Exception ex) {
@@ -189,7 +189,7 @@ public class FixBag implements Listener {
 			if (ModFixNGUtils.isToolboxOpen(player)) {
 				try {
 					if (ModFixNGUtils.isTryingToDropOpenToolBox(player, droppeditem)) {
-						player.closeInventory();
+						event.setCancelled(true);
 						return;
 					}
 				} catch (Exception ex) {
