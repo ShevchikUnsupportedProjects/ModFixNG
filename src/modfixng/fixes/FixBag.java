@@ -168,16 +168,27 @@ public class FixBag implements Listener {
 		});
 	}
 	
+	private boolean closinginventory = false;
 	//close inventory if trying to drop opened toolbox or cropnalyzer
 	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
+		if (!config.fixBagEnabled) {
+			return;
+		}
+		
+		if (closinginventory) {
+			return;
+		}
+		
 		Player player = event.getPlayer();
 		ItemStack droppeditem = event.getItemDrop().getItemStack();
 		if (config.fixBagCropanalyzerFixEnabled) {
 			if (ModFixNGUtils.isCropanalyzerOpen(player)) {
 				try {
 					if (ModFixNGUtils.isTryingToDropOpenCropanalyzer(player, droppeditem)) {
-						event.setCancelled(true);
+						closinginventory = true;
+						player.closeInventory();
+						closinginventory = false;
 						return;
 					}
 				} catch (Exception ex) {
@@ -189,7 +200,9 @@ public class FixBag implements Listener {
 			if (ModFixNGUtils.isToolboxOpen(player)) {
 				try {
 					if (ModFixNGUtils.isTryingToDropOpenToolBox(player, droppeditem)) {
-						event.setCancelled(true);
+						closinginventory = true;
+						player.closeInventory();
+						closinginventory = false;
 						return;
 					}
 				} catch (Exception ex) {
