@@ -41,10 +41,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.util.Vector;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.injector.GamePhase;
 
 public class RestrictBreakWhileOpen implements Listener {
 
@@ -111,9 +109,6 @@ public class RestrictBreakWhileOpen implements Listener {
 						PacketAdapter
 						.params(main, PacketType.Play.Client.CLOSE_WINDOW)
 						.clientSide()
-						.optionManualGamePhase()
-						.gamePhase(GamePhase.PLAYING)
-						.listenerPriority(ListenerPriority.LOWEST)
 				) 
 				{
 					@Override
@@ -141,9 +136,6 @@ public class RestrictBreakWhileOpen implements Listener {
 						PacketAdapter
 						.params(main, PacketType.Play.Server.CLOSE_WINDOW)
 						.serverSide()
-						.optionManualGamePhase()
-						.gamePhase(GamePhase.PLAYING)
-						.listenerPriority(ListenerPriority.LOWEST)
 				) 
 				{
 					@Override
@@ -170,10 +162,8 @@ public class RestrictBreakWhileOpen implements Listener {
 	{
 		if (!config.restrictBlockBreakWhileOpenEnabled) {return;}
 		
-		String playername = e.getPlayer().getName();
-		removeData(playername);
+		removeData(e.getPlayer().getName());
 	}
-	
 	private void removeData(String playername)
 	{
 		playerOpenBlock.remove(playername);
