@@ -27,12 +27,10 @@ public class PlainNMSUtils {
 
 	protected static boolean isInventoryOpen(Player p) 
 	{
-		org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer cplayer = (org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer) p;
-		net.minecraft.server.v1_5_R3.EntityPlayer nmsplayer = cplayer.getHandle();
-		net.minecraft.server.v1_5_R3.EntityHuman nmshuman = (net.minecraft.server.v1_5_R3.EntityHuman) nmsplayer;
+		net.minecraft.server.v1_5_R3.EntityHuman nmshuman = getNMSHuman(p);
 		return !nmshuman.activeContainer.getClass().getName().equals(nmshuman.defaultContainer.getClass().getName());
 	}
-
+	
 	protected static void findAndFixOpenCropanalyzer(Player p, List<ItemStack> drops) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException 
 	{
 		net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
@@ -124,19 +122,24 @@ public class PlainNMSUtils {
 		}
 		return false;
 	}
-
+	
 	protected static net.minecraft.server.v1_5_R3.Container getPlayerContainer(Player p) 
 	{
-		org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer cplayer = (org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer) p;
-		net.minecraft.server.v1_5_R3.EntityPlayer nmsplayer = cplayer.getHandle();
-		net.minecraft.server.v1_5_R3.EntityHuman nmshuman = (net.minecraft.server.v1_5_R3.EntityHuman) nmsplayer;
-		return nmshuman.activeContainer;
+		return getNMSHuman(p).activeContainer;
 	}
 
-	protected static net.minecraft.server.v1_5_R3.ItemStack getNMSItemStack(ItemStack i) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	protected static net.minecraft.server.v1_5_R3.ItemStack getNMSItemStack(ItemStack i) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException 
+	{
 		Field handleField = i.getClass().getDeclaredField("handle");
 		handleField.setAccessible(true);
 		return (net.minecraft.server.v1_5_R3.ItemStack) handleField.get(i);
+	}
+	
+	private static net.minecraft.server.v1_5_R3.EntityHuman getNMSHuman(Player p)
+	{
+		org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer cplayer = (org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer) p;
+		net.minecraft.server.v1_5_R3.EntityPlayer nmsplayer = cplayer.getHandle();
+		return (net.minecraft.server.v1_5_R3.EntityHuman) nmsplayer;
 	}
 
 }
