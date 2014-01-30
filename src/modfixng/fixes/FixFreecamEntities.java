@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
+import modfixng.utils.ModFixNGUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -48,7 +49,8 @@ public class FixFreecamEntities implements Listener {
 		initEntitiesCheck();
 	}
 	
-	HashMap<String,Entity> playerOpenEntity = new HashMap<String,Entity>(100);
+	private HashMap<String,Entity> playerOpenEntity = new HashMap<String,Entity>(100);
+	private HashMap<String,Integer> playerOpenEntityInvOpenCheckTask = new HashMap<String,Integer>(100);
 	
 	//add player to list when he opens minecart
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
@@ -56,16 +58,36 @@ public class FixFreecamEntities implements Listener {
 	{
 		if (!config.fixFreecamEntitiesEnabled)  {return;}
 		
-		String playername = e.getPlayer().getName();
+		final Player player = e.getPlayer();
+		final String playername = player.getName();
+		
 		if (playerOpenEntity.containsKey(playername))
 		{
 			e.setCancelled(true);
 			return;
 		}
 		
-		if (config.fixFreecamEntitiesEntitiesIDs.contains(e.getRightClicked().getType().getTypeId()))
+		final Entity entity = e.getRightClicked();
+		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()))
 		{
-			playerOpenEntity.put(playername,e.getRightClicked());
+			if (playerOpenEntityInvOpenCheckTask.containsKey(playername))
+			{
+				int taskID = playerOpenEntityInvOpenCheckTask.get(playername);
+				Bukkit.getScheduler().cancelTask(taskID);
+				playerOpenEntityInvOpenCheckTask.remove(playername);
+			}
+			int taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+			{
+				public void run()
+				{
+					if (ModFixNGUtils.isInventoryOpen(player))
+					{
+						playerOpenEntity.put(playername, entity);
+						playerOpenEntityInvOpenCheckTask.remove(playername);
+					}
+				}	
+			});
+			playerOpenEntityInvOpenCheckTask.put(playername, taskID);
 		}
 	}
 
@@ -91,7 +113,7 @@ public class FixFreecamEntities implements Listener {
 						{
 							public void run()
 							{
-								playerOpenEntity.remove(playername);
+								removeData(playername);
 							}
 						});
 					}
@@ -111,7 +133,7 @@ public class FixFreecamEntities implements Listener {
 					{
 						if (!config.fixFreecamEntitiesEnabled) {return;}
 						
-						playerOpenEntity.remove(e.getPlayer().getName());
+						removeData(e.getPlayer().getName());
 				    }
 				});
 	}
@@ -120,7 +142,17 @@ public class FixFreecamEntities implements Listener {
 	{
 		if (!config.fixFreecamEntitiesEnabled) {return;}
 
-		playerOpenEntity.remove(e.getPlayer().getName());
+		removeData(e.getPlayer().getName());
+	}
+	private void removeData(String playername)
+	{
+		playerOpenEntity.remove(playername);
+		if (playerOpenEntityInvOpenCheckTask.containsKey(playername))
+		{
+			int taskID = playerOpenEntityInvOpenCheckTask.get(playername);
+			Bukkit.getScheduler().cancelTask(taskID);
+			playerOpenEntityInvOpenCheckTask.remove(playername);
+		};
 	}
 
 	//check if entity is not valid or player is too far away from it, if yes - force close inventory
