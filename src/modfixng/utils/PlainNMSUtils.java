@@ -48,7 +48,7 @@ public class PlainNMSUtils {
 		{
 			if (item.getTypeId() == oldcropanalyzeritemstack.id) {
 				net.minecraft.server.v1_5_R3.ItemStack nmsi = getNMSItemStack(item);
-				if (nmsi.getTag().hasKey("uid")) 
+				if (nmsi.hasTag() && nmsi.getTag().hasKey("uid")) 
 				{
 					int nmsiuid = nmsi.getTag().getInt("uid");
 					if (nmsiuid == cropanalyzeritemstackuid) 
@@ -77,8 +77,12 @@ public class PlainNMSUtils {
 
 	protected static boolean isTryingToDropOpenCropanalyzer(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException 
 	{
+		if (item.equals(p.getItemOnCursor()))
+		{
+			return false;
+		}
 		net.minecraft.server.v1_5_R3.ItemStack clickeditem = getNMSItemStack(item);
-		if (clickeditem.getTag().hasKey("uid")) 
+		if (clickeditem.hasTag() && clickeditem.getTag().hasKey("uid")) 
 		{
 			int clickeduid = clickeditem.getTag().getInt("uid");
 			net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
@@ -96,8 +100,12 @@ public class PlainNMSUtils {
 
 	protected static boolean isTryingToDropOpenToolBox(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException 
 	{
+		if (item.equals(p.getItemOnCursor()))
+		{
+			return false;
+		}
 		net.minecraft.server.v1_5_R3.ItemStack clickeditem = getNMSItemStack(item);
-		if (clickeditem.getTag().hasKey("uid")) 
+		if (clickeditem.hasTag() && clickeditem.getTag().hasKey("uid")) 
 		{
 			int clickeduid = clickeditem.getTag().getInt("uid");
 			net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
