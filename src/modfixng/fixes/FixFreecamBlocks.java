@@ -157,13 +157,7 @@ public class FixFreecamBlocks implements Listener {
 						{
 							public void run()
 							{
-								playerOpenBlock.remove(playername);
-								if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
-								{
-									int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
-									Bukkit.getScheduler().cancelTask(taskID);
-									playerOpenBlockInvOpenCheckTask.remove(playername);
-								}
+								removeData(playername);
 							}
 						});
 					}
@@ -184,13 +178,8 @@ public class FixFreecamBlocks implements Listener {
 						if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 						
 						String playername = e.getPlayer().getName();
-						playerOpenBlock.remove(playername);
-						if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
-						{
-							int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
-							Bukkit.getScheduler().cancelTask(taskID);
-							playerOpenBlockInvOpenCheckTask.remove(playername);
-						}
+
+						removeData(playername);
 				    }
 				});
 	}
@@ -199,7 +188,10 @@ public class FixFreecamBlocks implements Listener {
 	{
 		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 		
-		String playername = e.getPlayer().getName();
+		removeData(e.getPlayer().getName());
+	}
+	private void removeData(String playername) 
+	{
 		playerOpenBlock.remove(playername);
 		if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
 		{
