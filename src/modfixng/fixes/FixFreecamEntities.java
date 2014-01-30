@@ -83,8 +83,8 @@ public class FixFreecamEntities implements Listener {
 					if (ModFixNGUtils.isInventoryOpen(player))
 					{
 						playerOpenEntity.put(playername, entity);
-						playerOpenEntityInvOpenCheckTask.remove(playername);
 					}
+					playerOpenEntityInvOpenCheckTask.remove(playername);
 				}	
 			});
 			playerOpenEntityInvOpenCheckTask.put(playername, taskID);

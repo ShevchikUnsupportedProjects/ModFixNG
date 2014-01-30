@@ -92,8 +92,8 @@ public class RestrictBreakWhileOpen implements Listener {
 					if (ModFixNGUtils.isInventoryOpen(player))
 					{
 						playerOpenBlock.put(playername, b.getState());
-						playerOpenBlockInvOpenCheckTask.remove(playername);
 					}
+					playerOpenBlockInvOpenCheckTask.remove(playername);
 				}	
 			});
 			playerOpenBlockInvOpenCheckTask.put(playername, taskID);
