@@ -52,7 +52,7 @@ public class FixFreecamEntities implements Listener {
 	private HashMap<String,Entity> playerOpenEntity = new HashMap<String,Entity>(100);
 	private HashMap<String,Integer> playerOpenEntityInvOpenCheckTask = new HashMap<String,Integer>(100);
 	
-	//add player to list when he opens minecart
+	//add player to list when he opens entity inventory
 	@EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
 	public void onPlayerOpenedMinecart(PlayerInteractEntityEvent e)
 	{
