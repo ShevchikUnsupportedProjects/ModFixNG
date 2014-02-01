@@ -139,11 +139,6 @@ public class ModFixNGUtils {
     	return false;
     }
 
-    public static boolean isClickedNonEmptyArmorSlot(Player p, int clickedslot)
-    {
-    	return PlainNMSUtils.isClickedNonEmptyArmorSlot(p, clickedslot);
-    }
-
     private static boolean isRunningMCPC()
     {
     	return (MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP"));

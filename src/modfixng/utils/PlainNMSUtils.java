@@ -120,16 +120,6 @@ public class PlainNMSUtils {
 		}
 		return false;
 	}
-
-	protected static boolean isClickedNonEmptyArmorSlot(Player p, int clickedslot) 
-	{
-		net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
-		if (container.c.get(clickedslot).getClass().getName().equals("ic2.core.slot.SlotArmor"))
-		{
-			return container.b.get(clickedslot) != null;
-		}
-		return false;
-	}
 	
 	protected static net.minecraft.server.v1_5_R3.Container getPlayerContainer(Player p) 
 	{

@@ -46,11 +46,8 @@ public class RestrictIC2EnergyStorageArmorSlot19Click {
 				if (e.getPacket().getIntegers().getValues().get(3) == 2) {
 					//check inventory(checking for ic2 electric inventory)
 					if (ModFixNGUtils.isElectricContainerOpen(player)) {
-						//check clicked slot(checking for non empty inventory armor slot)
-						if (ModFixNGUtils.isClickedNonEmptyArmorSlot(player, e.getPacket().getIntegers().getValues().get(1))) {
-							e.setCancelled(true);
-							player.updateInventory();
-						}
+						e.setCancelled(true);
+						player.updateInventory();
 					}
 				}
 			}
