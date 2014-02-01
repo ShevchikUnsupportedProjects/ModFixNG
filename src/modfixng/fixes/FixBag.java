@@ -35,7 +35,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 
@@ -47,6 +46,7 @@ public class FixBag implements Listener {
 		this.main = main;
 		this.config = config;
 		init19ButtonInventoryClickListener();
+		initInventoryClickListener();
 	}
 
 	// close inventory on death and also fix dropped cropanalyzer
@@ -70,7 +70,7 @@ public class FixBag implements Listener {
 		p.closeInventory();
 	}
 	
-	//deny entity interact if inventory already opened or close previous
+	//deny entity interact if inventory already opened
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractBlock(PlayerInteractEvent event) {
 		if (!config.fixBagEnabled) {
@@ -85,7 +85,7 @@ public class FixBag implements Listener {
 		}
 	}
 	
-	//deny entity interact if inventory already opened or close previous
+	//deny entity interact if inventory already opened
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if (!config.fixBagEnabled) {
@@ -133,7 +133,6 @@ public class FixBag implements Listener {
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)
 				.clientSide()
-				.listenerPriority(ListenerPriority.HIGHEST)
 				.optionIntercept()
 			) {
 			@SuppressWarnings("deprecation")
@@ -167,6 +166,32 @@ public class FixBag implements Listener {
 			}
 		});
 	}
+	
+	private void initInventoryClickListener() {
+		main.protocolManager.addPacketListener(new PacketAdapter(
+				PacketAdapter
+				.params(main, PacketType.Play.Client.WINDOW_CLICK)
+				.clientSide()
+				.optionIntercept()
+			) {
+			@Override
+			public void onPacketReceiving(PacketEvent e) {
+				if (!config.fixBagEnabled) {
+					return;
+				}
+
+				if (e.getPlayer() == null) {
+					return;
+				}
+
+				if (e.getPacket().getIntegers().getValues().get(0) != 0 && !ModFixNGUtils.isInventoryOpen(e.getPlayer())) {
+					e.setCancelled(true);
+				}
+			}
+		});
+	}
+	
+	
 	
 	private boolean closinginventory = false;
 	//close inventory if trying to drop opened toolbox or cropnalyzer
