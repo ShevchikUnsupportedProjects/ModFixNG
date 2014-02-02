@@ -161,14 +161,16 @@ public class RestrictBreakWhileOpen implements Listener {
 	}
 
 	private void removeData(String playername) {
-		if (config.restrictBlockBreakWhileOpenClearDropIfBlockBroken) {
-			BlockState bs = playerOpenBlock.get(playername);
-			Block b = bs.getBlock();
-			if (bs.getType() != b.getType()) {
-				clearNearbyDrop(b);
+		if (playerOpenBlock.containsKey(playername)) {
+			if (config.restrictBlockBreakWhileOpenClearDropIfBlockBroken) {
+				BlockState bs = playerOpenBlock.get(playername);
+				Block b = bs.getBlock();
+				if (bs.getType() != b.getType()) {
+					clearNearbyDrop(b);
+				}
 			}
+			playerOpenBlock.remove(playername);
 		}
-		playerOpenBlock.remove(playername);
 		if (playerOpenBlockInvOpenCheckTask.containsKey(playername)) {
 			int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
 			Bukkit.getScheduler().cancelTask(taskID);
