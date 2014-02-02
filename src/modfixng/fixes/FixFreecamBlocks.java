@@ -48,189 +48,179 @@ public class FixFreecamBlocks implements Listener {
 	public FixFreecamBlocks(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
-		//zeroItemsCheck
+		// zeroItemsCheck
 		initInvCheck();
-		//forceCloseInv
+		// forceCloseInv
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
 		initBlockCheck();
 	}
-	
-	//check for 0-amount items
-	private void initInvCheck()
-	{
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
-		{
-			public void run()
-			{
-				if (!config.fixFreecamBlockZeroItemsCheckEnabled) {return;}
-				
-				for (Player p : Bukkit.getOnlinePlayers())
-				{
-					//hotbar slots
-					for(int i = 0; i < 9; i++) 
-					{
+
+	// check for 0-amount items
+	private void initInvCheck() {
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
+			@Override
+			public void run() {
+				if (!config.fixFreecamBlockZeroItemsCheckEnabled) {
+					return;
+				}
+
+				for (Player p : Bukkit.getOnlinePlayers()) {
+					// hotbar slots
+					for (int i = 0; i < 9; i++) {
 						ItemStack item = p.getInventory().getItem(i);
-						if (item != null && item.getAmount() == 0)
-						{
+						if (item != null && item.getAmount() == 0) {
 							p.getInventory().setItem(i, null);
 						}
 					}
-					//armor
-					for (ItemStack armor : p.getInventory().getArmorContents())
-					{
-						if (armor.getAmount() == 0)
-						{
+					// armor
+					for (ItemStack armor : p.getInventory().getArmorContents()) {
+						if (armor.getAmount() == 0) {
 							armor.setType(Material.AIR);
 						}
 					}
 				}
 			}
-		},0,1);
+		}, 0, 1);
 	}
-	
-	
-	
-	private HashMap<String,BlockState> playerOpenBlock = new HashMap<String,BlockState>(100);
-	private HashMap<String,Integer> playerOpenBlockInvOpenCheckTask = new HashMap<String,Integer>(100);
-	
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-	public void onPlayerOpenedBlock(PlayerInteractEvent e)
-	{
-		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
-		
-		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
+
+	private HashMap<String, BlockState> playerOpenBlock = new HashMap<String, BlockState>(100);
+	private HashMap<String, Integer> playerOpenBlockInvOpenCheckTask = new HashMap<String, Integer>(100);
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPlayerOpenedBlock(PlayerInteractEvent e) {
+		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
+			return;
+		}
+
+		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+			return;
+		}
 
 		final Player player = e.getPlayer();
 		final String playername = player.getName();
-		
-		if (playerOpenBlock.containsKey(playername))
-		{
+
+		if (playerOpenBlock.containsKey(playername)) {
 			e.setCancelled(true);
 			return;
 		}
-		
+
 		final Block b = e.getClickedBlock();
-		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b))
-		{
-			if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
-			{
+		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b)) {
+			if (playerOpenBlockInvOpenCheckTask.containsKey(playername)) {
 				int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
 				Bukkit.getScheduler().cancelTask(taskID);
 				playerOpenBlockInvOpenCheckTask.remove(playername);
 			}
-			int taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
-			{
-				public void run()
-				{
-					if (ModFixNGUtils.isInventoryOpen(player))
-					{
-						playerOpenBlock.put(playername, b.getState());
+			int taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(main,
+				new Runnable() {
+					@Override
+					public void run() {
+						if (ModFixNGUtils.isInventoryOpen(player)) {
+							playerOpenBlock.put(playername, b.getState());
+						}
+						playerOpenBlockInvOpenCheckTask.remove(playername);
 					}
-					playerOpenBlockInvOpenCheckTask.remove(playername);
-				}	
-			});
+				}
+			);
 			playerOpenBlockInvOpenCheckTask.put(playername, taskID);
 		}
 	}
 
-	
-	//remove player from list when he closes inventory
-	private void initClientCloseInventoryFixListener()
-	{
+	// remove player from list when he closes inventory
+	private void initClientCloseInventoryFixListener() {
 		main.protocolManager.addPacketListener(
-				new PacketAdapter(
-						PacketAdapter
-						.params(main, PacketType.Play.Client.CLOSE_WINDOW)
-						.clientSide()
-				) 
-				{
-					@Override
-					public void onPacketReceiving(PacketEvent e) 
-					{
-						if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
-						
-						if (e.getPlayer() == null) {return;}
-						
-						final String playername = e.getPlayer().getName();
-						Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
-						{
-							public void run()
-							{
+			new PacketAdapter(
+					PacketAdapter
+					.params(main, PacketType.Play.Client.CLOSE_WINDOW)
+					.clientSide()
+			) {
+				@Override
+				public void onPacketReceiving(PacketEvent e) {
+					if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
+						return;
+					}
+
+					if (e.getPlayer() == null) {
+						return;
+					}
+
+					final String playername = e.getPlayer().getName();
+					Bukkit.getScheduler().scheduleSyncDelayedTask(main,
+						new Runnable() {
+							@Override
+							public void run() {
 								removeData(playername);
 							}
-						});
-					}
-				});
+						}
+					);
+				}
+			}
+		);
 	}
-	private void initServerCloseInventoryFixListener()
-	{
-		main.protocolManager.addPacketListener(
-				new PacketAdapter(
-						PacketAdapter
-						.params(main, PacketType.Play.Server.CLOSE_WINDOW)
-						.serverSide()
-				) 
-				{
-					@Override
-					public void onPacketSending(PacketEvent e) 
-					{
-						if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
-						
-						String playername = e.getPlayer().getName();
 
-						removeData(playername);
-				    }
-				});
+	private void initServerCloseInventoryFixListener() {
+		main.protocolManager.addPacketListener(
+			new PacketAdapter(
+				PacketAdapter
+				.params(main, PacketType.Play.Server.CLOSE_WINDOW)
+				.serverSide()
+			) {
+				@Override
+				public void onPacketSending(PacketEvent e) {
+					if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
+						return;
+					}
+
+					String playername = e.getPlayer().getName();
+
+					removeData(playername);
+				}
+			}
+		);
 	}
-	@EventHandler(priority=EventPriority.MONITOR)
-	public void onQuit(PlayerQuitEvent e)
-	{
-		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
-		
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onQuit(PlayerQuitEvent e) {
+		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
+			return;
+		}
+
 		removeData(e.getPlayer().getName());
 	}
-	private void removeData(String playername) 
-	{
+
+	private void removeData(String playername) {
 		playerOpenBlock.remove(playername);
-		if (playerOpenBlockInvOpenCheckTask.containsKey(playername))
-		{
+		if (playerOpenBlockInvOpenCheckTask.containsKey(playername)) {
 			int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
 			Bukkit.getScheduler().cancelTask(taskID);
 			playerOpenBlockInvOpenCheckTask.remove(playername);
 		}
 	}
-	
-	//check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory
-	private void initBlockCheck()
-	{
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
-		{
-			public void run()
-			{
-				if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {return;}
 
-				for (Player player : Bukkit.getOnlinePlayers())
-				{
-					if (playerOpenBlock.containsKey(player.getName()))
-					{
+	// check if block is broken or player is too far away from it or the block
+	// is broken, if yes - force close inventory
+	private void initBlockCheck() {
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
+			@Override
+			public void run() {
+				if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
+					return;
+				}
+
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					if (playerOpenBlock.containsKey(player.getName())) {
 						String playername = player.getName();
 						BlockState bs = playerOpenBlock.get(playername);
 						Block b = bs.getBlock();
-						if 
-						(
-							b.getType() != bs.getType() || 
-							!b.getWorld().getName().equals(player.getWorld().getName()) ||
-							b.getLocation().distanceSquared(player.getLocation()) > 36
-						)
-						{
+						if (b.getType() != bs.getType() || !b.getWorld().getName().equals(player.getWorld().getName()) || b.getLocation().distanceSquared(player.getLocation()) > 36) {
 							player.closeInventory();
 							playerOpenBlock.remove(playername);
 						}
 					}
 				}
 			}
-		},0,1);
+		}, 0, 1);
 	}
 
 }

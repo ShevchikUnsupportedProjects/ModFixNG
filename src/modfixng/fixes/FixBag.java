@@ -56,7 +56,7 @@ public class FixBag implements Listener {
 			return;
 		}
 
-		Player p = (Player) event.getEntity();
+		Player p = event.getEntity();
 		if (config.fixBagCropanalyzerFixEnabled) {
 			if (ModFixNGUtils.isCropanalyzerOpen(p)) {
 				try {
@@ -66,17 +66,17 @@ public class FixBag implements Listener {
 				}
 			}
 		}
-		
+
 		p.closeInventory();
 	}
-	
-	//deny entity interact if inventory already opened
+
+	// deny entity interact if inventory already opened
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractBlock(PlayerInteractEvent event) {
 		if (!config.fixBagEnabled) {
 			return;
 		}
-		
+
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			if (config.fixBagRestrictInteractIfInventoryOpen) {
 				event.setCancelled(true);
@@ -84,14 +84,14 @@ public class FixBag implements Listener {
 			}
 		}
 	}
-	
-	//deny entity interact if inventory already opened
+
+	// deny entity interact if inventory already opened
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if (!config.fixBagEnabled) {
 			return;
 		}
-		
+
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			if (config.fixBagRestrictInteractIfInventoryOpen) {
 				event.setCancelled(true);
@@ -127,84 +127,86 @@ public class FixBag implements Listener {
 		event.getPlayer().closeInventory();
 	}
 
-	// restrict using 1-9 buttons in bags inventories if it will move bag to another slot
+	// restrict using 1-9 buttons in bags inventories if it will move bag to
+	// another slot
 	private void init19ButtonInventoryClickListener() {
-		main.protocolManager.addPacketListener(new PacketAdapter(
+		main.protocolManager.addPacketListener(
+			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Client.WINDOW_CLICK)
-				.clientSide()
-				.optionIntercept()
+				.params(main, PacketType.Play.Client.WINDOW_CLICK).clientSide()
 			) {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void onPacketReceiving(PacketEvent e) {
-				if (!config.fixBagEnabled) {
-					return;
-				}
-				
-				if (!config.fixBag19ButtonClickEnabled) {
-					return;
-				}
+				@SuppressWarnings("deprecation")
+				@Override
+				public void onPacketReceiving(PacketEvent e) {
+					if (!config.fixBagEnabled) {
+						return;
+					}
 
-				if (e.getPlayer() == null) {
-					return;
-				}
+					if (!config.fixBag19ButtonClickEnabled) {
+						return;
+					}
 
-				Player player = e.getPlayer();
-				// if item in hand is one of the bad ids - check buttons
-				if (config.fixBag19ButtonClickBagIDs.contains(player.getItemInHand().getTypeId())) {
-					// check click type(checking for shift+button)
-					if (e.getPacket().getIntegers().getValues().get(3) == 2) {
-						// check to which slot we want to move item(checking if it is the holding bag slot)
-						final int heldslot = player.getInventory().getHeldItemSlot();
-						if (heldslot == e.getPacket().getIntegers().getValues().get(2)) {
-							e.setCancelled(true);
-							player.updateInventory();
+					if (e.getPlayer() == null) {
+						return;
+					}
+
+					Player player = e.getPlayer();
+					// if item in hand is one of the bad ids - check buttons
+					if (config.fixBag19ButtonClickBagIDs.contains(player.getItemInHand().getTypeId())) {
+						// check click type(checking for shift+button)
+						if (e.getPacket().getIntegers().getValues().get(3) == 2) {
+							// check to which slot we want to move item(checking if it is the holding bag slot)
+							final int heldslot = player.getInventory().getHeldItemSlot();
+							if (heldslot == e.getPacket().getIntegers().getValues().get(2)) {
+								e.setCancelled(true);
+								player.updateInventory();
+							}
 						}
 					}
 				}
 			}
-		});
+		);
 	}
-	
+
 	private void initInventoryClickListener() {
-		main.protocolManager.addPacketListener(new PacketAdapter(
+		main.protocolManager.addPacketListener(
+			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Client.WINDOW_CLICK)
-				.clientSide()
+				.params(main, PacketType.Play.Client.WINDOW_CLICK).clientSide()
 				.optionIntercept()
 			) {
-			@Override
-			public void onPacketReceiving(PacketEvent e) {
-				if (!config.fixBagEnabled) {
-					return;
-				}
+				@Override
+				public void onPacketReceiving(PacketEvent e) {
+					if (!config.fixBagEnabled) {
+						return;
+					}
 
-				if (e.getPlayer() == null) {
-					return;
-				}
+					if (e.getPlayer() == null) {
+						return;
+					}
 
-				if (e.getPacket().getIntegers().getValues().get(0) != 0 && !ModFixNGUtils.isInventoryOpen(e.getPlayer())) {
-					e.setCancelled(true);
+					if (e.getPacket().getIntegers().getValues().get(0) != 0
+							&& !ModFixNGUtils.isInventoryOpen(e.getPlayer())) {
+						e.setCancelled(true);
+					}
 				}
 			}
-		});
+		);
 	}
-	
-	
-	
+
 	private boolean closinginventory = false;
-	//close inventory if trying to drop opened toolbox or cropnalyzer
-	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=true)
+
+	// close inventory if trying to drop opened toolbox or cropnalyzer
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		if (!config.fixBagEnabled) {
 			return;
 		}
-		
+
 		if (closinginventory) {
 			return;
 		}
-		
+
 		Player player = event.getPlayer();
 		ItemStack droppeditem = event.getItemDrop().getItemStack();
 		if (config.fixBagCropanalyzerFixEnabled) {
@@ -236,5 +238,5 @@ public class FixBag implements Listener {
 			}
 		}
 	}
-	
+
 }

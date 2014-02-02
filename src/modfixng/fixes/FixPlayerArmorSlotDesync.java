@@ -28,31 +28,33 @@ public class FixPlayerArmorSlotDesync {
 
 	private ModFixNG main;
 	private Config config;
-	public FixPlayerArmorSlotDesync(ModFixNG main, Config config)
-	{
+
+	public FixPlayerArmorSlotDesync(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 		startInvSync();
 	}
-	
-	//resend armor slot items every tick
-	private void startInvSync()
-	{
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
-		{
-			public void run()
-			{
-				if (!config.fixSlotDesyncEnabled) {return;}
-				
-				for (Player player : Bukkit.getOnlinePlayers())
-				{
-					ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 5, player.getInventory().getHelmet());
-					ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 6, player.getInventory().getChestplate());
-					ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 7, player.getInventory().getLeggings());
-					ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 8, player.getInventory().getBoots());
+
+	// resend armor slot items every tick
+	private void startInvSync() {
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(main,
+			new Runnable() {
+				@Override
+				public void run() {
+					if (!config.fixSlotDesyncEnabled) {
+						return;
+					}
+
+					for (Player player : Bukkit.getOnlinePlayers()) {
+						ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 5, player.getInventory().getHelmet());
+						ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 6, player.getInventory().getChestplate());
+						ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 7, player.getInventory().getLeggings());
+						ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 8, player.getInventory().getBoots());
+					}
 				}
-			}
-		}, 0, 20);
+			},
+			0, 20
+		);
 	}
-	
+
 }

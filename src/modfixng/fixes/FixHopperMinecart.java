@@ -31,22 +31,22 @@ public class FixHopperMinecart implements Listener {
 	@SuppressWarnings("unused")
 	private ModFixNG main;
 	private Config config;
-	
+
 	public FixHopperMinecart(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
 	}
-	
-	//force close player inventory if he was in hopper minecart on quit
+
+	// force close player inventory if he was in hopper minecart on quit
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onPlayerLeave(PlayerQuitEvent e)
-	{
-		if (!config.fixHopperMinecart) {return;}
-		
-		if (e.getPlayer().isInsideVehicle() && e.getPlayer().getVehicle() instanceof HopperMinecart)
-		{
+	public void onPlayerLeave(PlayerQuitEvent e) {
+		if (!config.fixHopperMinecart) {
+			return;
+		}
+
+		if (e.getPlayer().isInsideVehicle() && e.getPlayer().getVehicle() instanceof HopperMinecart) {
 			e.getPlayer().closeInventory();
 		}
 	}
-	
+
 }
