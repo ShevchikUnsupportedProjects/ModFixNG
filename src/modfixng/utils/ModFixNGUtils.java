@@ -90,7 +90,7 @@ public class ModFixNGUtils {
 			}
 		}
 	}
-	
+
 	public static boolean isClickValid(int invid, Player p) {
 		if (isRunningMCPC()) {
 			if (PlainNMSUtils.getPlayerContainer(p).windowId != invid) {
