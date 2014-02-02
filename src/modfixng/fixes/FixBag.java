@@ -185,8 +185,8 @@ public class FixBag implements Listener {
 						return;
 					}
 
-					if (e.getPacket().getIntegers().getValues().get(0) != 0
-							&& !ModFixNGUtils.isInventoryOpen(e.getPlayer())) {
+					int invid = e.getPacket().getIntegers().getValues().get(0);
+					if (!ModFixNGUtils.isClickValid(invid, e.getPlayer())) {
 						e.setCancelled(true);
 					}
 				}

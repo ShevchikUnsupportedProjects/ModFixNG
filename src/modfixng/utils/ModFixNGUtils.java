@@ -90,6 +90,25 @@ public class ModFixNGUtils {
 			}
 		}
 	}
+	
+	public static boolean isClickValid(int invid, Player p) {
+		if (isRunningMCPC()) {
+			if (PlainNMSUtils.getPlayerContainer(p).windowId != invid) {
+				return false;
+			}
+		} else {
+			if (ModFixNGUtils.isInventoryOpen(p)) {
+				if (invid == 0) {
+					return false;
+				}
+			} else {
+				if (invid != 0) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
 	public static boolean isCropanalyzerOpen(Player p) {
 		if (isRunningMCPC()) {
