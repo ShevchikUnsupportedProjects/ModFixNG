@@ -93,8 +93,8 @@ public class FixFreecamEntities implements Listener {
 	private void initClientCloseInventoryFixListener() {
 		main.protocolManager.addPacketListener(
 			new PacketAdapter(
-				PacketAdapter.params(main, PacketType.Play.Client.CLOSE_WINDOW)
-				.clientSide()
+				PacketAdapter
+				.params(main, PacketType.Play.Client.CLOSE_WINDOW)
 			) {
 				@Override
 				public void onPacketReceiving(PacketEvent e) {
@@ -125,7 +125,6 @@ public class FixFreecamEntities implements Listener {
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Server.CLOSE_WINDOW)
-				.serverSide()
 			) {
 				@Override
 				public void onPacketSending(PacketEvent e) {
@@ -157,8 +156,7 @@ public class FixFreecamEntities implements Listener {
 		}
 	}
 
-	// check if entity is not valid or player is too far away from it, if yes -
-	// force close inventory
+	// check if entity is not valid or player is too far away from it, if yes -  force close inventory
 	private void initEntitiesCheck() {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(main,
 			new Runnable() {

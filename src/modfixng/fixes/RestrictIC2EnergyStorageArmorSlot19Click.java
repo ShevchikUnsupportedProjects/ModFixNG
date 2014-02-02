@@ -26,7 +26,6 @@ public class RestrictIC2EnergyStorageArmorSlot19Click {
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)
-				.clientSide()
 			) {
 				@SuppressWarnings("deprecation")
 				@Override

@@ -131,9 +131,8 @@ public class FixFreecamBlocks implements Listener {
 	private void initClientCloseInventoryFixListener() {
 		main.protocolManager.addPacketListener(
 			new PacketAdapter(
-					PacketAdapter
-					.params(main, PacketType.Play.Client.CLOSE_WINDOW)
-					.clientSide()
+				PacketAdapter
+				.params(main, PacketType.Play.Client.CLOSE_WINDOW)
 			) {
 				@Override
 				public void onPacketReceiving(PacketEvent e) {
@@ -164,7 +163,6 @@ public class FixFreecamBlocks implements Listener {
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Server.CLOSE_WINDOW)
-				.serverSide()
 			) {
 				@Override
 				public void onPacketSending(PacketEvent e) {
@@ -198,8 +196,7 @@ public class FixFreecamBlocks implements Listener {
 		}
 	}
 
-	// check if block is broken or player is too far away from it or the block
-	// is broken, if yes - force close inventory
+	// check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory
 	private void initBlockCheck() {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
 			@Override

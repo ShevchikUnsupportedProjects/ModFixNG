@@ -133,7 +133,7 @@ public class FixBag implements Listener {
 		main.protocolManager.addPacketListener(
 			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Client.WINDOW_CLICK).clientSide()
+				.params(main, PacketType.Play.Client.WINDOW_CLICK)
 			) {
 				@SuppressWarnings("deprecation")
 				@Override
@@ -172,8 +172,7 @@ public class FixBag implements Listener {
 		main.protocolManager.addPacketListener(
 			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Client.WINDOW_CLICK).clientSide()
-				.optionIntercept()
+				.params(main, PacketType.Play.Client.WINDOW_CLICK)
 			) {
 				@Override
 				public void onPacketReceiving(PacketEvent e) {

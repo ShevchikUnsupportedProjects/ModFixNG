@@ -104,9 +104,8 @@ public class RestrictBreakWhileOpen implements Listener {
 	private void initClientCloseInventoryFixListener() {
 		main.protocolManager.addPacketListener(
 			new PacketAdapter(
-					PacketAdapter
-					.params(main, PacketType.Play.Client.CLOSE_WINDOW)
-					.clientSide()
+				PacketAdapter
+				.params(main, PacketType.Play.Client.CLOSE_WINDOW)
 			) {
 				@Override
 				public void onPacketReceiving(PacketEvent e) {
@@ -135,8 +134,8 @@ public class RestrictBreakWhileOpen implements Listener {
 	private void initServerCloseInventoryFixListener() {
 		main.protocolManager.addPacketListener(
 			new PacketAdapter(
-				PacketAdapter.params(main, PacketType.Play.Server.CLOSE_WINDOW)
-				.serverSide()
+				PacketAdapter
+				.params(main, PacketType.Play.Server.CLOSE_WINDOW)
 			) {
 				@Override
 				public void onPacketSending(PacketEvent e) {
