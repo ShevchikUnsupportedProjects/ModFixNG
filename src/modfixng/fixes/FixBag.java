@@ -174,6 +174,7 @@ public class FixBag implements Listener {
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)
 			) {
+				@SuppressWarnings("deprecation")
 				@Override
 				public void onPacketReceiving(PacketEvent e) {
 					if (!config.fixBagEnabled) {
@@ -187,6 +188,7 @@ public class FixBag implements Listener {
 					int invid = e.getPacket().getIntegers().getValues().get(0);
 					if (!ModFixNGUtils.isClickValid(invid, e.getPlayer())) {
 						e.setCancelled(true);
+						e.getPlayer().updateInventory();
 					}
 				}
 			}
