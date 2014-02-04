@@ -143,8 +143,7 @@ public class RestrictBreakWhileOpen implements Listener {
 						return;
 					}
 
-					final String playername = e.getPlayer().getName();
-					removeData(playername);
+					removeData(e.getPlayer().getName());
 				}
 			}
 		);
