@@ -122,7 +122,7 @@ public class FixFreecamBlocks implements Listener {
 
 	// remove player from list when he closes inventory
 	private void initClientCloseInventoryFixListener() {
-		main.protocolManager.addPacketListener(
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.CLOSE_WINDOW)
@@ -137,18 +137,10 @@ public class FixFreecamBlocks implements Listener {
 						return;
 					}
 
-					final String playername = e.getPlayer().getName();
-					Bukkit.getScheduler().scheduleSyncDelayedTask(main,
-						new Runnable() {
-							@Override
-							public void run() {
-								removeData(playername);
-							}
-						}
-					);
+					removeData(e.getPlayer().getName());
 				}
 			}
-		);
+		).syncStart();
 	}
 
 	private void initServerCloseInventoryFixListener() {

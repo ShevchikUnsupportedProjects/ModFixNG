@@ -84,6 +84,7 @@ public class ModFixNG extends JavaPlugin {
 		fsl = null;
 		fic2esasl = null;
 		protocolManager.removePacketListeners(this);
+		protocolManager.getAsynchronousManager().unregisterAsyncHandlers(this);
 		protocolManager = null;
 	}
 

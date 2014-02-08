@@ -130,7 +130,7 @@ public class FixBag implements Listener {
 
 	// restrict using 1-9 buttons in bags inventories if it will move bag to another slot
 	private void init19ButtonInventoryClickListener() {
-		main.protocolManager.addPacketListener(
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)
@@ -165,12 +165,12 @@ public class FixBag implements Listener {
 					}
 				}
 			}
-		);
+		).start();
 	}
 
 	// do not allow to click invalid inventory
 	private void initInventoryClickListener() {
-		main.protocolManager.addPacketListener(
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)
@@ -193,7 +193,7 @@ public class FixBag implements Listener {
 					}
 				}
 			}
-		);
+		).syncStart();
 	}
 
 	// close inventory if trying to drop opened toolbox or cropnalyzer

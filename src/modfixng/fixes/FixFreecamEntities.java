@@ -91,7 +91,7 @@ public class FixFreecamEntities implements Listener {
 
 	// remove player from list when he closes minecart
 	private void initClientCloseInventoryFixListener() {
-		main.protocolManager.addPacketListener(
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.CLOSE_WINDOW)
@@ -106,18 +106,10 @@ public class FixFreecamEntities implements Listener {
 						return;
 					}
 
-					final String playername = e.getPlayer().getName();
-					Bukkit.getScheduler().scheduleSyncDelayedTask(main,
-						new Runnable() {
-							@Override
-							public void run() {
-								removeData(playername);
-							}
-						}
-					);
+					removeData(e.getPlayer().getName());
 				}
 			}
-		);
+		).syncStart();
 	}
 
 	private void initServerCloseInventoryFixListener() {
@@ -170,11 +162,7 @@ public class FixFreecamEntities implements Listener {
 						if (playerOpenEntity.containsKey(player.getName())) {
 							String playername = player.getName();
 							Entity entity = playerOpenEntity.get(playername);
-							if (!entity.isValid()
-									|| !entity.getWorld().getName()
-											.equals(player.getWorld().getName())
-									|| entity.getLocation().distanceSquared(
-											player.getLocation()) > 36) {
+							if (!entity.isValid() || !entity.getWorld().getName().equals(player.getWorld().getName()) || entity.getLocation().distanceSquared(player.getLocation()) > 36) {
 								player.closeInventory();
 								playerOpenEntity.remove(playername);
 							}

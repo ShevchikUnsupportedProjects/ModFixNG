@@ -22,7 +22,7 @@ public class RestrictIC2EnergyStorageArmorSlot19Click {
 	}
 
 	private void init19ButtonInventoryClickListener() {
-		main.protocolManager.addPacketListener(
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)
@@ -49,7 +49,7 @@ public class RestrictIC2EnergyStorageArmorSlot19Click {
 					}
 				}
 			}
-		);
+		).start();
 	}
 
 }
