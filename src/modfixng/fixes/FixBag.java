@@ -17,6 +17,9 @@
 
 package modfixng.fixes;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
@@ -129,6 +132,15 @@ public class FixBag implements Listener {
 	}
 
 	// restrict using 1-9 buttons in bags inventories if it will move bag to another slot
+	private HashSet<String> knownInventoryNames = new HashSet<String>(
+		Arrays.asList(
+			new String[] {
+				//forestry bags
+				"forestry.storage.gui.ContainerNaturalistBackpack",
+				"forestry.storage.gui.ContainerBackpack"
+			}
+		)
+	);
 	private void init19ButtonInventoryClickListener() {
 		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
@@ -151,8 +163,9 @@ public class FixBag implements Listener {
 					}
 
 					Player player = e.getPlayer();
-					// if item in hand is one of the bad ids - check buttons
-					if (config.fixBag19ButtonClickBagIDs.contains(player.getItemInHand().getTypeId())) {
+					// check inventory name (checking if one of the inventory names in list)
+					String inventoryName = ModFixNGUtils.getOpenInventoryName(player);
+					if (config.fixBag19ButtonClickBagInventoryNames.contains(inventoryName) || knownInventoryNames.contains(inventoryName)) {
 						// check click type(checking for shift+button)
 						if (e.getPacket().getIntegers().getValues().get(3) == 2) {
 							// check to which slot we want to move item(checking if it is the holding bag slot)

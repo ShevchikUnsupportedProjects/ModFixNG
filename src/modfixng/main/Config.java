@@ -38,7 +38,7 @@ public class Config {
 	public boolean fixBagEnabled = true;
 	public boolean fixBagRestrictInteractIfInventoryOpen = true;
 	public boolean fixBag19ButtonClickEnabled = true;
-	public HashSet<Integer> fixBag19ButtonClickBagIDs = new HashSet<Integer>();
+	public HashSet<String> fixBag19ButtonClickBagInventoryNames = new HashSet<String>();
 	public boolean fixBagCropanalyzerFixEnabled = true;
 	public boolean fixBagToolboxFixEnabled = true;
 
@@ -64,7 +64,7 @@ public class Config {
 
 		fixBagEnabled = config.getBoolean("BackPackFix.enabled", fixBagEnabled);
 		fixBag19ButtonClickEnabled = config.getBoolean("BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
-		fixBag19ButtonClickBagIDs = new HashSet<Integer>(config.getIntegerList("BackPackFix.restrict19ButtonClick.BagIDs"));
+		fixBag19ButtonClickBagInventoryNames = new HashSet<String>(config.getStringList("BackPackFix.restrict19ButtonClick.inventoryNames"));
 		fixBagCropanalyzerFixEnabled = config.getBoolean("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
 		fixBagToolboxFixEnabled = config.getBoolean("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 		fixBagRestrictInteractIfInventoryOpen = config.getBoolean("BackPackFix.restrictInteractIfInventoryOpen.enabled", fixBagRestrictInteractIfInventoryOpen);
@@ -94,7 +94,7 @@ public class Config {
 
 		config.set("BackPackFix.enabled", fixBagEnabled);
 		config.set("BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
-		config.set("BackPackFix.restrict19ButtonClick.BagIDs", new ArrayList<Integer>(fixBag19ButtonClickBagIDs));
+		config.set("BackPackFix.restrict19ButtonClick.inventoryNames", new ArrayList<String>(fixBag19ButtonClickBagInventoryNames));
 		config.set("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
 		config.set("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 		config.set("BackPackFix.restrictInteractIfInventoryOpen.enabled", fixBagRestrictInteractIfInventoryOpen);
