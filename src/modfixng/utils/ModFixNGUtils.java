@@ -21,7 +21,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -82,9 +81,9 @@ public class ModFixNGUtils {
 
 	public static String getOpenInventoryName(Player p) {
 		if (isRunningMCPC()) {
-			return ChatColor.BLUE + "Open inventory name: "+PlainNMSUtils.getPlayerContainer(p).getClass().getName()+" , Default inventory name: "+PlainNMSUtils.getDefaultContainer(p).getClass().getName();
+			return PlainNMSUtils.getPlayerContainer(p).getClass().getName();
 		}
-		return "Определение имени инвентаря доступно только на mcpc+";
+		return null;
 	}
 
 	public static boolean isInventoryOpen(Player p) {

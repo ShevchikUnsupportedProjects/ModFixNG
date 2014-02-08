@@ -147,7 +147,7 @@ public class Commands implements CommandExecutor, Listener {
 				new Runnable() {
 					@Override
 					public void run() {
-						pl.sendMessage(ModFixNGUtils.getOpenInventoryName(pl));
+						pl.sendMessage(ChatColor.BLUE + "Open inventory name: "+ModFixNGUtils.getOpenInventoryName(pl));
 						pl.closeInventory();
 					}
 				}
