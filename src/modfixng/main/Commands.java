@@ -21,6 +21,7 @@ import java.util.HashSet;
 
 import modfixng.utils.ModFixNGUtils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -38,7 +39,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Commands implements CommandExecutor, Listener {
-	@SuppressWarnings("unused")
+
 	private ModFixNG main;
 	private Config config;
 
@@ -81,14 +82,17 @@ public class Commands implements CommandExecutor, Listener {
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 			displayHelp(sender);
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("iinfo")) {
+		} else if (args.length == 1 && args[0].equalsIgnoreCase("iteminfo")) {
 			displayItemInfo(sender);
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("binfo")) {
+		} else if (args.length == 1 && args[0].equalsIgnoreCase("blockinfo")) {
 			displayBlockInfo(sender);
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("einfo")) {
+		} else if (args.length == 1 && args[0].equalsIgnoreCase("entityinfo")) {
 			displayEntityInfo(sender);
+			return true;
+		} else if (args.length == 1 && args[0].equalsIgnoreCase("inventoryinfo")) {
+			displayInventoryNameInfo(sender);
 			return true;
 		}
 		return false;
@@ -130,6 +134,24 @@ public class Commands implements CommandExecutor, Listener {
 			Player pl = (Player) sender;
 			pl.sendMessage(ChatColor.BLUE + "Кликните правой кнопкой мыши по Entity, для того чтобы узнать её Type ID");
 			pleinfoswitch.add(pl.getName());
+		} else {
+			sender.sendMessage(ChatColor.BLUE + "У консоли нет рук");
+		}
+	}
+
+	private void displayInventoryNameInfo(CommandSender sender) {
+		if (sender instanceof Player) {
+			final Player pl = (Player) sender;
+			pl.sendMessage(ChatColor.BLUE + "Откройте инвентарь и подождите 2 секунды для того чтобы узнать имя открытого инвентаря");
+			Bukkit.getScheduler().scheduleSyncDelayedTask(main,
+				new Runnable() {
+					@Override
+					public void run() {
+						pl.sendMessage(ModFixNGUtils.getOpenInventoryName(pl));
+						pl.closeInventory();
+					}
+				}
+			, 40);
 		} else {
 			sender.sendMessage(ChatColor.BLUE + "У консоли нет рук");
 		}

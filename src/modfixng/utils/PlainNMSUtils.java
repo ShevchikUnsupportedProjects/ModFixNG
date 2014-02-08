@@ -112,6 +112,10 @@ public class PlainNMSUtils {
 		return getNMSHuman(p).activeContainer;
 	}
 
+	protected static net.minecraft.server.v1_5_R3.Container getDefaultContainer(Player p) {
+		return getNMSHuman(p).defaultContainer;
+	}
+
 	protected static net.minecraft.server.v1_5_R3.ItemStack getNMSItemStack(ItemStack i) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Field handleField = i.getClass().getDeclaredField("handle");
 		handleField.setAccessible(true);
@@ -121,7 +125,7 @@ public class PlainNMSUtils {
 	private static net.minecraft.server.v1_5_R3.EntityHuman getNMSHuman(Player p) {
 		org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer cplayer = (org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer) p;
 		net.minecraft.server.v1_5_R3.EntityPlayer nmsplayer = cplayer.getHandle();
-		return (net.minecraft.server.v1_5_R3.EntityHuman) nmsplayer;
+		return nmsplayer;
 	}
 
 }

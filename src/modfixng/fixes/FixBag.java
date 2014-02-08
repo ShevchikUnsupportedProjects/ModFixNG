@@ -57,6 +57,7 @@ public class FixBag implements Listener {
 		}
 
 		Player p = event.getEntity();
+
 		if (config.fixBagCropanalyzerFixEnabled) {
 			if (ModFixNGUtils.isCropanalyzerOpen(p)) {
 				try {
@@ -100,7 +101,7 @@ public class FixBag implements Listener {
 		}
 	}
 
-	// close inventory on portal enter
+	// close inventory on portal enter or exit
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onMove(PlayerMoveEvent event) {
 		if (!config.fixBagEnabled) {
@@ -127,8 +128,7 @@ public class FixBag implements Listener {
 		event.getPlayer().closeInventory();
 	}
 
-	// restrict using 1-9 buttons in bags inventories if it will move bag to
-	// another slot
+	// restrict using 1-9 buttons in bags inventories if it will move bag to another slot
 	private void init19ButtonInventoryClickListener() {
 		main.protocolManager.addPacketListener(
 			new PacketAdapter(
@@ -168,6 +168,7 @@ public class FixBag implements Listener {
 		);
 	}
 
+	// do not allow to click invalid inventory
 	private void initInventoryClickListener() {
 		main.protocolManager.addPacketListener(
 			new PacketAdapter(
@@ -195,9 +196,8 @@ public class FixBag implements Listener {
 		);
 	}
 
-	private boolean closinginventory = false;
-
 	// close inventory if trying to drop opened toolbox or cropnalyzer
+	private boolean closinginventory = false;
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		if (!config.fixBagEnabled) {
