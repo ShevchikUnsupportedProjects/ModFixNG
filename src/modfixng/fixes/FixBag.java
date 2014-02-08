@@ -165,7 +165,7 @@ public class FixBag implements Listener {
 					Player player = e.getPlayer();
 					// check inventory name (checking if one of the inventory names in list)
 					String inventoryName = ModFixNGUtils.getOpenInventoryName(player);
-					if (config.fixBag19ButtonClickBagInventoryNames.contains(inventoryName) || knownInventoryNames.contains(inventoryName)) {
+					if (inventoryName != null && config.fixBag19ButtonClickBagInventoryNames.contains(inventoryName) || knownInventoryNames.contains(inventoryName)) {
 						// check click type(checking for shift+button)
 						if (e.getPacket().getIntegers().getValues().get(3) == 2) {
 							// check to which slot we want to move item(checking if it is the holding bag slot)
