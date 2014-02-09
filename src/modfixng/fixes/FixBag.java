@@ -50,6 +50,7 @@ public class FixBag implements Listener {
 		this.config = config;
 		init19ButtonInventoryClickListener();
 		initInventoryClickListener();
+		initInventoryCloseListener();
 	}
 
 	// close inventory on death and fix dropped items
@@ -203,13 +204,40 @@ public class FixBag implements Listener {
 					}
 
 					int invid = e.getPacket().getIntegers().getValues().get(0);
-					if (!ModFixNGUtils.isClickValid(invid, e.getPlayer())) {
+					if (!ModFixNGUtils.isContainerValid(invid, e.getPlayer())) {
 						e.setCancelled(true);
 						e.getPlayer().updateInventory();
 					}
 				}
 			}
 		).syncStart();
+	}
+	
+	// ignore invalid inventory close
+	private void initInventoryCloseListener() {
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+				new PacketAdapter(
+					PacketAdapter
+					.params(main, PacketType.Play.Client.CLOSE_WINDOW)
+				) {
+					@Override
+					public void onPacketReceiving(PacketEvent e) {
+						if (!config.fixBagEnabled) {
+							return;
+						}
+
+						if (e.getPlayer() == null) {
+							return;
+						}
+
+						int invid = e.getPacket().getIntegers().getValues().get(0);
+						if (!ModFixNGUtils.isContainerValid(invid, e.getPlayer())) {
+							e.setCancelled(true);
+							e.getPlayer().closeInventory();
+						}
+					}
+				}
+			).syncStart();
 	}
 
 	// close inventory if trying to drop opened toolbox or cropnalyzer
