@@ -52,7 +52,7 @@ public class FixBag implements Listener {
 		initInventoryClickListener();
 	}
 
-	// close inventory on death and also fix dropped cropanalyzer
+	// close inventory on death and fix dropped items
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		if (!config.fixBagEnabled) {
@@ -61,17 +61,20 @@ public class FixBag implements Listener {
 
 		Player p = event.getEntity();
 
-		if (config.fixBagCropanalyzerFixEnabled) {
-			if (ModFixNGUtils.isCropanalyzerOpen(p)) {
-				try {
-					ModFixNGUtils.findAndFixOpenCropanalyzer(p, event.getDrops());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		p.closeInventory();
+		
+		event.getDrops().clear();
+		for (ItemStack item : p.getInventory().getContents()) {
+			if (item != null) {
+				event.getDrops().add(item.clone());
+			}
+		}
+		for (ItemStack armor : p.getInventory().getArmorContents()) {
+			if (armor != null) {
+				event.getDrops().add(armor);
 			}
 		}
 
-		p.closeInventory();
 	}
 
 	// deny entity interact if inventory already opened

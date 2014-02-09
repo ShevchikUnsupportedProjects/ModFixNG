@@ -19,7 +19,6 @@ package modfixng.utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.bukkit.GameMode;
 import org.bukkit.World;
@@ -126,10 +125,6 @@ public class ModFixNGUtils {
 
 	public static boolean isTryingToDropOpenCropanalyzer(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		return PlainNMSUtils.isTryingToDropOpenCropanalyzer(p, item);
-	}
-
-	public static void findAndFixOpenCropanalyzer(Player p, List<ItemStack> drops) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		PlainNMSUtils.findAndFixOpenCropanalyzer(p, drops);
 	}
 
 	public static boolean isToolboxOpen(Player p) {
