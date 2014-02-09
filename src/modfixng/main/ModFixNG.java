@@ -23,6 +23,7 @@ import modfixng.fixes.FixFreecamEntities;
 import modfixng.fixes.FixPlayerArmorSlotDesync;
 import modfixng.fixes.RestrictBreakWhileOpen;
 import modfixng.fixes.RestrictIC2EnergyStorageArmorSlot19Click;
+import modfixng.fixes.ValidateActions;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,6 +40,7 @@ public class ModFixNG extends JavaPlugin {
 	private FixBag bagl;
 	private FixFreecamEntities mpl;
 	private FixFreecamBlocks fciol;
+	private ValidateActions val;
 	private RestrictBreakWhileOpen rbwol;
 	@SuppressWarnings("unused")
 	private FixPlayerArmorSlotDesync fsl;
@@ -61,6 +63,8 @@ public class ModFixNG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(mpl, this);
 		fciol = new FixFreecamBlocks(this, config);
 		getServer().getPluginManager().registerEvents(fciol, this);
+		val = new ValidateActions(this, config);
+		getServer().getPluginManager().registerEvents(val, this);
 		rbwol = new RestrictBreakWhileOpen(this, config);
 		getServer().getPluginManager().registerEvents(rbwol, this);
 		fsl = new FixPlayerArmorSlotDesync(this, config);
@@ -76,6 +80,7 @@ public class ModFixNG extends JavaPlugin {
 		commandl = null;
 		mpl = null;
 		fciol = null;
+		val = null;
 		fsl = null;
 		fic2esasl = null;
 		protocolManager.removePacketListeners(this);

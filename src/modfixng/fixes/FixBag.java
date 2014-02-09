@@ -31,8 +31,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -49,8 +47,6 @@ public class FixBag implements Listener {
 		this.main = main;
 		this.config = config;
 		init19ButtonInventoryClickListener();
-		initInventoryClickListener();
-		initInventoryCloseListener();
 	}
 
 	// close inventory on death and fix dropped items
@@ -76,36 +72,6 @@ public class FixBag implements Listener {
 			}
 		}
 
-	}
-
-	// deny entity interact if inventory already opened
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerInteractBlock(PlayerInteractEvent event) {
-		if (!config.fixBagEnabled) {
-			return;
-		}
-
-		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
-			if (config.fixBagRestrictInteractIfInventoryOpen) {
-				event.setCancelled(true);
-				return;
-			}
-		}
-	}
-
-	// deny entity interact if inventory already opened
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-		if (!config.fixBagEnabled) {
-			return;
-		}
-
-		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
-			if (config.fixBagRestrictInteractIfInventoryOpen) {
-				event.setCancelled(true);
-				return;
-			}
-		}
 	}
 
 	// close inventory on portal enter or exit
@@ -183,61 +149,6 @@ public class FixBag implements Listener {
 				}
 			}
 		).start();
-	}
-
-	// do not allow to click invalid inventory
-	private void initInventoryClickListener() {
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
-			new PacketAdapter(
-				PacketAdapter
-				.params(main, PacketType.Play.Client.WINDOW_CLICK)
-			) {
-				@SuppressWarnings("deprecation")
-				@Override
-				public void onPacketReceiving(PacketEvent e) {
-					if (!config.fixBagEnabled) {
-						return;
-					}
-
-					if (e.getPlayer() == null) {
-						return;
-					}
-
-					int invid = e.getPacket().getIntegers().getValues().get(0);
-					if (!ModFixNGUtils.isContainerValid(invid, e.getPlayer())) {
-						e.setCancelled(true);
-						e.getPlayer().updateInventory();
-					}
-				}
-			}
-		).syncStart();
-	}
-	
-	// ignore invalid inventory close
-	private void initInventoryCloseListener() {
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
-				new PacketAdapter(
-					PacketAdapter
-					.params(main, PacketType.Play.Client.CLOSE_WINDOW)
-				) {
-					@Override
-					public void onPacketReceiving(PacketEvent e) {
-						if (!config.fixBagEnabled) {
-							return;
-						}
-
-						if (e.getPlayer() == null) {
-							return;
-						}
-
-						int invid = e.getPacket().getIntegers().getValues().get(0);
-						if (!ModFixNGUtils.isContainerValid(invid, e.getPlayer())) {
-							e.setCancelled(true);
-							e.getPlayer().closeInventory();
-						}
-					}
-				}
-			).syncStart();
 	}
 
 	// close inventory if trying to drop opened toolbox or cropnalyzer

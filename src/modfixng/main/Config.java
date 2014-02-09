@@ -36,7 +36,6 @@ public class Config {
 	}
 
 	public boolean fixBagEnabled = true;
-	public boolean fixBagRestrictInteractIfInventoryOpen = true;
 	public boolean fixBag19ButtonClickEnabled = true;
 	public HashSet<String> fixBag19ButtonClickBagInventoryNames = new HashSet<String>();
 	public boolean fixBagCropanalyzerFixEnabled = true;
@@ -49,11 +48,13 @@ public class Config {
 	public HashSet<String> fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>();
 	public boolean fixFreecamBlockZeroItemsCheckEnabled = true;
 
+	public boolean validateActionsEnabled = true;
+	public boolean validateActionsInteractEnabled = true;
+	public boolean validateActionsInventoryEnabled = true;
+
 	public boolean restrictBlockBreakWhileOpenEnabled = true;
 	public HashSet<String> restrictBlockBreakWhileOpenIDs = new HashSet<String>();
 	public boolean restrictBlockBreakWhileOpenClearDropIfBlockBroken = true;
-
-	public boolean fixHopperMinecart = true;
 
 	public boolean fixSlotDesyncEnabled = true;
 
@@ -67,7 +68,6 @@ public class Config {
 		fixBag19ButtonClickBagInventoryNames = new HashSet<String>(config.getStringList("BackPackFix.restrict19ButtonClick.inventoryNames"));
 		fixBagCropanalyzerFixEnabled = config.getBoolean("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
 		fixBagToolboxFixEnabled = config.getBoolean("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
-		fixBagRestrictInteractIfInventoryOpen = config.getBoolean("BackPackFix.restrictInteractIfInventoryOpen.enabled", fixBagRestrictInteractIfInventoryOpen);
 
 		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enabled", fixFreecamBlockZeroItemsCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.checkBlocks.enabled", fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
@@ -79,8 +79,6 @@ public class Config {
 		restrictBlockBreakWhileOpenEnabled = config.getBoolean("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
 		restrictBlockBreakWhileOpenIDs = new HashSet<String>(config.getStringList("RestrictBlockBreakWhileOpen.IDs"));
 		restrictBlockBreakWhileOpenClearDropIfBlockBroken = config.getBoolean("RestrictBlockBreakWhileOpen.clearDropIfBlockWasBrokenSomehow", restrictBlockBreakWhileOpenClearDropIfBlockBroken);
-
-		fixHopperMinecart = config.getBoolean("HopperMinecartFix.enabled", fixHopperMinecart);
 
 		fixSlotDesyncEnabled = config.getBoolean("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
@@ -97,7 +95,6 @@ public class Config {
 		config.set("BackPackFix.restrict19ButtonClick.inventoryNames", new ArrayList<String>(fixBag19ButtonClickBagInventoryNames));
 		config.set("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
 		config.set("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
-		config.set("BackPackFix.restrictInteractIfInventoryOpen.enabled", fixBagRestrictInteractIfInventoryOpen);
 
 		config.set("ProperlyCloseInventories.removeZeroSizeItems.enabled", fixFreecamBlockZeroItemsCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.enabled", fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
@@ -109,8 +106,6 @@ public class Config {
 		config.set("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
 		config.set("RestrictBlockBreakWhileOpen.IDs", new ArrayList<String>(restrictBlockBreakWhileOpenIDs));
 		config.set("RestrictBlockBreakWhileOpen.clearDropIfBlockWasBrokenSomehow", restrictBlockBreakWhileOpenClearDropIfBlockBroken);
-
-		config.set("HopperMinecartFix.enabled", fixHopperMinecart);
 
 		config.set("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
