@@ -83,7 +83,7 @@ public class FixFreecamBlocks implements Listener {
 	private HashMap<String, BlockState> playerOpenBlock = new HashMap<String, BlockState>(100);
 	private HashMap<String, Integer> playerOpenBlockInvOpenCheckTask = new HashMap<String, Integer>(100);
 
-	private HashSet<Material> knownMaterials  = new HashSet<Material>(
+	private HashSet<Material> knownBlockMaterials  = new HashSet<Material>(
 		Arrays.asList(
 			new Material[] {
 				//some vanilla minecraft item that has gui but doesn't implement IInventory
@@ -113,7 +113,7 @@ public class FixFreecamBlocks implements Listener {
 		}
 
 		final Block b = e.getClickedBlock();
-		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b) || knownMaterials.contains(b.getType())) {
+		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
 			if (playerOpenBlockInvOpenCheckTask.containsKey(playername)) {
 				int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
 				Bukkit.getScheduler().cancelTask(taskID);

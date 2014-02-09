@@ -55,7 +55,7 @@ public class FixFreecamEntities implements Listener {
 	private HashMap<String, Entity> playerOpenEntity = new HashMap<String, Entity>(100);
 	private HashMap<String, Integer> playerOpenEntityInvOpenCheckTask = new HashMap<String, Integer>(100);
 
-	private HashSet<EntityType> knownEntityType  = new HashSet<EntityType>(
+	private HashSet<EntityType> knownEntityTypes  = new HashSet<EntityType>(
 		Arrays.asList(
 			new EntityType[] {
 				//vanilla entities that has inventories
@@ -82,7 +82,7 @@ public class FixFreecamEntities implements Listener {
 		}
 
 		final Entity entity = e.getRightClicked();
-		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityType.contains(entity.getType()) || entity.getType().toString().equals("HORSE")) {
+		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityTypes.contains(entity.getType()) || entity.getType().toString().equals("HORSE")) {
 			if (playerOpenEntityInvOpenCheckTask.containsKey(playername)) {
 				int taskID = playerOpenEntityInvOpenCheckTask.get(playername);
 				Bukkit.getScheduler().cancelTask(taskID);
