@@ -89,7 +89,7 @@ public class FixFreecamEntities implements Listener {
 		}
 	}
 
-	// remove player from list when he closes minecart
+	// remove player from list when he closes inventory
 	private void initClientCloseInventoryFixListener() {
 		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
@@ -111,7 +111,6 @@ public class FixFreecamEntities implements Listener {
 			}
 		).syncStart();
 	}
-
 	private void initServerCloseInventoryFixListener() {
 		main.protocolManager.addPacketListener(
 			new PacketAdapter(
@@ -129,7 +128,6 @@ public class FixFreecamEntities implements Listener {
 			}
 		);
 	}
-
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
 		if (!config.fixFreecamEntitiesEnabled) {

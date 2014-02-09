@@ -93,6 +93,7 @@ public class FixFreecamBlocks implements Listener {
 			}
 		)
 	);
+	// add player to list when he opens block inventory
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e) {
 		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
@@ -155,7 +156,6 @@ public class FixFreecamBlocks implements Listener {
 			}
 		).syncStart();
 	}
-
 	private void initServerCloseInventoryFixListener() {
 		main.protocolManager.addPacketListener(
 			new PacketAdapter(
@@ -173,7 +173,6 @@ public class FixFreecamBlocks implements Listener {
 			}
 		);
 	}
-
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
 		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
