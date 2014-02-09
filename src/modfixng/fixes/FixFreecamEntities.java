@@ -17,7 +17,9 @@
 
 package modfixng.fixes;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -25,6 +27,7 @@ import modfixng.utils.ModFixNGUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -52,6 +55,17 @@ public class FixFreecamEntities implements Listener {
 	private HashMap<String, Entity> playerOpenEntity = new HashMap<String, Entity>(100);
 	private HashMap<String, Integer> playerOpenEntityInvOpenCheckTask = new HashMap<String, Integer>(100);
 
+	private HashSet<EntityType> knownEntityType  = new HashSet<EntityType>(
+		Arrays.asList(
+			new EntityType[] {
+				//vanilla entities that has inventories
+				EntityType.MINECART_CHEST,
+				EntityType.MINECART_FURNACE,
+				EntityType.MINECART_HOPPER,
+				EntityType.VILLAGER
+			}
+		)
+	);
 	// add player to list when he opens entity inventory
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerOpenedMinecart(PlayerInteractEntityEvent e) {
@@ -68,7 +82,7 @@ public class FixFreecamEntities implements Listener {
 		}
 
 		final Entity entity = e.getRightClicked();
-		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId())) {
+		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityType.contains(entity.getType())) {
 			if (playerOpenEntityInvOpenCheckTask.containsKey(playername)) {
 				int taskID = playerOpenEntityInvOpenCheckTask.get(playername);
 				Bukkit.getScheduler().cancelTask(taskID);
