@@ -62,7 +62,7 @@ public class FixBag implements Listener {
 		Player p = event.getEntity();
 
 		p.closeInventory();
-		
+
 		event.getDrops().clear();
 		for (ItemStack item : p.getInventory().getContents()) {
 			if (item != null) {
