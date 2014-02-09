@@ -82,7 +82,7 @@ public class FixFreecamEntities implements Listener {
 		}
 
 		final Entity entity = e.getRightClicked();
-		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityType.contains(entity.getType())) {
+		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityType.contains(entity.getType()) || entity.getType().toString().equals("HORSE")) {
 			if (playerOpenEntityInvOpenCheckTask.containsKey(playername)) {
 				int taskID = playerOpenEntityInvOpenCheckTask.get(playername);
 				Bukkit.getScheduler().cancelTask(taskID);
