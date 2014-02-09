@@ -68,7 +68,7 @@ public class FixFreecamEntities implements Listener {
 	);
 	// add player to list when he opens entity inventory
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onPlayerOpenedMinecart(PlayerInteractEntityEvent e) {
+	public void onPlayerOpenedEntity(PlayerInteractEntityEvent e) {
 		if (!config.fixFreecamEntitiesEnabled) {
 			return;
 		}
