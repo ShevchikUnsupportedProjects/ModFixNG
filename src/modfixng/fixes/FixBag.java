@@ -71,7 +71,7 @@ public class FixBag implements Listener {
 		}
 		for (ItemStack armor : p.getInventory().getArmorContents()) {
 			if (armor != null) {
-				event.getDrops().add(armor);
+				event.getDrops().add(armor.clone());
 			}
 		}
 
