@@ -24,6 +24,7 @@ import modfixng.utils.ModFixNGUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -43,7 +44,7 @@ public class ValidateActions implements Listener {
 		initInventoryCloseListener();
 	}
 
-	// deny entity interact if inventory already opened
+	// deny entity interact if inventory opened
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractBlock(PlayerInteractEvent event) {
 		if (!config.validateActionsEnabled) {
@@ -59,7 +60,7 @@ public class ValidateActions implements Listener {
 		}
 	}
 
-	// deny entity interact if inventory already opened
+	// deny entity interact if inventory opened
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if (!config.validateActionsEnabled) {
@@ -69,6 +70,22 @@ public class ValidateActions implements Listener {
 			return;
 		}
 
+		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+			event.setCancelled(true);
+			return;
+		}
+	}
+
+	// deny commands use if inventory opened
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
+		if (!config.validateActionsEnabled) {
+			return;
+		}
+		if (!config.validateActionsInteractEnabled) {
+			return;
+		}
+		
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 			return;
