@@ -50,9 +50,6 @@ public class ValidateActions implements Listener {
 		if (!config.validateActionsEnabled) {
 			return;
 		}
-		if (!config.validateActionsInteractEnabled) {
-			return;
-		}
 
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
@@ -66,9 +63,6 @@ public class ValidateActions implements Listener {
 		if (!config.validateActionsEnabled) {
 			return;
 		}
-		if (!config.validateActionsInteractEnabled) {
-			return;
-		}
 
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
@@ -80,9 +74,6 @@ public class ValidateActions implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
 		if (!config.validateActionsEnabled) {
-			return;
-		}
-		if (!config.validateActionsInteractEnabled) {
 			return;
 		}
 		
@@ -104,9 +95,6 @@ public class ValidateActions implements Listener {
 				@Override
 				public void onPacketReceiving(PacketEvent e) {
 					if (!config.validateActionsEnabled) {
-						return;
-					}
-					if (!config.validateActionsInventoryEnabled) {
 						return;
 					}
 
@@ -135,9 +123,6 @@ public class ValidateActions implements Listener {
 				@Override
 				public void onPacketReceiving(PacketEvent e) {
 					if (!config.validateActionsEnabled) {
-						return;
-					}
-					if (!config.validateActionsInventoryEnabled) {
 						return;
 					}
 

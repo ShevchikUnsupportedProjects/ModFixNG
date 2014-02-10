@@ -49,8 +49,6 @@ public class Config {
 	public boolean fixFreecamBlockZeroItemsCheckEnabled = true;
 
 	public boolean validateActionsEnabled = true;
-	public boolean validateActionsInteractEnabled = true;
-	public boolean validateActionsInventoryEnabled = true;
 
 	public boolean restrictBlockBreakWhileOpenEnabled = true;
 	public HashSet<String> restrictBlockBreakWhileOpenIDs = new HashSet<String>();
