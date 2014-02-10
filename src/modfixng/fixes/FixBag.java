@@ -107,7 +107,8 @@ public class FixBag implements Listener {
 			new String[] {
 				//forestry bags
 				"forestry.storage.gui.ContainerNaturalistBackpack",
-				"forestry.storage.gui.ContainerBackpack"
+				"forestry.storage.gui.ContainerBackpack",
+				"forestry.mail.gui.ContainerLetter"
 			}
 		)
 	);
