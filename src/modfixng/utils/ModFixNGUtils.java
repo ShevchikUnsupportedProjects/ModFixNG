@@ -50,10 +50,10 @@ public class ModFixNGUtils {
 		return blstring;
 	}
 
-	public static void updateSlot(ProtocolManager protocolManager, Player player, int inventory, int slot, ItemStack item) {
+	public static void updateSlot(ProtocolManager protocolManager, Player player, int inventory, int minecraftslot, ItemStack item) {
 		PacketContainer updateslot = protocolManager.createPacket(PacketType.Play.Server.SET_SLOT);
 		updateslot.getIntegers().write(0, inventory);
-		updateslot.getIntegers().write(1, slot);
+		updateslot.getIntegers().write(1, minecraftslot);
 		updateslot.getItemModifier().write(0, item);
 		try {
 			protocolManager.sendServerPacket(player, updateslot);
