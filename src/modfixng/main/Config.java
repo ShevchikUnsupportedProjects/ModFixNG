@@ -75,7 +75,7 @@ public class Config {
 		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("ProperlyCloseInventories.checkEntities.IDs"));
 
 		validateActionsEnabled = config.getBoolean("ValidateActions.enabled", validateActionsEnabled);
-		
+
 		restrictBlockBreakWhileOpenEnabled = config.getBoolean("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
 		restrictBlockBreakWhileOpenIDs = new HashSet<String>(config.getStringList("RestrictBlockBreakWhileOpen.IDs"));
 		restrictBlockBreakWhileOpenClearDropIfBlockBroken = config.getBoolean("RestrictBlockBreakWhileOpen.clearDropIfBlockWasBrokenSomehow", restrictBlockBreakWhileOpenClearDropIfBlockBroken);
@@ -104,7 +104,7 @@ public class Config {
 		config.set("ProperlyCloseInventories.checkEntities.IDs", new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));
 
 		config.set("ValidateActions.enabled", validateActionsEnabled);
-		
+
 		config.set("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
 		config.set("RestrictBlockBreakWhileOpen.IDs", new ArrayList<String>(restrictBlockBreakWhileOpenIDs));
 		config.set("RestrictBlockBreakWhileOpen.clearDropIfBlockWasBrokenSomehow", restrictBlockBreakWhileOpenClearDropIfBlockBroken);

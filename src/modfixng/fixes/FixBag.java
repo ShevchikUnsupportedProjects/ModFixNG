@@ -23,6 +23,7 @@ import java.util.HashSet;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.PacketContainerReadable;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -135,10 +136,10 @@ public class FixBag implements Listener {
 
 					Player player = e.getPlayer();
 					// check click type(checking for shift+button)
-					if (e.getPacket().getIntegers().getValues().get(3) == 2) {
+					if (e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE) == PacketContainerReadable.InventoryClick.Mode.NUMBER_KEY_PRESS) {
 						// check to which slot we want to move item(checking if it is the holding bag slot)
 						final int heldslot = player.getInventory().getHeldItemSlot();
-						if (heldslot == e.getPacket().getIntegers().getValues().get(2)) {
+						if (heldslot == e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.BUTTON)) {
 							// check inventory name (checking if one of the inventory names in list)
 							String inventoryName = ModFixNGUtils.getOpenInventoryName(player);
 							if (inventoryName != null && config.fixBag19ButtonClickBagInventoryNames.contains(inventoryName) || knownInventoryNames.contains(inventoryName)) {

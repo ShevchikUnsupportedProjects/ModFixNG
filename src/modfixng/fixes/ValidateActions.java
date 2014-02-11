@@ -20,6 +20,7 @@ package modfixng.fixes;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.PacketContainerReadable;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -76,7 +77,7 @@ public class ValidateActions implements Listener {
 		if (!config.validateActionsEnabled) {
 			return;
 		}
-		
+
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 			return;
@@ -102,7 +103,7 @@ public class ValidateActions implements Listener {
 						return;
 					}
 
-					int invid = e.getPacket().getIntegers().getValues().get(0);
+					int invid = e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.INVENTORY_ID);
 					if (!ModFixNGUtils.isContainerValid(invid, e.getPlayer())) {
 						e.setCancelled(true);
 						e.getPlayer().updateInventory();
@@ -130,7 +131,7 @@ public class ValidateActions implements Listener {
 						return;
 					}
 
-					int invid = e.getPacket().getIntegers().getValues().get(0);
+					int invid = e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClose.PacketIndex.INVENTORY_ID);
 					if (!ModFixNGUtils.isContainerValid(invid, e.getPlayer())) {
 						e.setCancelled(true);
 						e.getPlayer().closeInventory();
