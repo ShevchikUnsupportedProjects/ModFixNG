@@ -22,6 +22,7 @@ public class PacketContainerReadable {
 	public static class InventoryClick {
 		public class PacketIndex {
 			public static final int INVENTORY_ID = 0;
+			public static final int SLOT = 1;
 			public static final int BUTTON = 2;
 			public static final int MODE = 3;
 		}
