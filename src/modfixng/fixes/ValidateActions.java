@@ -41,6 +41,7 @@ public class ValidateActions implements Listener {
 	public ValidateActions(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
+		initDropButtonPlayClickListener();
 		initInventoryClickListener();
 		initInventoryCloseListener();
 	}
@@ -82,6 +83,36 @@ public class ValidateActions implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+	}
+
+	// deny block dig drop mode packets if inventory opened
+	public void initDropButtonPlayClickListener() {
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+			new PacketAdapter(
+				PacketAdapter
+				.params(main, PacketType.Play.Client.BLOCK_DIG)
+				.listenerPriority(ListenerPriority.LOWEST)
+			) {
+				@Override
+				public void onPacketReceiving(PacketEvent event) {
+					if (!config.validateActionsEnabled) {
+						return;
+					}
+
+					if (event.getPlayer() == null) {
+						return;
+					}
+
+					int status = event.getPacket().getIntegers().getValues().get(4);
+					if (status == 3 || status == 4) {
+						System.out.println(ModFixNGUtils.isInventoryOpen(event.getPlayer()));
+						if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+							event.setCancelled(true);
+						}
+					}
+				}
+			}
+		).syncStart();
 	}
 
 	// do not allow to click invalid inventory

@@ -30,9 +30,6 @@ public class PlainNMSUtils {
 	}
 
 	protected static boolean isTryingToDropOpenCropanalyzer(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		if (item.equals(p.getItemOnCursor())) {
-			return false;
-		}
 		net.minecraft.server.v1_5_R3.ItemStack clickeditem = getNMSItemStack(item);
 		if (clickeditem.hasTag() && clickeditem.getTag().hasKey("uid")) {
 			int clickeduid = clickeditem.getTag().getInt("uid");
@@ -50,9 +47,6 @@ public class PlainNMSUtils {
 	}
 
 	protected static boolean isTryingToDropOpenToolBox(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		if (item.equals(p.getItemOnCursor())) {
-			return false;
-		}
 		net.minecraft.server.v1_5_R3.ItemStack clickeditem = getNMSItemStack(item);
 		if (clickeditem.hasTag() && clickeditem.getTag().hasKey("uid")) {
 			int clickeduid = clickeditem.getTag().getInt("uid");

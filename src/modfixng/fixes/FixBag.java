@@ -31,7 +31,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -48,6 +47,7 @@ public class FixBag implements Listener {
 		this.main = main;
 		this.config = config;
 		init19ButtonInventoryClickListener();
+		initDropButtonInventoryClickListener();
 	}
 
 	// close inventory on death and fix dropped items
@@ -121,7 +121,7 @@ public class FixBag implements Listener {
 			) {
 				@SuppressWarnings("deprecation")
 				@Override
-				public void onPacketReceiving(PacketEvent e) {
+				public void onPacketReceiving(PacketEvent event) {
 					if (!config.fixBagEnabled) {
 						return;
 					}
@@ -130,20 +130,20 @@ public class FixBag implements Listener {
 						return;
 					}
 
-					if (e.getPlayer() == null) {
+					if (event.getPlayer() == null) {
 						return;
 					}
 
-					Player player = e.getPlayer();
+					Player player = event.getPlayer();
 					// check click type(checking for shift+button)
-					if (e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE) == PacketContainerReadable.InventoryClick.Mode.NUMBER_KEY_PRESS) {
+					if (event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE) == PacketContainerReadable.InventoryClick.Mode.NUMBER_KEY_PRESS) {
 						// check to which slot we want to move item(checking if it is the holding bag slot)
 						final int heldslot = player.getInventory().getHeldItemSlot();
-						if (heldslot == e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.BUTTON)) {
+						if (heldslot == event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.BUTTON)) {
 							// check inventory name (checking if one of the inventory names in list)
 							String inventoryName = ModFixNGUtils.getOpenInventoryName(player);
 							if (inventoryName != null && config.fixBag19ButtonClickBagInventoryNames.contains(inventoryName) || knownInventoryNames.contains(inventoryName)) {
-								e.setCancelled(true);
+								event.setCancelled(true);
 								player.updateInventory();
 							}
 						}
@@ -153,28 +153,42 @@ public class FixBag implements Listener {
 		).start();
 	}
 
-	// close inventory if trying to drop opened toolbox or cropnalyzer
-	private boolean closinginventory = false;
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPlayerDropItem(PlayerDropItemEvent event) {
-		if (!config.fixBagEnabled) {
-			return;
-		}
+	// close inventory if trying to drop opened toolbox or cropnalyzer(q button in inventory)
+	public void initDropButtonInventoryClickListener() {
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+			new PacketAdapter(
+				PacketAdapter
+				.params(main, PacketType.Play.Client.WINDOW_CLICK)
+			) {
+				@SuppressWarnings("deprecation")
+				@Override
+				public void onPacketReceiving(PacketEvent event) {
+					if (!config.fixBagEnabled) {
+						return;
+					}
 
-		if (closinginventory) {
-			return;
-		}
+					if (event.getPlayer() == null) {
+						return;
+					}
 
-		Player player = event.getPlayer();
-		ItemStack droppeditem = event.getItemDrop().getItemStack();
+					int mode = event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE);
+					int button = event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.BUTTON);
+					if (mode == PacketContainerReadable.InventoryClick.Mode.DROP && button != -999) {
+						if (isInvalidDropInventory(event.getPlayer(), event.getPlayer().getItemInHand())) {
+							event.setCancelled(true);
+							event.getPlayer().updateInventory();
+						}
+					}
+				}
+			}
+		).syncStart();
+	}
+	private boolean isInvalidDropInventory(Player player, ItemStack droppeditem) {
 		if (config.fixBagCropanalyzerFixEnabled) {
 			if (ModFixNGUtils.isCropanalyzerOpen(player)) {
 				try {
 					if (ModFixNGUtils.isTryingToDropOpenCropanalyzer(player, droppeditem)) {
-						closinginventory = true;
-						player.closeInventory();
-						closinginventory = false;
-						return;
+						return true;
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -185,16 +199,14 @@ public class FixBag implements Listener {
 			if (ModFixNGUtils.isToolboxOpen(player)) {
 				try {
 					if (ModFixNGUtils.isTryingToDropOpenToolBox(player, droppeditem)) {
-						closinginventory = true;
-						player.closeInventory();
-						closinginventory = false;
-						return;
+						return true;
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}
 		}
+		return false;
 	}
 
 }
