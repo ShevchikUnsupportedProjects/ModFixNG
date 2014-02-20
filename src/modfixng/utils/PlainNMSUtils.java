@@ -29,8 +29,8 @@ public class PlainNMSUtils {
 		return !nmshuman.activeContainer.getClass().getName().equals(nmshuman.defaultContainer.getClass().getName());
 	}
 
-	protected static boolean isTryingToDropOpenCropanalyzer(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		net.minecraft.server.v1_5_R3.ItemStack clickeditem = getNMSItemStack(item);
+	protected static boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		net.minecraft.server.v1_5_R3.ItemStack clickeditem = (net.minecraft.server.v1_5_R3.ItemStack) getPlayerContainer(p).b.get(minecraftslot);
 		if (clickeditem.hasTag() && clickeditem.getTag().hasKey("uid")) {
 			int clickeduid = clickeditem.getTag().getInt("uid");
 			net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
@@ -46,8 +46,8 @@ public class PlainNMSUtils {
 		return false;
 	}
 
-	protected static boolean isTryingToDropOpenToolBox(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		net.minecraft.server.v1_5_R3.ItemStack clickeditem = getNMSItemStack(item);
+	protected static boolean isTryingToDropOpenToolBox(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		net.minecraft.server.v1_5_R3.ItemStack clickeditem = (net.minecraft.server.v1_5_R3.ItemStack) getPlayerContainer(p).b.get(minecraftslot);
 		if (clickeditem.hasTag() && clickeditem.getTag().hasKey("uid")) {
 			int clickeduid = clickeditem.getTag().getInt("uid");
 			net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);

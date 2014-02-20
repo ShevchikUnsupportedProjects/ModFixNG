@@ -174,7 +174,8 @@ public class FixBag implements Listener {
 					int mode = event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE);
 					int button = event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.BUTTON);
 					if (mode == PacketContainerReadable.InventoryClick.Mode.DROP && button != -999) {
-						if (isInvalidDropInventory(event.getPlayer(), event.getPlayer().getItemInHand())) {
+						int slot = event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.SLOT);
+						if (isInvalidDropInventory(event.getPlayer(), slot)) {
 							event.setCancelled(true);
 							event.getPlayer().updateInventory();
 						}
@@ -183,11 +184,11 @@ public class FixBag implements Listener {
 			}
 		).syncStart();
 	}
-	private boolean isInvalidDropInventory(Player player, ItemStack droppeditem) {
+	private boolean isInvalidDropInventory(Player player, int slot) {
 		if (config.fixBagCropanalyzerFixEnabled) {
 			if (ModFixNGUtils.isCropanalyzerOpen(player)) {
 				try {
-					if (ModFixNGUtils.isTryingToDropOpenCropanalyzer(player, droppeditem)) {
+					if (ModFixNGUtils.isTryingToDropOpenCropanalyzer(player, slot)) {
 						return true;
 					}
 				} catch (Exception ex) {
@@ -198,7 +199,7 @@ public class FixBag implements Listener {
 		if (config.fixBagToolboxFixEnabled) {
 			if (ModFixNGUtils.isToolboxOpen(player)) {
 				try {
-					if (ModFixNGUtils.isTryingToDropOpenToolBox(player, droppeditem)) {
+					if (ModFixNGUtils.isTryingToDropOpenToolBox(player, slot)) {
 						return true;
 					}
 				} catch (Exception ex) {

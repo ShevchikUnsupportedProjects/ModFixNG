@@ -123,8 +123,8 @@ public class ModFixNGUtils {
 		return false;
 	}
 
-	public static boolean isTryingToDropOpenCropanalyzer(Player p, ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		return PlainNMSUtils.isTryingToDropOpenCropanalyzer(p, item);
+	public static boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		return PlainNMSUtils.isTryingToDropOpenCropanalyzer(p, minecraftslot);
 	}
 
 	public static boolean isToolboxOpen(Player p) {
@@ -134,8 +134,8 @@ public class ModFixNGUtils {
 		return false;
 	}
 
-	public static boolean isTryingToDropOpenToolBox(Player p, ItemStack item)throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		return PlainNMSUtils.isTryingToDropOpenToolBox(p, item);
+	public static boolean isTryingToDropOpenToolBox(Player p, int minecraftslot)throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		return PlainNMSUtils.isTryingToDropOpenToolBox(p, minecraftslot);
 	}
 
 	public static boolean isElectricContainerOpen(Player p) {
