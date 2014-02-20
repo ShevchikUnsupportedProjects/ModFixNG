@@ -105,7 +105,6 @@ public class ValidateActions implements Listener {
 
 					int status = event.getPacket().getIntegers().getValues().get(4);
 					if (status == 3 || status == 4) {
-						System.out.println(ModFixNGUtils.isInventoryOpen(event.getPlayer()));
 						if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 							event.setCancelled(true);
 						}
