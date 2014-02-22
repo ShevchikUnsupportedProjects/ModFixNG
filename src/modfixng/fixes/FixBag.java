@@ -142,7 +142,7 @@ public class FixBag implements Listener {
 						if (heldslot == event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.BUTTON)) {
 							// check inventory name (checking if one of the inventory names in list)
 							String inventoryName = ModFixNGUtils.getOpenInventoryName(player);
-							if (inventoryName != null && config.fixBag19ButtonClickBagInventoryNames.contains(inventoryName) || knownInventoryNames.contains(inventoryName)) {
+							if (inventoryName != null && (config.fixBag19ButtonClickBagInventoryNames.contains(inventoryName) || knownInventoryNames.contains(inventoryName))) {
 								event.setCancelled(true);
 								player.updateInventory();
 							}
