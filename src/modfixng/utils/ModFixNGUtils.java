@@ -80,7 +80,7 @@ public class ModFixNGUtils {
 
 	public static String getOpenInventoryName(Player p) {
 		if (isRunningMCPC()) {
-			return PlainNMSUtils.getPlayerContainer(p).getClass().getName();
+			return PlainNMSUtils.getOpenInventoryName(p);
 		}
 		return null;
 	}
@@ -99,26 +99,19 @@ public class ModFixNGUtils {
 
 	public static boolean isContainerValid(int invid , Player p) {
 		if (isRunningMCPC()) {
-			if (PlainNMSUtils.getPlayerContainer(p).windowId != invid) {
-				return false;
-			}
+			return PlainNMSUtils.getOpenInventoryId(p) == invid;
 		} else {
 			if (ModFixNGUtils.isInventoryOpen(p)) {
-				if (invid == 0) {
-					return false;
-				}
+				return invid != 0;
 			} else {
-				if (invid != 0) {
-					return false;
-				}
+				return invid == 0;
 			}
 		}
-		return true;
 	}
 
 	public static boolean isCropanalyzerOpen(Player p) {
 		if (isRunningMCPC()) {
-			return PlainNMSUtils.getPlayerContainer(p).getClass().getName().equals("ic2.core.item.tool.ContainerCropnalyzer");
+			return PlainNMSUtils.getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerCropnalyzer");
 		}
 		return false;
 	}
@@ -129,7 +122,7 @@ public class ModFixNGUtils {
 
 	public static boolean isToolboxOpen(Player p) {
 		if (isRunningMCPC()) {
-			return PlainNMSUtils.getPlayerContainer(p).getClass().getName().equals("ic2.core.item.tool.ContainerToolbox");
+			return PlainNMSUtils.getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerToolbox");
 		}
 		return false;
 	}
@@ -140,7 +133,7 @@ public class ModFixNGUtils {
 
 	public static boolean isElectricContainerOpen(Player p) {
 		if (isRunningMCPC()) {
-			return PlainNMSUtils.getPlayerContainer(p).getClass().getName().equals("ic2.core.block.wiring.ContainerElectricBlock");
+			return PlainNMSUtils.getOpenInventoryName(p).equals("ic2.core.block.wiring.ContainerElectricBlock");
 		}
 		return false;
 	}

@@ -20,13 +20,19 @@ package modfixng.utils;
 import java.lang.reflect.Field;
 
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class PlainNMSUtils {
 
 	protected static boolean isInventoryOpen(Player p) {
-		net.minecraft.server.v1_5_R3.EntityHuman nmshuman = getNMSHuman(p);
-		return !nmshuman.activeContainer.getClass().getName().equals(nmshuman.defaultContainer.getClass().getName());
+		return getOpenInventoryId(p) != 0;
+	}
+
+	protected static String getOpenInventoryName(Player p) {
+		return getPlayerContainer(p).getClass().getName();
+	}
+
+	protected static int getOpenInventoryId(Player p) {
+		return getPlayerContainer(p).windowId;
 	}
 
 	protected static boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -63,18 +69,8 @@ public class PlainNMSUtils {
 		return false;
 	}
 
-	protected static net.minecraft.server.v1_5_R3.Container getPlayerContainer(Player p) {
+	private static net.minecraft.server.v1_5_R3.Container getPlayerContainer(Player p) {
 		return getNMSHuman(p).activeContainer;
-	}
-
-	protected static net.minecraft.server.v1_5_R3.Container getDefaultContainer(Player p) {
-		return getNMSHuman(p).defaultContainer;
-	}
-
-	protected static net.minecraft.server.v1_5_R3.ItemStack getNMSItemStack(ItemStack i) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Field handleField = i.getClass().getDeclaredField("handle");
-		handleField.setAccessible(true);
-		return (net.minecraft.server.v1_5_R3.ItemStack) handleField.get(i);
 	}
 
 	private static net.minecraft.server.v1_5_R3.EntityHuman getNMSHuman(Player p) {
