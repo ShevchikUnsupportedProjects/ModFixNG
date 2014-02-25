@@ -106,10 +106,13 @@ public class FixBag implements Listener {
 	private HashSet<String> knownInventoryNames = new HashSet<String>(
 		Arrays.asList(
 			new String[] {
-				//forestry bags
+				//forestry
 				"forestry.storage.gui.ContainerNaturalistBackpack",
 				"forestry.storage.gui.ContainerBackpack",
-				"forestry.mail.gui.ContainerLetter"
+				"forestry.mail.gui.ContainerLetter",
+				"forestry.apiculture.gui.ContainerBeealyzer",
+				"forestry.arboriculture.gui.ContainerTreealyzer",
+				"forestry.lepidopterology.gui.ContainerFlutterlyzer"
 			}
 		)
 	);
