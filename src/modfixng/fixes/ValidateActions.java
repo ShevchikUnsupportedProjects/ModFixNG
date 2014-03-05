@@ -44,6 +44,7 @@ public class ValidateActions implements Listener {
 		initDropButtonPlayClickListener();
 		initInventoryClickListener();
 		initInventoryCloseListener();
+		initPlayerMoveListener();
 	}
 
 	// deny entity interact if inventory opened
@@ -169,6 +170,32 @@ public class ValidateActions implements Listener {
 				}
 			}
 		).syncStart();
+	}
+
+	//ignore player move while he is in vehicle
+	private void initPlayerMoveListener() {
+		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+			new PacketAdapter(
+				PacketAdapter
+				.params(main, PacketType.Play.Client.POSITION, PacketType.Play.Client.POSITION_LOOK)
+				.listenerPriority(ListenerPriority.LOWEST)
+			) {
+				@Override
+				public void onPacketReceiving(PacketEvent e) {
+					if (!config.validateActionsEnabled) {
+						return;
+					}
+
+					if (e.getPlayer() == null) {
+						return;
+					}
+
+					if (e.getPlayer().isInsideVehicle()) {
+						e.setCancelled(true);
+					}
+				}
+			}
+		).start();
 	}
 
 }
