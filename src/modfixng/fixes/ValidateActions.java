@@ -177,7 +177,7 @@ public class ValidateActions implements Listener {
 		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Client.POSITION, PacketType.Play.Client.POSITION_LOOK)
+				.params(main, PacketType.Play.Client.POSITION)
 				.listenerPriority(ListenerPriority.LOWEST)
 			) {
 				@Override
