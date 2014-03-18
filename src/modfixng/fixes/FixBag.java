@@ -153,7 +153,7 @@ public class FixBag implements Listener {
 					}
 				}
 			}
-		).start();
+		).syncStart();
 	}
 
 	// close inventory if trying to drop opened toolbox or cropnalyzer(q button in inventory)
