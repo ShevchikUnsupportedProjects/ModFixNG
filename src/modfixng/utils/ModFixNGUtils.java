@@ -81,8 +81,9 @@ public class ModFixNGUtils {
 	public static String getOpenInventoryName(Player p) {
 		if (isRunningMCPC()) {
 			return PlainNMSUtils.getOpenInventoryName(p);
+		} else {
+			return p.getOpenInventory().getTopInventory().getHolder().getClass().getName();
 		}
-		return null;
 	}
 
 	public static boolean isInventoryOpen(Player p) {
