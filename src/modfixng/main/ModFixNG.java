@@ -21,7 +21,6 @@ import modfixng.fixes.FixBag;
 import modfixng.fixes.FixFreecamBlocks;
 import modfixng.fixes.FixFreecamEntities;
 import modfixng.fixes.FixPlayerArmorSlotDesync;
-import modfixng.fixes.RestrictBreakWhileOpen;
 import modfixng.fixes.RestrictIC2EnergyStorageArmorSlot19Click;
 import modfixng.fixes.ValidateActions;
 
@@ -41,7 +40,6 @@ public class ModFixNG extends JavaPlugin {
 	private FixFreecamEntities mpl;
 	private FixFreecamBlocks fciol;
 	private ValidateActions val;
-	private RestrictBreakWhileOpen rbwol;
 	@SuppressWarnings("unused")
 	private FixPlayerArmorSlotDesync fsl;
 	@SuppressWarnings("unused")
@@ -65,8 +63,6 @@ public class ModFixNG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(fciol, this);
 		val = new ValidateActions(this, config);
 		getServer().getPluginManager().registerEvents(val, this);
-		rbwol = new RestrictBreakWhileOpen(this, config);
-		getServer().getPluginManager().registerEvents(rbwol, this);
 		fsl = new FixPlayerArmorSlotDesync(this, config);
 		fic2esasl = new RestrictIC2EnergyStorageArmorSlot19Click(this, config);
 	}
