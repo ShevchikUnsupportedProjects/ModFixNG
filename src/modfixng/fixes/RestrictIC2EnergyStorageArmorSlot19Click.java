@@ -3,6 +3,7 @@ package modfixng.fixes;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.PacketContainerReadable;
 
 import org.bukkit.entity.Player;
 
@@ -40,7 +41,7 @@ public class RestrictIC2EnergyStorageArmorSlot19Click {
 
 					final Player player = e.getPlayer();
 					// check click type(checking for button)
-					if (e.getPacket().getIntegers().getValues().get(3) == 2) {
+					if (e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.BUTTON) == PacketContainerReadable.InventoryClick.Mode.NUMBER_KEY_PRESS) {
 						// check inventory(checking for ic2 electric inventory)
 						if (ModFixNGUtils.isElectricContainerOpen(player)) {
 							e.setCancelled(true);
@@ -49,7 +50,7 @@ public class RestrictIC2EnergyStorageArmorSlot19Click {
 					}
 				}
 			}
-		).start();
+		).syncStart();
 	}
 
 }
