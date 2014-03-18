@@ -111,7 +111,7 @@ public class FixFreecamEntities implements Listener {
 				.params(main, PacketType.Play.Client.CLOSE_WINDOW)
 			) {
 				@Override
-				public void onPacketReceiving(PacketEvent e) {
+				public void onPacketReceiving(final PacketEvent e) {
 					if (!config.fixFreecamEntitiesEnabled) {
 						return;
 					}
@@ -120,7 +120,15 @@ public class FixFreecamEntities implements Listener {
 						return;
 					}
 
-					removeData(e.getPlayer().getName());
+					Bukkit.getScheduler().scheduleSyncDelayedTask(
+						main,
+						new Runnable() {
+							@Override
+							public void run() {
+								removeData(e.getPlayer().getName());
+							}
+						}
+					);
 				}
 			}
 		).syncStart();
