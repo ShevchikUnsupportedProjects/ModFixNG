@@ -40,6 +40,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 
 public class FixBag implements Listener {
+
 	private ModFixNG main;
 	private Config config;
 
@@ -72,7 +73,6 @@ public class FixBag implements Listener {
 				event.getDrops().add(armor);
 			}
 		}
-
 	}
 
 	// close inventory on portal enter or exit
@@ -89,7 +89,6 @@ public class FixBag implements Listener {
 		if (event.getTo().getBlock().getType() == Material.PORTAL || event.getFrom().getBlock().getType() == Material.PORTAL) {
 			event.getPlayer().closeInventory();
 		}
-
 	}
 
 	// close inventory on quit
