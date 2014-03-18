@@ -26,12 +26,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config {
-	@SuppressWarnings("unused")
-	private ModFixNG main;
+
 	private File configfile;
 
 	public Config(ModFixNG main) {
-		this.main = main;
 		configfile = new File(main.getDataFolder(), "config.yml");
 	}
 
