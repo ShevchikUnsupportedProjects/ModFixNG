@@ -22,9 +22,11 @@ import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
 import modfixng.utils.PacketContainerReadable;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -82,6 +84,20 @@ public class ValidateActions implements Listener {
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 			return;
+		}
+	}
+	
+	// deny entity damage if inventory is opened
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerEntityDamage(EntityDamageByEntityEvent event) {
+		if (!config.validateActionsEnabled) {
+			return;
+		}
+		
+		if (event.getDamager() instanceof Player) {
+			if (ModFixNGUtils.isInventoryOpen((Player) event.getDamager())) {
+				event.setCancelled(true);
+			}
 		}
 	}
 
