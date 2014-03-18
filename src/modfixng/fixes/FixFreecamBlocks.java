@@ -68,10 +68,9 @@ public class FixFreecamBlocks implements Listener {
 				}
 
 				for (Player p : Bukkit.getOnlinePlayers()) {
-					// hotbar slots
 					for (int i = 0; i < 9; i++) {
 						ItemStack item = p.getInventory().getItem(i);
-						if (item != null && item.getAmount() == 0) {
+						if (item != null && item.getAmount() <= 0) {
 							p.getInventory().setItem(i, null);
 						}
 					}
