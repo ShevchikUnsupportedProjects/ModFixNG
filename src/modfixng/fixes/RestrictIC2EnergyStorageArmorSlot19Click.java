@@ -41,7 +41,7 @@ public class RestrictIC2EnergyStorageArmorSlot19Click {
 
 					final Player player = e.getPlayer();
 					// check click type(checking for button)
-					if (e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.BUTTON) == PacketContainerReadable.InventoryClick.Mode.NUMBER_KEY_PRESS) {
+					if (e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE) == PacketContainerReadable.InventoryClick.Mode.NUMBER_KEY_PRESS) {
 						// check inventory(checking for ic2 electric inventory)
 						if (ModFixNGUtils.isElectricContainerOpen(player)) {
 							e.setCancelled(true);
