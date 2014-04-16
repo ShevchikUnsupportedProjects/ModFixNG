@@ -91,20 +91,6 @@ public class ValidateActions implements Listener {
 		}
 	}
 
-	// deny entity damage if inventory is opened
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerEntityDamage(EntityDamageByEntityEvent event) {
-		if (!config.validateActionsEnabled) {
-			return;
-		}
-
-		if (event.getDamager() instanceof Player) {
-			if (ModFixNGUtils.isInventoryOpen((Player) event.getDamager())) {
-				event.setCancelled(true);
-			}
-		}
-	}
-
 	private HashSet<String> players = new HashSet<String>();
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		players.add(e.getPlayer().getName());
