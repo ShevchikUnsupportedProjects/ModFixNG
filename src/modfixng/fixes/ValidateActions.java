@@ -92,9 +92,11 @@ public class ValidateActions implements Listener {
 	}
 
 	private HashSet<String> players = new HashSet<String>();
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		players.add(e.getPlayer().getName());
 	}
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerLeave(PlayerQuitEvent e) {
 		players.remove(e.getPlayer().getName());
 	}
@@ -108,20 +110,25 @@ public class ValidateActions implements Listener {
 				.listenerPriority(ListenerPriority.LOWEST)
 			) {
 				@Override
-				public void onPacketReceiving(PacketEvent event) {
+				public void onPacketReceiving(PacketEvent e) {
 					if (!config.validateActionsEnabled) {
 						return;
 					}
 
-					Player player = event.getPlayer();
+					Player player = e.getPlayer();
 					if (player == null) {
 						return;
 					}
 
-					int status = event.getPacket().getIntegers().getValues().get(4);
+					if (!players.contains(player.getName())) {
+						e.setCancelled(true);
+						return;
+					}
+
+					int status = e.getPacket().getIntegers().getValues().get(4);
 					if (status == 3 || status == 4) {
 						if (ModFixNGUtils.isInventoryOpen(player)) {
-							event.setCancelled(true);
+							e.setCancelled(true);
 						}
 					}
 				}
@@ -146,6 +153,12 @@ public class ValidateActions implements Listener {
 
 					Player player = e.getPlayer();
 					if (player == null) {
+						return;
+					}
+
+					if (!players.contains(player.getName())) {
+						e.setCancelled(true);
+						e.getPlayer().updateInventory();
 						return;
 					}
 
@@ -175,6 +188,12 @@ public class ValidateActions implements Listener {
 
 					Player player = e.getPlayer();
 					if (player == null) {
+						return;
+					}
+
+					if (!players.contains(player.getName())) {
+						e.setCancelled(true);
+						e.getPlayer().closeInventory();
 						return;
 					}
 
