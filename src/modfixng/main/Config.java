@@ -48,10 +48,6 @@ public class Config {
 
 	public boolean validateActionsEnabled = true;
 
-	public boolean restrictBlockBreakWhileOpenEnabled = true;
-	public HashSet<String> restrictBlockBreakWhileOpenIDs = new HashSet<String>();
-	public boolean restrictBlockBreakWhileOpenClearDropIfBlockBroken = true;
-
 	public boolean fixSlotDesyncEnabled = true;
 
 	public boolean fixIC2EnergyStorage = true;
@@ -73,10 +69,6 @@ public class Config {
 		fixFreecamEntitiesEntitiesIDs = new HashSet<Short>(config.getShortList("ProperlyCloseInventories.checkEntities.IDs"));
 
 		validateActionsEnabled = config.getBoolean("ValidateActions.enabled", validateActionsEnabled);
-
-		restrictBlockBreakWhileOpenEnabled = config.getBoolean("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
-		restrictBlockBreakWhileOpenIDs = new HashSet<String>(config.getStringList("RestrictBlockBreakWhileOpen.IDs"));
-		restrictBlockBreakWhileOpenClearDropIfBlockBroken = config.getBoolean("RestrictBlockBreakWhileOpen.clearDropIfBlockWasBrokenSomehow", restrictBlockBreakWhileOpenClearDropIfBlockBroken);
 
 		fixSlotDesyncEnabled = config.getBoolean("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
@@ -102,10 +94,6 @@ public class Config {
 		config.set("ProperlyCloseInventories.checkEntities.IDs", new ArrayList<Short>(fixFreecamEntitiesEntitiesIDs));
 
 		config.set("ValidateActions.enabled", validateActionsEnabled);
-
-		config.set("RestrictBlockBreakWhileOpen.enabled", restrictBlockBreakWhileOpenEnabled);
-		config.set("RestrictBlockBreakWhileOpen.IDs", new ArrayList<String>(restrictBlockBreakWhileOpenIDs));
-		config.set("RestrictBlockBreakWhileOpen.clearDropIfBlockWasBrokenSomehow", restrictBlockBreakWhileOpenClearDropIfBlockBroken);
 
 		config.set("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
