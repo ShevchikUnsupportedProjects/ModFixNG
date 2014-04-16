@@ -17,6 +17,8 @@
 
 package modfixng.fixes;
 
+import java.util.HashSet;
+
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
@@ -30,6 +32,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -101,6 +105,14 @@ public class ValidateActions implements Listener {
 		}
 	}
 
+	private HashSet<String> players = new HashSet<String>();
+	public void onPlayerJoin(PlayerJoinEvent e) {
+		players.add(e.getPlayer().getName());
+	}
+	public void onPlayerLeave(PlayerQuitEvent e) {
+		players.remove(e.getPlayer().getName());
+	}
+
 	// deny block dig drop mode packets if inventory opened
 	public void initDropButtonPlayClickListener() {
 		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
@@ -115,13 +127,19 @@ public class ValidateActions implements Listener {
 						return;
 					}
 
-					if (event.getPlayer() == null) {
+					Player player = event.getPlayer();
+					if (player == null) {
+						return;
+					}
+
+					if (!players.contains(player.getName())) {
+						event.setCancelled(true);
 						return;
 					}
 
 					int status = event.getPacket().getIntegers().getValues().get(4);
 					if (status == 3 || status == 4) {
-						if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+						if (ModFixNGUtils.isInventoryOpen(player)) {
 							event.setCancelled(true);
 						}
 					}
@@ -145,12 +163,18 @@ public class ValidateActions implements Listener {
 						return;
 					}
 
-					if (e.getPlayer() == null) {
+					Player player = e.getPlayer();
+					if (player == null) {
+						return;
+					}
+
+					if (!players.contains(player.getName())) {
+						e.setCancelled(true);
 						return;
 					}
 
 					int invid = e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.INVENTORY_ID);
-					if (!ModFixNGUtils.isContainerValid(invid, e.getPlayer())) {
+					if (!ModFixNGUtils.isContainerValid(invid, player)) {
 						e.setCancelled(true);
 						e.getPlayer().updateInventory();
 					}
@@ -173,12 +197,18 @@ public class ValidateActions implements Listener {
 						return;
 					}
 
-					if (e.getPlayer() == null) {
+					Player player = e.getPlayer();
+					if (player == null) {
+						return;
+					}
+
+					if (!players.contains(player.getName())) {
+						e.setCancelled(true);
 						return;
 					}
 
 					int invid = e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClose.PacketIndex.INVENTORY_ID);
-					if (!ModFixNGUtils.isContainerValid(invid, e.getPlayer())) {
+					if (!ModFixNGUtils.isContainerValid(invid, player)) {
 						e.setCancelled(true);
 						e.getPlayer().closeInventory();
 					}
