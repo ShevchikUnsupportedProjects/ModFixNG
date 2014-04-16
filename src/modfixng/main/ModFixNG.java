@@ -35,6 +35,8 @@ public class ModFixNG extends JavaPlugin {
 
 	private Config config;
 
+	private Commands commandl;
+
 	public ProtocolManager protocolManager;
 
 	@Override
@@ -42,7 +44,8 @@ public class ModFixNG extends JavaPlugin {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		config = new Config(this);
 		config.loadConfig();
-		getCommand("modfix").setExecutor(new Commands(this, config));
+		commandl = new Commands(this, config);
+		getCommand("modfix").setExecutor(commandl);
 		getServer().getPluginManager().registerEvents(commandl, this);
 		getServer().getPluginManager().registerEvents(new FixBag(this, config), this);
 		getServer().getPluginManager().registerEvents(new FixFreecamEntities(this, config), this);
@@ -58,6 +61,7 @@ public class ModFixNG extends JavaPlugin {
 			p.closeInventory();
 		}
 		config = null;
+		commandl = null;
 		protocolManager.removePacketListeners(this);
 		protocolManager.getAsynchronousManager().unregisterAsyncHandlers(this);
 		protocolManager = null;
