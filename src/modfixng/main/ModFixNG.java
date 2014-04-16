@@ -35,16 +35,6 @@ public class ModFixNG extends JavaPlugin {
 
 	private Config config;
 
-	private Commands commandl;
-	private FixBag bagl;
-	private FixFreecamEntities mpl;
-	private FixFreecamBlocks fciol;
-	private ValidateActions val;
-	@SuppressWarnings("unused")
-	private FixPlayerArmorSlotDesync fsl;
-	@SuppressWarnings("unused")
-	private RestrictIC2EnergyStorageArmorSlot19Click fic2esasl;
-
 	public ProtocolManager protocolManager;
 
 	@Override
@@ -52,19 +42,14 @@ public class ModFixNG extends JavaPlugin {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		config = new Config(this);
 		config.loadConfig();
-		commandl = new Commands(this, config);
-		getCommand("modfix").setExecutor(commandl);
+		getCommand("modfix").setExecutor(new Commands(this, config));
 		getServer().getPluginManager().registerEvents(commandl, this);
-		bagl = new FixBag(this, config);
-		getServer().getPluginManager().registerEvents(bagl, this);
-		mpl = new FixFreecamEntities(this, config);
-		getServer().getPluginManager().registerEvents(mpl, this);
-		fciol = new FixFreecamBlocks(this, config);
-		getServer().getPluginManager().registerEvents(fciol, this);
-		val = new ValidateActions(this, config);
-		getServer().getPluginManager().registerEvents(val, this);
-		fsl = new FixPlayerArmorSlotDesync(this, config);
-		fic2esasl = new RestrictIC2EnergyStorageArmorSlot19Click(this, config);
+		getServer().getPluginManager().registerEvents(new FixBag(this, config), this);
+		getServer().getPluginManager().registerEvents(new FixFreecamEntities(this, config), this);
+		getServer().getPluginManager().registerEvents(new FixFreecamBlocks(this, config), this);
+		getServer().getPluginManager().registerEvents(new ValidateActions(this, config), this);
+		new RestrictIC2EnergyStorageArmorSlot19Click(this, config);
+		new FixPlayerArmorSlotDesync(this, config);
 	}
 
 	@Override
@@ -73,12 +58,6 @@ public class ModFixNG extends JavaPlugin {
 			p.closeInventory();
 		}
 		config = null;
-		commandl = null;
-		mpl = null;
-		fciol = null;
-		val = null;
-		fsl = null;
-		fic2esasl = null;
 		protocolManager.removePacketListeners(this);
 		protocolManager.getAsynchronousManager().unregisterAsyncHandlers(this);
 		protocolManager = null;
