@@ -132,11 +132,6 @@ public class ValidateActions implements Listener {
 						return;
 					}
 
-					if (!players.contains(player.getName())) {
-						event.setCancelled(true);
-						return;
-					}
-
 					int status = event.getPacket().getIntegers().getValues().get(4);
 					if (status == 3 || status == 4) {
 						if (ModFixNGUtils.isInventoryOpen(player)) {
@@ -168,12 +163,6 @@ public class ValidateActions implements Listener {
 						return;
 					}
 
-					if (!players.contains(player.getName())) {
-						e.setCancelled(true);
-						e.getPlayer().updateInventory();
-						return;
-					}
-
 					int invid = e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.INVENTORY_ID);
 					if (!ModFixNGUtils.isContainerValid(invid, player)) {
 						e.setCancelled(true);
@@ -200,12 +189,6 @@ public class ValidateActions implements Listener {
 
 					Player player = e.getPlayer();
 					if (player == null) {
-						return;
-					}
-
-					if (!players.contains(player.getName())) {
-						e.setCancelled(true);
-						e.getPlayer().closeInventory();
 						return;
 					}
 
