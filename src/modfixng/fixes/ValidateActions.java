@@ -170,6 +170,7 @@ public class ValidateActions implements Listener {
 
 					if (!players.contains(player.getName())) {
 						e.setCancelled(true);
+						e.getPlayer().updateInventory();
 						return;
 					}
 
@@ -204,6 +205,7 @@ public class ValidateActions implements Listener {
 
 					if (!players.contains(player.getName())) {
 						e.setCancelled(true);
+						e.getPlayer().closeInventory();
 						return;
 					}
 
