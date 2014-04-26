@@ -48,7 +48,6 @@ public class ValidateActions implements Listener {
 		this.config = config;
 		initDropButtonPlayClickListener();
 		initInventoryClickListener();
-		initInventoryCloseListener();
 	}
 
 	// deny entity interact if inventory opened
