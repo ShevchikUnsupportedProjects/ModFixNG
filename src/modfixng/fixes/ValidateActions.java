@@ -171,39 +171,4 @@ public class ValidateActions implements Listener {
 		).syncStart();
 	}
 
-	// ignore invalid inventory close
-	private void initInventoryCloseListener() {
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
-			new PacketAdapter(
-				PacketAdapter
-				.params(main, PacketType.Play.Client.CLOSE_WINDOW)
-				.listenerPriority(ListenerPriority.LOWEST)
-			) {
-				@Override
-				public void onPacketReceiving(PacketEvent e) {
-					if (!config.validateActionsEnabled) {
-						return;
-					}
-
-					Player player = e.getPlayer();
-					if (player == null) {
-						return;
-					}
-
-					if (!players.contains(player.getName())) {
-						e.setCancelled(true);
-						e.getPlayer().closeInventory();
-						return;
-					}
-
-					int invid = e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClose.PacketIndex.INVENTORY_ID);
-					if (!ModFixNGUtils.isContainerValid(invid, player)) {
-						e.setCancelled(true);
-						e.getPlayer().closeInventory();
-					}
-				}
-			}
-		).syncStart();
-	}
-
 }
