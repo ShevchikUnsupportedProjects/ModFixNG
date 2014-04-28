@@ -212,14 +212,23 @@ public class FixFreecamBlocks implements Listener {
 						String playername = player.getName();
 						BlockState bs = playerOpenBlock.get(playername);
 						Block b = bs.getBlock();
-						if (b.getType() != bs.getType() || !b.getWorld().getName().equals(player.getWorld().getName()) || b.getLocation().distanceSquared(player.getLocation()) > 36) {
-							player.closeInventory();
-							playerOpenBlock.remove(playername);
+						if (!b.getWorld().getName().equals(player.getWorld().getName()) || b.getLocation().distanceSquared(player.getLocation()) > 36) {
+							if (!isValid(bs, b)) {
+								player.closeInventory();
+								playerOpenBlock.remove(playername);
+							}
 						}
 					}
 				}
 			}
 		}, 0, 1);
+	}
+
+	private boolean isValid(BlockState bs, Block b) {
+		if (bs.getType() == Material.FURNACE || bs.getType() == Material.BURNING_FURNACE) {
+			return b.getType() == Material.FURNACE || b.getType() == Material.BURNING_FURNACE;
+		}
+		return bs.getType() == b.getType();
 	}
 
 }
