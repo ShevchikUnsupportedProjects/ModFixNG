@@ -56,6 +56,10 @@ public class Config {
 	public boolean restrictShiftEnabled = true;
 	public HashSet<String> restrictShiftInvetoryNames = new HashSet<String>();
 
+	public boolean microblockFixEnabled = true;
+	public int microblockFixItemID = 25131;
+	public int microblockFixBlockID = 1281;
+
 	public void loadConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 
@@ -81,6 +85,10 @@ public class Config {
 
 		restrictShiftEnabled = config.getBoolean("RestrictShiftButtonClick.Enabled", restrict19Enabled);
 		restrictShiftInvetoryNames = new HashSet<String>(config.getStringList("RestrictShiftButtonClick.inventoryNames"));
+
+		microblockFixEnabled = config.getBoolean("MicroblockFix.enabled", microblockFixEnabled);
+		microblockFixItemID = config.getInt("MicroblockFix.itemID", microblockFixItemID);
+		microblockFixBlockID = config.getInt("MicroblockFix.blockID", microblockFixBlockID);
 
 		saveConfig();
 	}
@@ -110,6 +118,10 @@ public class Config {
 
 		config.set("RestrictShiftButtonClick.Enabled", restrictShiftEnabled);
 		config.set("RestrictShiftButtonClick.inventoryNames", new ArrayList<String>(restrictShiftInvetoryNames));
+
+		config.set("MicroblockFix.enabled", microblockFixEnabled);
+		config.set("MicroblockFix.itemID", microblockFixItemID);
+		config.set("MicroblockFix.blockID", microblockFixBlockID);
 
 		try {
 			config.save(configfile);
