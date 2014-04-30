@@ -132,13 +132,6 @@ public class ModFixNGUtils {
 		return PlainNMSUtils.isTryingToDropOpenToolBox(p, minecraftslot);
 	}
 
-	public static boolean isElectricContainerOpen(Player p) {
-		if (isRunningMCPC()) {
-			return PlainNMSUtils.getOpenInventoryName(p).equals("ic2.core.block.wiring.ContainerElectricBlock");
-		}
-		return false;
-	}
-
 	private static boolean isRunningMCPC() {
 		return (MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP"));
 	}

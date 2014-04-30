@@ -50,7 +50,8 @@ public class Config {
 
 	public boolean fixSlotDesyncEnabled = true;
 
-	public boolean fixIC2EnergyStorage = true;
+	public boolean restrict19Enabled = true;
+	public HashSet<String> restrict19InvetoryNames = new HashSet<String>();
 
 	public void loadConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
@@ -72,8 +73,9 @@ public class Config {
 
 		fixSlotDesyncEnabled = config.getBoolean("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
-		fixIC2EnergyStorage = config.getBoolean("IC2EnergyStorageFix.enabled", fixIC2EnergyStorage);
-
+		restrict19Enabled = config.getBoolean("Restrict19ButtonClick.Enabled", restrict19Enabled);
+		restrict19InvetoryNames = new HashSet<String>(config.getStringList("Restrict19ButtonClick.inventoryNames"));
+		
 		saveConfig();
 	}
 
@@ -97,7 +99,8 @@ public class Config {
 
 		config.set("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
-		config.set("IC2EnergyStorageFix.enabled", fixIC2EnergyStorage);
+		config.set("Restrict19ButtonClick.Enabled", restrict19Enabled);
+		config.set("Restrict19ButtonClick.inventoryNames", new ArrayList<String>(restrict19InvetoryNames));
 
 		try {
 			config.save(configfile);
