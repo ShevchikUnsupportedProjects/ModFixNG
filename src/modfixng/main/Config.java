@@ -80,10 +80,10 @@ public class Config {
 
 		fixSlotDesyncEnabled = config.getBoolean("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
-		restrict19Enabled = config.getBoolean("Restrict19ButtonClick.Enabled", restrict19Enabled);
+		restrict19Enabled = config.getBoolean("Restrict19ButtonClick.enabled", restrict19Enabled);
 		restrict19InvetoryNames = new HashSet<String>(config.getStringList("Restrict19ButtonClick.inventoryNames"));
 
-		restrictShiftEnabled = config.getBoolean("RestrictShiftButtonClick.Enabled", restrict19Enabled);
+		restrictShiftEnabled = config.getBoolean("RestrictShiftButtonClick.enabled", restrict19Enabled);
 		restrictShiftInvetoryNames = new HashSet<String>(config.getStringList("RestrictShiftButtonClick.inventoryNames"));
 
 		microblockFixEnabled = config.getBoolean("MicroblockFix.enabled", microblockFixEnabled);
@@ -113,10 +113,10 @@ public class Config {
 
 		config.set("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
-		config.set("Restrict19ButtonClick.Enabled", restrict19Enabled);
+		config.set("Restrict19ButtonClick.enabled", restrict19Enabled);
 		config.set("Restrict19ButtonClick.inventoryNames", new ArrayList<String>(restrict19InvetoryNames));
 
-		config.set("RestrictShiftButtonClick.Enabled", restrictShiftEnabled);
+		config.set("RestrictShiftButtonClick.enabled", restrictShiftEnabled);
 		config.set("RestrictShiftButtonClick.inventoryNames", new ArrayList<String>(restrictShiftInvetoryNames));
 
 		config.set("MicroblockFix.enabled", microblockFixEnabled);
