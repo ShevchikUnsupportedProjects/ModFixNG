@@ -82,7 +82,11 @@ public class ModFixNGUtils {
 		if (isRunningMCPC()) {
 			return PlainNMSUtils.getOpenInventoryName(p);
 		} else {
-			return p.getOpenInventory().getTopInventory().getHolder().getClass().getName();
+			if (isInventoryOpen(p)) {
+				return p.getOpenInventory().getTopInventory().getHolder().getClass().getName();
+			} else {
+				return p.getInventory().getClass().getName();
+			}
 		}
 	}
 
