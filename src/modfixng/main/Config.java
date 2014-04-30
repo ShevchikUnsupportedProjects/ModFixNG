@@ -81,7 +81,7 @@ public class Config {
 
 		restrictShiftEnabled = config.getBoolean("RestrictShiftButtonClick.Enabled", restrict19Enabled);
 		restrictShiftInvetoryNames = new HashSet<String>(config.getStringList("RestrictShiftButtonClick.inventoryNames"));
-		
+
 		saveConfig();
 	}
 

@@ -70,13 +70,8 @@ public class PlainNMSUtils {
 	}
 
 	private static net.minecraft.server.v1_5_R3.Container getPlayerContainer(Player p) {
-		return getNMSHuman(p).activeContainer;
-	}
-
-	private static net.minecraft.server.v1_5_R3.EntityHuman getNMSHuman(Player p) {
 		org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer cplayer = (org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer) p;
-		net.minecraft.server.v1_5_R3.EntityPlayer nmsplayer = cplayer.getHandle();
-		return nmsplayer;
+		return cplayer.getHandle().activeContainer;
 	}
 
 }
