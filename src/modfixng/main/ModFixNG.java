@@ -22,6 +22,7 @@ import modfixng.fixes.FixFreecamBlocks;
 import modfixng.fixes.FixFreecamEntities;
 import modfixng.fixes.FixPlayerArmorSlotDesync;
 import modfixng.fixes.Restrict19Click;
+import modfixng.fixes.RestrictShiftClick;
 import modfixng.fixes.ValidateActions;
 
 import org.bukkit.entity.Player;
@@ -52,6 +53,7 @@ public class ModFixNG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FixFreecamBlocks(this, config), this);
 		getServer().getPluginManager().registerEvents(new ValidateActions(this, config), this);
 		new Restrict19Click(this, config);
+		new RestrictShiftClick(this, config);
 		new FixPlayerArmorSlotDesync(this, config);
 	}
 

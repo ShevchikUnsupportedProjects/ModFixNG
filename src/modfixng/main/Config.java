@@ -53,6 +53,9 @@ public class Config {
 	public boolean restrict19Enabled = true;
 	public HashSet<String> restrict19InvetoryNames = new HashSet<String>();
 
+	public boolean restrictShiftEnabled = true;
+	public HashSet<String> restrictShiftInvetoryNames = new HashSet<String>();
+
 	public void loadConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 
@@ -75,6 +78,9 @@ public class Config {
 
 		restrict19Enabled = config.getBoolean("Restrict19ButtonClick.Enabled", restrict19Enabled);
 		restrict19InvetoryNames = new HashSet<String>(config.getStringList("Restrict19ButtonClick.inventoryNames"));
+
+		restrictShiftEnabled = config.getBoolean("RestrictShiftButtonClick.Enabled", restrict19Enabled);
+		restrictShiftInvetoryNames = new HashSet<String>(config.getStringList("RestrictShiftButtonClick.inventoryNames"));
 		
 		saveConfig();
 	}
@@ -101,6 +107,9 @@ public class Config {
 
 		config.set("Restrict19ButtonClick.Enabled", restrict19Enabled);
 		config.set("Restrict19ButtonClick.inventoryNames", new ArrayList<String>(restrict19InvetoryNames));
+
+		config.set("RestrictShiftButtonClick.Enabled", restrictShiftEnabled);
+		config.set("RestrictShiftButtonClick.inventoryNames", new ArrayList<String>(restrictShiftInvetoryNames));
 
 		try {
 			config.save(configfile);
