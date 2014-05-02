@@ -37,10 +37,4 @@ public class PacketContainerReadable {
 		}
 	}
 
-	public static class InventoryClose {
-		public class PacketIndex {
-			public static final int INVENTORY_ID = 0;
-		}
-	}
-
 }
