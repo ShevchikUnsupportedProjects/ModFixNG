@@ -83,7 +83,7 @@ public class Config {
 		restrict19Enabled = config.getBoolean("Restrict19ButtonClick.enabled", restrict19Enabled);
 		restrict19InvetoryNames = new HashSet<String>(config.getStringList("Restrict19ButtonClick.inventoryNames"));
 
-		restrictShiftEnabled = config.getBoolean("RestrictShiftButtonClick.enabled", restrict19Enabled);
+		restrictShiftEnabled = config.getBoolean("RestrictShiftButtonClick.enabled", restrictShiftEnabled);
 		restrictShiftInvetoryNames = new HashSet<String>(config.getStringList("RestrictShiftButtonClick.inventoryNames"));
 
 		microblockFixEnabled = config.getBoolean("MicroblockFix.enabled", microblockFixEnabled);
