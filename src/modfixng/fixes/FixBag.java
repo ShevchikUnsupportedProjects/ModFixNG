@@ -137,7 +137,7 @@ public class FixBag implements Listener {
 					}
 
 					Player player = event.getPlayer();
-					// check click type(checking for shift+button)
+					// check click type(checking for 1-9 buttons)
 					if (event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE) == PacketContainerReadable.InventoryClick.Mode.NUMBER_KEY_PRESS) {
 						// check to which slot we want to move item(checking if it is the holding bag slot)
 						final int heldslot = player.getInventory().getHeldItemSlot();
