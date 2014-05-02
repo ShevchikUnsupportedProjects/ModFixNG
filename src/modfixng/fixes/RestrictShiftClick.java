@@ -60,7 +60,7 @@ public class RestrictShiftClick {
 					// check click type(checking for button)
 					if (e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE) == PacketContainerReadable.InventoryClick.Mode.SHIFT_MOUSE_CLICK) {
 						String invname = ModFixNGUtils.getOpenInventoryName(player);
-						if (config.restrict19InvetoryNames.contains(invname)) {
+						if (config.restrictShiftInvetoryNames.contains(invname)) {
 							e.setCancelled(true);
 							player.updateInventory();
 						}
