@@ -128,4 +128,13 @@ public class Config {
 		} catch (IOException e) {
 		}
 	}
+
+	private HashSet<String> getHashSet(FileConfiguration config, String path) {
+		return new HashSet<String>(config.getStringList(path));
+	}
+
+	private void setHashSet(FileConfiguration config, String path, HashSet<?> value) {
+		config.set(path, new ArrayList<>(value));
+	}
+
 }
