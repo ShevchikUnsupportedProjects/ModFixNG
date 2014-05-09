@@ -36,7 +36,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -50,33 +49,10 @@ public class FixFreecamBlocks implements Listener {
 	public FixFreecamBlocks(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
-		// zeroItemsCheck
-		initInvCheck();
 		// forceCloseInv
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
 		initBlockCheck();
-	}
-
-	// check for 0-amount items
-	private void initInvCheck() {
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
-			@Override
-			public void run() {
-				if (!config.fixFreecamBlockZeroItemsCheckEnabled) {
-					return;
-				}
-
-				for (Player p : Bukkit.getOnlinePlayers()) {
-					for (int i = 0; i < 9; i++) {
-						ItemStack item = p.getInventory().getItem(i);
-						if (item != null && item.getAmount() <= 0) {
-							p.getInventory().setItem(i, null);
-						}
-					}
-				}
-			}
-		}, 0, 1);
 	}
 
 	private HashMap<String, BlockState> playerOpenBlock = new HashMap<String, BlockState>(100);

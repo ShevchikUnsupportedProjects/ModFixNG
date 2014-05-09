@@ -44,7 +44,6 @@ public class Config {
 
 	public boolean fixFreecamBlockCloseInventoryOnBreakCheckEnabled = true;
 	public HashSet<String> fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>();
-	public boolean fixFreecamBlockZeroItemsCheckEnabled = true;
 
 	public boolean validateActionsEnabled = true;
 
@@ -69,7 +68,6 @@ public class Config {
 		fixBagCropanalyzerFixEnabled = config.getBoolean("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
 		fixBagToolboxFixEnabled = config.getBoolean("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 
-		fixFreecamBlockZeroItemsCheckEnabled = config.getBoolean("ProperlyCloseInventories.removeZeroSizeItems.enabled", fixFreecamBlockZeroItemsCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.checkBlocks.enabled", fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
 		fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>(config.getStringList("ProperlyCloseInventories.checkBlocks.IDs"));
 
@@ -102,7 +100,6 @@ public class Config {
 		config.set("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
 		config.set("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 
-		config.set("ProperlyCloseInventories.removeZeroSizeItems.enabled", fixFreecamBlockZeroItemsCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.enabled", fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
 		config.set("ProperlyCloseInventories.checkBlocks.IDs", new ArrayList<String>(fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs));
 
