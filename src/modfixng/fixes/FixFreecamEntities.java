@@ -77,8 +77,12 @@ public class FixFreecamEntities implements Listener {
 		final String playername = player.getName();
 
 		if (playerOpenEntity.containsKey(playername)) {
-			e.setCancelled(true);
-			return;
+			if (ModFixNGUtils.isInventoryOpen(player)) {
+				e.setCancelled(true);
+				return;
+			} else {
+				playerOpenEntity.remove(playername);
+			}
 		}
 
 		final Entity entity = e.getRightClicked();
