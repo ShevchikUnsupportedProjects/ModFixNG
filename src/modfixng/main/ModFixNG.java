@@ -52,7 +52,7 @@ public class ModFixNG extends JavaPlugin {
 		config.loadConfig();
 		commandl = new Commands(config);
 		getServer().getPluginManager().registerEvents(commandl, this);
-		getCommand("modfix").setExecutor(commandl);
+		getCommand("modfixng").setExecutor(commandl);
 		loader = new FeatureLoader(this, config);
 		loader.registerOnce();
 		loader.loadAll();

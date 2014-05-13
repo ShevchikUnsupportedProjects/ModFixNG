@@ -5,5 +5,6 @@ author: Shevchik
 depend: [ProtocolLib]
 load: STARTUP
 commands:
-  modfix:
-    usage: 'Используйте команд /modfix help для получения списка комманд'
+  modfixng:
+    aliases: modfix
+    usage: 'Используйте команд /modfixng help для получения списка комманд'
