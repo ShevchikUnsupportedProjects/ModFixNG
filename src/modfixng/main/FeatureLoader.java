@@ -43,11 +43,8 @@ public class FeatureLoader {
 
 	private LinkedList<Feature> loadedFeatures = new LinkedList<Feature>();
 
-	public void loadAll() {
+	public void registerOnce() {
 		PluginManager pm = plugin.getServer().getPluginManager();
-		if (config.restrict19Enabled) {
-			loadFeature(new Restrict19Click(config));
-		}
 		pm.registerEvents(new FixBag(plugin, config), plugin);
 		pm.registerEvents(new FixFreecamEntities(plugin, config), plugin);
 		pm.registerEvents(new FixFreecamBlocks(plugin, config), plugin);
@@ -55,6 +52,12 @@ public class FeatureLoader {
 		pm.registerEvents(new ForgeMultipartPlaceFix(config), plugin); 	
 		new RestrictShiftClick(plugin, config);
 		new FixPlayerArmorSlotDesync(plugin, config);
+	}
+
+	public void loadAll() {
+		if (config.restrict19Enabled) {
+			loadFeature(new Restrict19Click(config));
+		}
 	}
 
 	public void loadFeature(Feature feature) {
