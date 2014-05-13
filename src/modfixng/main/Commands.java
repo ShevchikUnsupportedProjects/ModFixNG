@@ -40,11 +40,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class Commands implements CommandExecutor, Listener {
 
-	private ModFixNG main;
 	private Config config;
 
-	public Commands(ModFixNG main, Config config) {
-		this.main = main;
+	public Commands(Config config) {
 		this.config = config;
 	}
 
@@ -77,6 +75,8 @@ public class Commands implements CommandExecutor, Listener {
 			return true;
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 			config.loadConfig();
+			ModFixNG.getFeatureLoader().unloadAll();
+			ModFixNG.getFeatureLoader().loadAll();
 			sender.sendMessage(ChatColor.BLUE + "Конфиг перезагружен");
 			return true;
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
@@ -144,7 +144,7 @@ public class Commands implements CommandExecutor, Listener {
 		if (sender instanceof Player) {
 			final Player pl = (Player) sender;
 			pl.sendMessage(ChatColor.BLUE + "Откройте инвентарь и подождите 2 секунды для того чтобы узнать имя открытого инвентаря");
-			Bukkit.getScheduler().scheduleSyncDelayedTask(main,
+			Bukkit.getScheduler().scheduleSyncDelayedTask(ModFixNG.getInstance(),
 				new Runnable() {
 					@Override
 					public void run() {

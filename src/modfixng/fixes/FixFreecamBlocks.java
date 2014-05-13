@@ -115,7 +115,7 @@ public class FixFreecamBlocks implements Listener {
 
 	// remove player from list when he closes inventory
 	private void initClientCloseInventoryFixListener() {
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.CLOSE_WINDOW)
@@ -144,7 +144,7 @@ public class FixFreecamBlocks implements Listener {
 		).syncStart();
 	}
 	private void initServerCloseInventoryFixListener() {
-		main.protocolManager.addPacketListener(
+		ModFixNG.getProtocolManager().addPacketListener(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Server.CLOSE_WINDOW)

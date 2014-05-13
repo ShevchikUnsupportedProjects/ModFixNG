@@ -26,20 +26,31 @@ import com.comphenix.protocol.ProtocolManager;
 //warning: this plugin requires ProtocolLib to run
 public class ModFixNG extends JavaPlugin {
 
+	private static ModFixNG instance;
+	public static ModFixNG getInstance() {
+		return instance;
+	}
+
+	private static ProtocolManager protocolManager;
+	public static ProtocolManager getProtocolManager() {
+		return protocolManager;
+	}
+
+	private static FeatureLoader loader;
+	public static FeatureLoader getFeatureLoader() {
+		return loader;
+	}
+
 	private Config config;
-
 	private Commands commandl;
-
-	public ProtocolManager protocolManager;
-
-	private FeatureLoader loader;
 
 	@Override
 	public void onEnable() {
+		instance = this;
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		config = new Config(this);
 		config.loadConfig();
-		commandl = new Commands(this, config);
+		commandl = new Commands(config);
 		getServer().getPluginManager().registerEvents(commandl, this);
 		getCommand("modfix").setExecutor(commandl);
 		loader = new FeatureLoader(this, config);

@@ -40,7 +40,7 @@ public class RestrictShiftClick {
 	}
 
 	private void initShiftInventoryClickListener() {
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)

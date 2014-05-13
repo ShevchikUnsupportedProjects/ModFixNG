@@ -116,7 +116,7 @@ public class FixBag implements Listener {
 		)
 	);
 	private void init19ButtonInventoryClickListener() {
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)
@@ -157,7 +157,7 @@ public class FixBag implements Listener {
 
 	// close inventory if trying to drop opened toolbox or cropnalyzer(q button in inventory)
 	public void initDropButtonInventoryClickListener() {
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)

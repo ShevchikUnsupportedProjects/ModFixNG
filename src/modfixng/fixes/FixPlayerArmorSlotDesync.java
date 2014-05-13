@@ -46,10 +46,10 @@ public class FixPlayerArmorSlotDesync {
 					}
 
 					for (Player player : Bukkit.getOnlinePlayers()) {
-						ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 5, player.getInventory().getHelmet());
-						ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 6, player.getInventory().getChestplate());
-						ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 7, player.getInventory().getLeggings());
-						ModFixNGUtils.updateSlot(main.protocolManager, player, 0, 8, player.getInventory().getBoots());
+						ModFixNGUtils.updateSlot(ModFixNG.getProtocolManager(), player, 0, 5, player.getInventory().getHelmet());
+						ModFixNGUtils.updateSlot(ModFixNG.getProtocolManager(), player, 0, 6, player.getInventory().getChestplate());
+						ModFixNGUtils.updateSlot(ModFixNG.getProtocolManager(), player, 0, 7, player.getInventory().getLeggings());
+						ModFixNGUtils.updateSlot(ModFixNG.getProtocolManager(), player, 0, 8, player.getInventory().getBoots());
 					}
 				}
 			},

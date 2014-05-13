@@ -101,7 +101,7 @@ public class ValidateActions implements Listener {
 
 	// deny block dig drop mode packets if inventory opened
 	public void initDropButtonPlayClickListener() {
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.BLOCK_DIG)
@@ -136,7 +136,7 @@ public class ValidateActions implements Listener {
 
 	// do not allow to click invalid inventory
 	private void initInventoryClickListener() {
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(main, PacketType.Play.Client.WINDOW_CLICK)

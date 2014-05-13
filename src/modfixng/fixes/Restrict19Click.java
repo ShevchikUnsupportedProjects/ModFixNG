@@ -2,6 +2,7 @@ package modfixng.fixes;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -11,19 +12,19 @@ import modfixng.utils.PacketContainerReadable;
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.async.AsyncListenerHandler;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 
-public class Restrict19Click {
+public class Restrict19Click implements Feature {
 
-	private ModFixNG main;
 	private Config config;
 
-	public Restrict19Click(ModFixNG main, Config config) {
-		this.main = main;
+	public Restrict19Click(Config config) {
 		this.config = config;
-		init19ButtonInventoryClickListener();
 	}
+
+	private LinkedList<AsyncListenerHandler> listeners = new LinkedList<AsyncListenerHandler>();
 
 	private HashSet<String> knownInvNames = new HashSet<String>(
 		Arrays.asList(
@@ -31,18 +32,14 @@ public class Restrict19Click {
 		)
 	);
 	private void init19ButtonInventoryClickListener() {
-		main.protocolManager.getAsynchronousManager().registerAsyncHandler(
+		AsyncListenerHandler listener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Client.WINDOW_CLICK)
+				.params(ModFixNG.getInstance(), PacketType.Play.Client.WINDOW_CLICK)
 			) {
 				@SuppressWarnings("deprecation")
 				@Override
 				public void onPacketReceiving(PacketEvent e) {
-					if (!config.restrict19Enabled) {
-						return;
-					}
-
 					if (e.getPlayer() == null) {
 						return;
 					}
@@ -58,7 +55,21 @@ public class Restrict19Click {
 					}
 				}
 			}
-		).syncStart();
+		);
+		listener.syncStart();
+		listeners.add(listener);
+	}
+
+	@Override
+	public void load() {
+		init19ButtonInventoryClickListener();
+	}
+
+	@Override
+	public void unload() {
+		for (AsyncListenerHandler listener : listeners) {
+			ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
+		}
 	}
 
 }

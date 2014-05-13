@@ -17,9 +17,9 @@
 
 package modfixng.main;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 
 import modfixng.fixes.Feature;
@@ -45,20 +45,34 @@ public class FeatureLoader {
 
 	public void loadAll() {
 		PluginManager pm = plugin.getServer().getPluginManager();
+		if (config.restrict19Enabled) {
+			loadFeature(new Restrict19Click(config));
+		}
 		pm.registerEvents(new FixBag(plugin, config), plugin);
 		pm.registerEvents(new FixFreecamEntities(plugin, config), plugin);
 		pm.registerEvents(new FixFreecamBlocks(plugin, config), plugin);
 		pm.registerEvents(new ValidateActions(plugin, config), plugin);
-		pm.registerEvents(new ForgeMultipartPlaceFix(config), plugin); 
-		new Restrict19Click(plugin, config);
+		pm.registerEvents(new ForgeMultipartPlaceFix(config), plugin); 	
 		new RestrictShiftClick(plugin, config);
 		new FixPlayerArmorSlotDesync(plugin, config);
 	}
 
+	public void loadFeature(Feature feature) {
+		feature.load();
+		loadedFeatures.add(feature);
+	}
+
 	public void unloadAll() {
-		HandlerList.unregisterAll(plugin);
-		plugin.protocolManager.removePacketListeners(plugin);
-		plugin.protocolManager.getAsynchronousManager().unregisterAsyncHandlers(plugin);
+		Iterator<Feature> fit = loadedFeatures.iterator();
+		while (fit.hasNext()) {
+			fit.next().unload();
+			fit.remove();
+		}
+	}
+
+	public void unloadFeature(Feature feature) {
+		feature.unload();
+		loadedFeatures.remove(feature);
 	}
 
 }
