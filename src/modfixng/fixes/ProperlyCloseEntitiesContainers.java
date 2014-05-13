@@ -26,90 +26,84 @@ import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 
-public class FixFreecamBlocks implements Listener {
+public class ProperlyCloseEntitiesContainers implements Listener {
 
 	private ModFixNG main;
 	private Config config;
 
-	public FixFreecamBlocks(ModFixNG main, Config config) {
+	public ProperlyCloseEntitiesContainers(ModFixNG main, Config config) {
 		this.main = main;
 		this.config = config;
-		// forceCloseInv
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
-		initBlockCheck();
+		initEntitiesCheck();
 	}
 
-	private HashMap<String, BlockState> playerOpenBlock = new HashMap<String, BlockState>(100);
-	private HashMap<String, Integer> playerOpenBlockInvOpenCheckTask = new HashMap<String, Integer>(100);
+	private HashMap<String, Entity> playerOpenEntity = new HashMap<String, Entity>(100);
+	private HashMap<String, Integer> playerOpenEntityInvOpenCheckTask = new HashMap<String, Integer>(100);
 
-	private HashSet<Material> knownBlockMaterials  = new HashSet<Material>(
+	private HashSet<EntityType> knownEntityTypes  = new HashSet<EntityType>(
 		Arrays.asList(
-			new Material[] {
-				//some vanilla minecraft item that has gui but doesn't implement IInventory
-				Material.ANVIL,
-				Material.ENCHANTMENT_TABLE,
-				Material.BREWING_STAND
+			new EntityType[] {
+				//vanilla entities that has inventories
+				EntityType.MINECART_CHEST,
+				EntityType.MINECART_FURNACE,
+				EntityType.MINECART_HOPPER,
+				EntityType.VILLAGER
 			}
 		)
 	);
-	// add player to list when he opens block inventory
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPlayerOpenedBlock(PlayerInteractEvent e) {
-		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
-			return;
-		}
-
-		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+	// add player to list when he opens entity inventory
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerOpenedEntity(PlayerInteractEntityEvent e) {
+		if (!config.fixFreecamEntitiesEnabled) {
 			return;
 		}
 
 		final Player player = e.getPlayer();
 		final String playername = player.getName();
 
-		if (playerOpenBlock.containsKey(playername)) {
+		if (playerOpenEntity.containsKey(playername)) {
 			if (ModFixNGUtils.isInventoryOpen(player)) {
 				e.setCancelled(true);
-				return;	
+				return;
 			} else {
-				playerOpenBlock.remove(playername);
+				playerOpenEntity.remove(playername);
 			}
 		}
 
-		final Block b = e.getClickedBlock();
-		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
-			if (playerOpenBlockInvOpenCheckTask.containsKey(playername)) {
-				int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
+		final Entity entity = e.getRightClicked();
+		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityTypes.contains(entity.getType()) || entity.getType().toString().equals("HORSE")) {
+			if (playerOpenEntityInvOpenCheckTask.containsKey(playername)) {
+				int taskID = playerOpenEntityInvOpenCheckTask.get(playername);
 				Bukkit.getScheduler().cancelTask(taskID);
-				playerOpenBlockInvOpenCheckTask.remove(playername);
+				playerOpenEntityInvOpenCheckTask.remove(playername);
 			}
 			int taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(main,
 				new Runnable() {
 					@Override
 					public void run() {
 						if (ModFixNGUtils.isInventoryOpen(player)) {
-							playerOpenBlock.put(playername, b.getState());
+							playerOpenEntity.put(playername, entity);
 						}
-						playerOpenBlockInvOpenCheckTask.remove(playername);
+						playerOpenEntityInvOpenCheckTask.remove(playername);
 					}
 				}
 			);
-			playerOpenBlockInvOpenCheckTask.put(playername, taskID);
+			playerOpenEntityInvOpenCheckTask.put(playername, taskID);
 		}
 	}
 
@@ -122,7 +116,7 @@ public class FixFreecamBlocks implements Listener {
 			) {
 				@Override
 				public void onPacketReceiving(final PacketEvent e) {
-					if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
+					if (!config.fixFreecamEntitiesEnabled) {
 						return;
 					}
 
@@ -151,7 +145,7 @@ public class FixFreecamBlocks implements Listener {
 			) {
 				@Override
 				public void onPacketSending(PacketEvent e) {
-					if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
+					if (!config.fixFreecamEntitiesEnabled) {
 						return;
 					}
 
@@ -162,7 +156,7 @@ public class FixFreecamBlocks implements Listener {
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
-		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
+		if (!config.fixFreecamEntitiesEnabled) {
 			return;
 		}
 
@@ -170,45 +164,38 @@ public class FixFreecamBlocks implements Listener {
 	}
 
 	private void removeData(String playername) {
-		playerOpenBlock.remove(playername);
-		if (playerOpenBlockInvOpenCheckTask.containsKey(playername)) {
-			int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
+		playerOpenEntity.remove(playername);
+		if (playerOpenEntityInvOpenCheckTask.containsKey(playername)) {
+			int taskID = playerOpenEntityInvOpenCheckTask.get(playername);
 			Bukkit.getScheduler().cancelTask(taskID);
-			playerOpenBlockInvOpenCheckTask.remove(playername);
+			playerOpenEntityInvOpenCheckTask.remove(playername);
 		}
 	}
 
-	// check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory
-	private void initBlockCheck() {
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
-			@Override
-			public void run() {
-				if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
-					return;
-				}
+	// check if entity is not valid or player is too far away from it, if yes -  force close inventory
+	private void initEntitiesCheck() {
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(main,
+			new Runnable() {
+				@Override
+				public void run() {
+					if (!config.fixFreecamEntitiesEnabled) {
+						return;
+					}
 
-				for (Player player : Bukkit.getOnlinePlayers()) {
-					if (playerOpenBlock.containsKey(player.getName())) {
-						String playername = player.getName();
-						BlockState bs = playerOpenBlock.get(playername);
-						Block b = bs.getBlock();
-						if (!b.getWorld().getName().equals(player.getWorld().getName()) || b.getLocation().distanceSquared(player.getLocation()) > 36) {
-							if (!isValid(bs, b)) {
+					for (Player player : Bukkit.getOnlinePlayers()) {
+						if (playerOpenEntity.containsKey(player.getName())) {
+							String playername = player.getName();
+							Entity entity = playerOpenEntity.get(playername);
+							if (!entity.isValid() || !entity.getWorld().getName().equals(player.getWorld().getName()) || entity.getLocation().distanceSquared(player.getLocation()) > 36) {
 								player.closeInventory();
-								playerOpenBlock.remove(playername);
+								playerOpenEntity.remove(playername);
 							}
 						}
 					}
 				}
-			}
-		}, 0, 1);
-	}
-
-	private boolean isValid(BlockState bs, Block b) {
-		if (bs.getType() == Material.FURNACE || bs.getType() == Material.BURNING_FURNACE) {
-			return b.getType() == Material.FURNACE || b.getType() == Material.BURNING_FURNACE;
-		}
-		return bs.getType() == b.getType();
+			},
+			0, 1
+		);
 	}
 
 }

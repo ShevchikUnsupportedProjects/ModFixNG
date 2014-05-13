@@ -24,8 +24,8 @@ import org.bukkit.plugin.PluginManager;
 
 import modfixng.fixes.Feature;
 import modfixng.fixes.FixBag;
-import modfixng.fixes.FixFreecamBlocks;
-import modfixng.fixes.FixFreecamEntities;
+import modfixng.fixes.ProperlyCloseBlocksContainers;
+import modfixng.fixes.ProperlyCloseEntitiesContainers;
 import modfixng.fixes.FixPlayerArmorSlotDesync;
 import modfixng.fixes.ForgeMultipartPlaceFix;
 import modfixng.fixes.Restrict19Click;
@@ -46,8 +46,8 @@ public class FeatureLoader {
 	public void registerOnce() {
 		PluginManager pm = plugin.getServer().getPluginManager();
 		pm.registerEvents(new FixBag(plugin, config), plugin);
-		pm.registerEvents(new FixFreecamEntities(plugin, config), plugin);
-		pm.registerEvents(new FixFreecamBlocks(plugin, config), plugin);
+		pm.registerEvents(new ProperlyCloseEntitiesContainers(plugin, config), plugin);
+		pm.registerEvents(new ProperlyCloseBlocksContainers(plugin, config), plugin);
 	}
 
 	public void loadAll() {
