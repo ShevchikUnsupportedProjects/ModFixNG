@@ -45,12 +45,14 @@ public class FeatureLoader {
 
 	public void registerOnce() {
 		PluginManager pm = plugin.getServer().getPluginManager();
-		pm.registerEvents(new FixBag(plugin, config), plugin);
 		pm.registerEvents(new ProperlyCloseEntitiesContainers(plugin, config), plugin);
 		pm.registerEvents(new ProperlyCloseBlocksContainers(plugin, config), plugin);
 	}
 
 	public void loadAll() {
+		if (config.fixBagEnabled) {
+			loadFeature(new FixBag(config));
+		}
 		if (config.microblockFixEnabled) {
 			loadFeature(new ForgeMultipartPlaceFix(config));
 		}
