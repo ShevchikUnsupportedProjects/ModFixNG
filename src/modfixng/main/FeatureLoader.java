@@ -48,11 +48,13 @@ public class FeatureLoader {
 		pm.registerEvents(new FixBag(plugin, config), plugin);
 		pm.registerEvents(new FixFreecamEntities(plugin, config), plugin);
 		pm.registerEvents(new FixFreecamBlocks(plugin, config), plugin);
-		pm.registerEvents(new ValidateActions(plugin, config), plugin);
 		pm.registerEvents(new ForgeMultipartPlaceFix(config), plugin); 	
 	}
 
 	public void loadAll() {
+		if (config.validateActionsEnabled) {
+			loadFeature(new ValidateActions());
+		}
 		if (config.restrict19Enabled) {
 			loadFeature(new Restrict19Click(config));
 		}

@@ -18,15 +18,17 @@
 package modfixng.fixes;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 
-import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
 import modfixng.utils.PacketContainerReadable;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -35,28 +37,16 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.async.AsyncListenerHandler;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 
-public class ValidateActions implements Listener {
-	private ModFixNG main;
-	private Config config;
-
-	public ValidateActions(ModFixNG main, Config config) {
-		this.main = main;
-		this.config = config;
-		initDropButtonPlayClickListener();
-		initInventoryClickListener();
-	}
+public class ValidateActions implements Listener, Feature {
 
 	// deny entity interact if inventory opened
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractBlock(PlayerInteractEvent event) {
-		if (!config.validateActionsEnabled) {
-			return;
-		}
-
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 			return;
@@ -66,10 +56,6 @@ public class ValidateActions implements Listener {
 	// deny entity interact if inventory opened
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-		if (!config.validateActionsEnabled) {
-			return;
-		}
-
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 			return;
@@ -79,15 +65,14 @@ public class ValidateActions implements Listener {
 	// deny commands use if inventory opened
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
-		if (!config.validateActionsEnabled) {
-			return;
-		}
-
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 			return;
 		}
 	}
+
+
+	private LinkedList<AsyncListenerHandler> listeners = new LinkedList<AsyncListenerHandler>();
 
 	private HashSet<String> players = new HashSet<String>();
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -101,18 +86,14 @@ public class ValidateActions implements Listener {
 
 	// deny block dig drop mode packets if inventory opened
 	public void initDropButtonPlayClickListener() {
-		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
+		AsyncListenerHandler listener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Client.BLOCK_DIG)
+				.params(ModFixNG.getInstance(), PacketType.Play.Client.BLOCK_DIG)
 				.listenerPriority(ListenerPriority.LOWEST)
 			) {
 				@Override
 				public void onPacketReceiving(PacketEvent e) {
-					if (!config.validateActionsEnabled) {
-						return;
-					}
-
 					Player player = e.getPlayer();
 					if (player == null) {
 						return;
@@ -131,24 +112,22 @@ public class ValidateActions implements Listener {
 					}
 				}
 			}
-		).syncStart();
+		);
+		listener.syncStart();
+		listeners.add(listener);
 	}
 
 	// do not allow to click invalid inventory
 	private void initInventoryClickListener() {
-		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
+		AsyncListenerHandler listener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Client.WINDOW_CLICK)
+				.params(ModFixNG.getInstance(), PacketType.Play.Client.WINDOW_CLICK)
 				.listenerPriority(ListenerPriority.LOWEST)
 			) {
 				@SuppressWarnings("deprecation")
 				@Override
 				public void onPacketReceiving(PacketEvent e) {
-					if (!config.validateActionsEnabled) {
-						return;
-					}
-
 					Player player = e.getPlayer();
 					if (player == null) {
 						return;
@@ -167,7 +146,24 @@ public class ValidateActions implements Listener {
 					}
 				}
 			}
-		).syncStart();
+		);
+		listener.syncStart();
+		listeners.add(listener);
+	}
+
+	@Override
+	public void load() {
+		Bukkit.getPluginManager().registerEvents(this, ModFixNG.getInstance());
+		initDropButtonPlayClickListener();
+		initInventoryClickListener();
+	}
+
+	@Override
+	public void unload() {
+		for (AsyncListenerHandler listener : listeners) {
+			ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
+		}
+		HandlerList.unregisterAll(this);
 	}
 
 }
