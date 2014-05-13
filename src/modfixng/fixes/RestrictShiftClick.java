@@ -17,8 +17,6 @@
 
 package modfixng.fixes;
 
-import java.util.LinkedList;
-
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
@@ -39,10 +37,10 @@ public class RestrictShiftClick implements Feature {
 		this.config = config;
 	}
 
-	private LinkedList<AsyncListenerHandler> listeners = new LinkedList<AsyncListenerHandler>();
+	private AsyncListenerHandler listener;
 
 	private void initShiftInventoryClickListener() {
-		AsyncListenerHandler listener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
+		listener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(ModFixNG.getInstance(), PacketType.Play.Client.WINDOW_CLICK)
@@ -67,7 +65,6 @@ public class RestrictShiftClick implements Feature {
 			}
 		);
 		listener.syncStart();
-		listeners.add(listener);
 	}
 
 	@Override
@@ -77,9 +74,7 @@ public class RestrictShiftClick implements Feature {
 
 	@Override
 	public void unload() {
-		for (AsyncListenerHandler listener : listeners) {
-			ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
-		}
+		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
 	}
 
 }
