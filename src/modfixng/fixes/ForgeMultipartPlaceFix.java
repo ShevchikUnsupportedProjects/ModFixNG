@@ -20,17 +20,20 @@ package modfixng.fixes;
 import java.util.HashMap;
 
 import modfixng.main.Config;
+import modfixng.main.ModFixNG;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ForgeMultipartPlaceFix implements Listener {
+public class ForgeMultipartPlaceFix implements Listener, Feature {
 
 	private Config config;
 	public ForgeMultipartPlaceFix(Config config) {
@@ -41,10 +44,6 @@ public class ForgeMultipartPlaceFix implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockPlaceEvent(BlockPlaceEvent event) {
-		if (!config.microblockFixEnabled) {
-			return;
-		}
-
 		Block placed = event.getBlockPlaced();
 		
 		if (!event.isCancelled()) {
@@ -70,6 +69,16 @@ public class ForgeMultipartPlaceFix implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent event) {
 		blocksPlaced.remove(event.getPlayer().getName());
+	}
+
+	@Override
+	public void load() {
+		Bukkit.getPluginManager().registerEvents(this, ModFixNG.getInstance());
+	}
+
+	@Override
+	public void unload() {
+		HandlerList.unregisterAll(this);
 	}
 
 }

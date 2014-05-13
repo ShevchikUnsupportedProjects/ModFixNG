@@ -48,10 +48,15 @@ public class FeatureLoader {
 		pm.registerEvents(new FixBag(plugin, config), plugin);
 		pm.registerEvents(new FixFreecamEntities(plugin, config), plugin);
 		pm.registerEvents(new FixFreecamBlocks(plugin, config), plugin);
-		pm.registerEvents(new ForgeMultipartPlaceFix(config), plugin); 	
 	}
 
 	public void loadAll() {
+		if (config.microblockFixEnabled) {
+			loadFeature(new ForgeMultipartPlaceFix(config));
+		}
+		if (config.fixSlotDesyncEnabled) {
+			loadFeature(new FixPlayerArmorSlotDesync());
+		}
 		if (config.validateActionsEnabled) {
 			loadFeature(new ValidateActions());
 		}
@@ -60,9 +65,6 @@ public class FeatureLoader {
 		}
 		if (config.restrictShiftEnabled) {
 			loadFeature(new RestrictShiftClick(config));
-		}
-		if (config.fixSlotDesyncEnabled) {
-			loadFeature(new FixPlayerArmorSlotDesync());
 		}
 	}
 
