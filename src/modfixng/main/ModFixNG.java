@@ -17,15 +17,6 @@
 
 package modfixng.main;
 
-import modfixng.fixes.FixBag;
-import modfixng.fixes.FixFreecamBlocks;
-import modfixng.fixes.FixFreecamEntities;
-import modfixng.fixes.FixPlayerArmorSlotDesync;
-import modfixng.fixes.ForgeMultipartPlaceFix;
-import modfixng.fixes.Restrict19Click;
-import modfixng.fixes.RestrictShiftClick;
-import modfixng.fixes.ValidateActions;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,33 +32,28 @@ public class ModFixNG extends JavaPlugin {
 
 	public ProtocolManager protocolManager;
 
+	private FeatureLoader loader;
+
 	@Override
 	public void onEnable() {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		config = new Config(this);
 		config.loadConfig();
 		commandl = new Commands(this, config);
-		getCommand("modfix").setExecutor(commandl);
 		getServer().getPluginManager().registerEvents(commandl, this);
-		getServer().getPluginManager().registerEvents(new FixBag(this, config), this);
-		getServer().getPluginManager().registerEvents(new FixFreecamEntities(this, config), this);
-		getServer().getPluginManager().registerEvents(new FixFreecamBlocks(this, config), this);
-		getServer().getPluginManager().registerEvents(new ValidateActions(this, config), this);
-		getServer().getPluginManager().registerEvents(new ForgeMultipartPlaceFix(config), this); 
-		new Restrict19Click(this, config);
-		new RestrictShiftClick(this, config);
-		new FixPlayerArmorSlotDesync(this, config);
+		getCommand("modfix").setExecutor(commandl);
+		loader = new FeatureLoader(this, config);
+		loader.loadAll();
 	}
 
 	@Override
 	public void onDisable() {
+		loader.unloadAll();
 		for (Player p : getServer().getOnlinePlayers()) {
 			p.closeInventory();
 		}
 		config = null;
 		commandl = null;
-		protocolManager.removePacketListeners(this);
-		protocolManager.getAsynchronousManager().unregisterAsyncHandlers(this);
 		protocolManager = null;
 	}
 
