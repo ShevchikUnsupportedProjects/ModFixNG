@@ -42,11 +42,8 @@ import com.comphenix.protocol.events.PacketEvent;
 
 public class ProperlyCloseEntitiesContainers implements Listener {
 
-	private ModFixNG main;
 	private Config config;
-
-	public ProperlyCloseEntitiesContainers(ModFixNG main, Config config) {
-		this.main = main;
+	public ProperlyCloseEntitiesContainers(Config config) {
 		this.config = config;
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
@@ -90,7 +87,7 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityTypes.contains(entity.getType()) || entity.getType().toString().equals("HORSE")) {
 			removeData(playername);
 			BukkitTask task = Bukkit.getScheduler().runTask(
-				main,
+				ModFixNG.getInstance(),
 				new Runnable() {
 					@Override
 					public void run() {
@@ -110,7 +107,7 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Client.CLOSE_WINDOW)
+				.params(ModFixNG.getInstance(), PacketType.Play.Client.CLOSE_WINDOW)
 			) {
 				@Override
 				public void onPacketReceiving(final PacketEvent e) {
@@ -123,7 +120,7 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 					}
 
 					Bukkit.getScheduler().scheduleSyncDelayedTask(
-						main,
+						ModFixNG.getInstance(),
 						new Runnable() {
 							@Override
 							public void run() {
@@ -139,7 +136,7 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 		ModFixNG.getProtocolManager().addPacketListener(
 			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Server.CLOSE_WINDOW)
+				.params(ModFixNG.getInstance(), PacketType.Play.Server.CLOSE_WINDOW)
 			) {
 				@Override
 				public void onPacketSending(PacketEvent e) {
@@ -171,7 +168,8 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 
 	// check if entity is not valid or player is too far away from it, if yes -  force close inventory
 	private void initEntitiesCheck() {
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(main,
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(
+			ModFixNG.getInstance(),
 			new Runnable() {
 				@Override
 				public void run() {

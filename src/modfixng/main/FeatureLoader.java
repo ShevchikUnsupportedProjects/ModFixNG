@@ -45,8 +45,8 @@ public class FeatureLoader {
 
 	public void registerOnce() {
 		PluginManager pm = plugin.getServer().getPluginManager();
-		pm.registerEvents(new ProperlyCloseEntitiesContainers(plugin, config), plugin);
-		pm.registerEvents(new ProperlyCloseBlocksContainers(plugin, config), plugin);
+		pm.registerEvents(new ProperlyCloseEntitiesContainers(config), plugin);
+		pm.registerEvents(new ProperlyCloseBlocksContainers(config), plugin);
 	}
 
 	public void loadAll() {

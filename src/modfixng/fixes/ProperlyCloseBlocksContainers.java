@@ -44,13 +44,9 @@ import com.comphenix.protocol.events.PacketEvent;
 
 public class ProperlyCloseBlocksContainers implements Listener {
 
-	private ModFixNG main;
 	private Config config;
-
-	public ProperlyCloseBlocksContainers(ModFixNG main, Config config) {
-		this.main = main;
+	public ProperlyCloseBlocksContainers(Config config) {
 		this.config = config;
-		// forceCloseInv
 		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
 		initBlockCheck();
@@ -96,7 +92,7 @@ public class ProperlyCloseBlocksContainers implements Listener {
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
 			removeData(playername);
 			BukkitTask task = Bukkit.getScheduler().runTask(
-				main,
+				ModFixNG.getInstance(),
 				new Runnable() {
 					@Override
 					public void run() {
@@ -116,7 +112,7 @@ public class ProperlyCloseBlocksContainers implements Listener {
 		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Client.CLOSE_WINDOW)
+				.params(ModFixNG.getInstance(), PacketType.Play.Client.CLOSE_WINDOW)
 			) {
 				@Override
 				public void onPacketReceiving(final PacketEvent e) {
@@ -129,7 +125,7 @@ public class ProperlyCloseBlocksContainers implements Listener {
 					}
 
 					Bukkit.getScheduler().scheduleSyncDelayedTask(
-						main,
+						ModFixNG.getInstance(),
 						new Runnable() {
 							@Override
 							public void run() {
@@ -145,7 +141,7 @@ public class ProperlyCloseBlocksContainers implements Listener {
 		ModFixNG.getProtocolManager().addPacketListener(
 			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Server.CLOSE_WINDOW)
+				.params(ModFixNG.getInstance(), PacketType.Play.Server.CLOSE_WINDOW)
 			) {
 				@Override
 				public void onPacketSending(PacketEvent e) {
@@ -177,7 +173,7 @@ public class ProperlyCloseBlocksContainers implements Listener {
 
 	// check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory
 	private void initBlockCheck() {
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(ModFixNG.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
