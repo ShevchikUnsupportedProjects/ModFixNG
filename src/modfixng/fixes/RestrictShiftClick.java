@@ -17,6 +17,8 @@
 
 package modfixng.fixes;
 
+import java.util.LinkedList;
+
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
@@ -25,33 +27,29 @@ import modfixng.utils.PacketContainerReadable;
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.async.AsyncListenerHandler;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 
-public class RestrictShiftClick {
+public class RestrictShiftClick implements Feature {
 
-	private ModFixNG main;
 	private Config config;
 
-	public RestrictShiftClick(ModFixNG main, Config config) {
-		this.main = main;
+	public RestrictShiftClick(Config config) {
 		this.config = config;
-		initShiftInventoryClickListener();
 	}
 
+	private LinkedList<AsyncListenerHandler> listeners = new LinkedList<AsyncListenerHandler>();
+
 	private void initShiftInventoryClickListener() {
-		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
+		AsyncListenerHandler listener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
-				.params(main, PacketType.Play.Client.WINDOW_CLICK)
+				.params(ModFixNG.getInstance(), PacketType.Play.Client.WINDOW_CLICK)
 			) {
 				@SuppressWarnings("deprecation")
 				@Override
 				public void onPacketReceiving(PacketEvent e) {
-					if (!config.restrictShiftEnabled) {
-						return;
-					}
-
 					if (e.getPlayer() == null) {
 						return;
 					}
@@ -67,7 +65,21 @@ public class RestrictShiftClick {
 					}
 				}
 			}
-		).syncStart();
+		);
+		listener.syncStart();
+		listeners.add(listener);
+	}
+
+	@Override
+	public void load() {
+		initShiftInventoryClickListener();
+	}
+
+	@Override
+	public void unload() {
+		for (AsyncListenerHandler listener : listeners) {
+			ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
+		}
 	}
 
 }

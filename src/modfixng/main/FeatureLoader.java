@@ -50,13 +50,15 @@ public class FeatureLoader {
 		pm.registerEvents(new FixFreecamBlocks(plugin, config), plugin);
 		pm.registerEvents(new ValidateActions(plugin, config), plugin);
 		pm.registerEvents(new ForgeMultipartPlaceFix(config), plugin); 	
-		new RestrictShiftClick(plugin, config);
 		new FixPlayerArmorSlotDesync(plugin, config);
 	}
 
 	public void loadAll() {
 		if (config.restrict19Enabled) {
 			loadFeature(new Restrict19Click(config));
+		}
+		if (config.restrictShiftEnabled) {
+			loadFeature(new RestrictShiftClick(config));
 		}
 	}
 
