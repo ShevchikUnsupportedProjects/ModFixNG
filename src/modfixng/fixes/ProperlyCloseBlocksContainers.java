@@ -18,8 +18,8 @@
 package modfixng.fixes;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -55,8 +55,8 @@ public class ProperlyCloseBlocksContainers implements Listener {
 		initBlockCheck();
 	}
 
-	private HashMap<String, BlockState> playerOpenBlock = new HashMap<String, BlockState>(100);
-	private HashMap<String, Integer> playerOpenBlockInvOpenCheckTask = new HashMap<String, Integer>(100);
+	private LinkedHashMap<String, BlockState> playerOpenBlock = new LinkedHashMap<String, BlockState>(200);
+	private LinkedHashMap<String, Integer> playerOpenBlockInvOpenCheckTask = new LinkedHashMap<String, Integer>(200);
 
 	private HashSet<Material> knownBlockMaterials  = new HashSet<Material>(
 		Arrays.asList(

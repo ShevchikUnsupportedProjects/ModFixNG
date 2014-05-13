@@ -18,8 +18,8 @@
 package modfixng.fixes;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -52,8 +52,8 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 		initEntitiesCheck();
 	}
 
-	private HashMap<String, Entity> playerOpenEntity = new HashMap<String, Entity>(100);
-	private HashMap<String, Integer> playerOpenEntityInvOpenCheckTask = new HashMap<String, Integer>(100);
+	private LinkedHashMap<String, Entity> playerOpenEntity = new LinkedHashMap<String, Entity>(200);
+	private LinkedHashMap<String, Integer> playerOpenEntityInvOpenCheckTask = new LinkedHashMap<String, Integer>(200);
 
 	private HashSet<EntityType> knownEntityTypes  = new HashSet<EntityType>(
 		Arrays.asList(
