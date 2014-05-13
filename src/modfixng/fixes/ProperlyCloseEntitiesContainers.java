@@ -34,6 +34,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -53,7 +54,7 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 	}
 
 	private LinkedHashMap<String, Entity> playerOpenEntity = new LinkedHashMap<String, Entity>(200);
-	private LinkedHashMap<String, Integer> playerOpenEntityInvOpenCheckTask = new LinkedHashMap<String, Integer>(200);
+	private LinkedHashMap<String, BukkitTask> playerOpenEntityInvOpenCheckTask = new LinkedHashMap<String, BukkitTask>(200);
 
 	private HashSet<EntityType> knownEntityTypes  = new HashSet<EntityType>(
 		Arrays.asList(
@@ -87,12 +88,9 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 
 		final Entity entity = e.getRightClicked();
 		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityTypes.contains(entity.getType()) || entity.getType().toString().equals("HORSE")) {
-			if (playerOpenEntityInvOpenCheckTask.containsKey(playername)) {
-				int taskID = playerOpenEntityInvOpenCheckTask.get(playername);
-				Bukkit.getScheduler().cancelTask(taskID);
-				playerOpenEntityInvOpenCheckTask.remove(playername);
-			}
-			int taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(main,
+			removeData(playername);
+			BukkitTask task = Bukkit.getScheduler().runTask(
+				main,
 				new Runnable() {
 					@Override
 					public void run() {
@@ -103,7 +101,7 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 					}
 				}
 			);
-			playerOpenEntityInvOpenCheckTask.put(playername, taskID);
+			playerOpenEntityInvOpenCheckTask.put(playername, task);
 		}
 	}
 
@@ -166,8 +164,7 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 	private void removeData(String playername) {
 		playerOpenEntity.remove(playername);
 		if (playerOpenEntityInvOpenCheckTask.containsKey(playername)) {
-			int taskID = playerOpenEntityInvOpenCheckTask.get(playername);
-			Bukkit.getScheduler().cancelTask(taskID);
+			playerOpenEntityInvOpenCheckTask.get(playername).cancel();
 			playerOpenEntityInvOpenCheckTask.remove(playername);
 		}
 	}

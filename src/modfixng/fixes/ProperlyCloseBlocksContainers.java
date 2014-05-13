@@ -36,6 +36,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -56,7 +57,7 @@ public class ProperlyCloseBlocksContainers implements Listener {
 	}
 
 	private LinkedHashMap<String, BlockState> playerOpenBlock = new LinkedHashMap<String, BlockState>(200);
-	private LinkedHashMap<String, Integer> playerOpenBlockInvOpenCheckTask = new LinkedHashMap<String, Integer>(200);
+	private LinkedHashMap<String, BukkitTask> playerOpenBlockInvOpenCheckTask = new LinkedHashMap<String, BukkitTask>(200);
 
 	private HashSet<Material> knownBlockMaterials  = new HashSet<Material>(
 		Arrays.asList(
@@ -93,12 +94,9 @@ public class ProperlyCloseBlocksContainers implements Listener {
 
 		final Block b = e.getClickedBlock();
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
-			if (playerOpenBlockInvOpenCheckTask.containsKey(playername)) {
-				int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
-				Bukkit.getScheduler().cancelTask(taskID);
-				playerOpenBlockInvOpenCheckTask.remove(playername);
-			}
-			int taskID = Bukkit.getScheduler().scheduleSyncDelayedTask(main,
+			removeData(playername);
+			BukkitTask task = Bukkit.getScheduler().runTask(
+				main,
 				new Runnable() {
 					@Override
 					public void run() {
@@ -109,7 +107,7 @@ public class ProperlyCloseBlocksContainers implements Listener {
 					}
 				}
 			);
-			playerOpenBlockInvOpenCheckTask.put(playername, taskID);
+			playerOpenBlockInvOpenCheckTask.put(playername, task);
 		}
 	}
 
@@ -172,8 +170,7 @@ public class ProperlyCloseBlocksContainers implements Listener {
 	private void removeData(String playername) {
 		playerOpenBlock.remove(playername);
 		if (playerOpenBlockInvOpenCheckTask.containsKey(playername)) {
-			int taskID = playerOpenBlockInvOpenCheckTask.get(playername);
-			Bukkit.getScheduler().cancelTask(taskID);
+			playerOpenBlockInvOpenCheckTask.get(playername).cancel();
 			playerOpenBlockInvOpenCheckTask.remove(playername);
 		}
 	}
