@@ -17,34 +17,24 @@
 
 package modfixng.fixes;
 
-import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
-public class FixPlayerArmorSlotDesync {
+public class FixPlayerArmorSlotDesync implements Feature {
 
-	private ModFixNG main;
-	private Config config;
-
-	public FixPlayerArmorSlotDesync(ModFixNG main, Config config) {
-		this.main = main;
-		this.config = config;
-		startInvSync();
-	}
+	private BukkitTask task;
 
 	// resend armor slot items every tick
 	private void startInvSync() {
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(main,
+		task = Bukkit.getScheduler().runTaskTimer(
+			ModFixNG.getInstance(),
 			new Runnable() {
 				@Override
 				public void run() {
-					if (!config.fixSlotDesyncEnabled) {
-						return;
-					}
-
 					for (Player player : Bukkit.getOnlinePlayers()) {
 						ModFixNGUtils.updateSlot(ModFixNG.getProtocolManager(), player, 0, 5, player.getInventory().getHelmet());
 						ModFixNGUtils.updateSlot(ModFixNG.getProtocolManager(), player, 0, 6, player.getInventory().getChestplate());
@@ -55,6 +45,16 @@ public class FixPlayerArmorSlotDesync {
 			},
 			0, 20
 		);
+	}
+
+	@Override
+	public void load() {
+		startInvSync();
+	}
+
+	@Override
+	public void unload() {
+		task.cancel();
 	}
 
 }

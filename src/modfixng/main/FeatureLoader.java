@@ -50,7 +50,6 @@ public class FeatureLoader {
 		pm.registerEvents(new FixFreecamBlocks(plugin, config), plugin);
 		pm.registerEvents(new ValidateActions(plugin, config), plugin);
 		pm.registerEvents(new ForgeMultipartPlaceFix(config), plugin); 	
-		new FixPlayerArmorSlotDesync(plugin, config);
 	}
 
 	public void loadAll() {
@@ -59,6 +58,9 @@ public class FeatureLoader {
 		}
 		if (config.restrictShiftEnabled) {
 			loadFeature(new RestrictShiftClick(config));
+		}
+		if (config.fixSlotDesyncEnabled) {
+			loadFeature(new FixPlayerArmorSlotDesync());
 		}
 	}
 
