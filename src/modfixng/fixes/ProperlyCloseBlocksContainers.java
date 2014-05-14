@@ -185,6 +185,11 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(alistener);
 		ModFixNG.getProtocolManager().removePacketListener(plistener);
 		HandlerList.unregisterAll(this);
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (playerOpenBlock.containsKey(player.getName())) {
+				player.closeInventory();
+			}
+		}
 	}
 
 }

@@ -170,6 +170,11 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(alistener);
 		ModFixNG.getProtocolManager().removePacketListener(plistener);
 		HandlerList.unregisterAll(this);
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (playerOpenEntity.containsKey(player.getName())) {
+				player.closeInventory();
+			}
+		}
 	}
 
 }
