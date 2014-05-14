@@ -130,10 +130,6 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
-		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
-			return;
-		}
-
 		removeData(e.getPlayer().getName());
 	}
 
