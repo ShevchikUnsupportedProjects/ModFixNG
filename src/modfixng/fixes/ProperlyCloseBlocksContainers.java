@@ -36,7 +36,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitTask;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -53,7 +52,6 @@ public class ProperlyCloseBlocksContainers implements Listener {
 	}
 
 	private LinkedHashMap<String, BlockState> playerOpenBlock = new LinkedHashMap<String, BlockState>(200);
-	private LinkedHashMap<String, BukkitTask> playerOpenBlockInvOpenCheckTask = new LinkedHashMap<String, BukkitTask>(200);
 
 	private HashSet<Material> knownBlockMaterials  = new HashSet<Material>(
 		Arrays.asList(
@@ -83,27 +81,12 @@ public class ProperlyCloseBlocksContainers implements Listener {
 			if (ModFixNGUtils.isInventoryOpen(player)) {
 				e.setCancelled(true);
 				return;	
-			} else {
-				playerOpenBlock.remove(playername);
 			}
 		}
 
 		final Block b = e.getClickedBlock();
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
-			removeData(playername);
-			BukkitTask task = Bukkit.getScheduler().runTask(
-				ModFixNG.getInstance(),
-				new Runnable() {
-					@Override
-					public void run() {
-						if (ModFixNGUtils.isInventoryOpen(player)) {
-							playerOpenBlock.put(playername, b.getState());
-						}
-						playerOpenBlockInvOpenCheckTask.remove(playername);
-					}
-				}
-			);
-			playerOpenBlockInvOpenCheckTask.put(playername, task);
+			playerOpenBlock.put(playername, b.getState());
 		}
 	}
 
@@ -165,10 +148,6 @@ public class ProperlyCloseBlocksContainers implements Listener {
 
 	private void removeData(String playername) {
 		playerOpenBlock.remove(playername);
-		if (playerOpenBlockInvOpenCheckTask.containsKey(playername)) {
-			playerOpenBlockInvOpenCheckTask.get(playername).cancel();
-			playerOpenBlockInvOpenCheckTask.remove(playername);
-		}
 	}
 
 	// check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory

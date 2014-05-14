@@ -34,7 +34,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitTask;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -51,7 +50,6 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 	}
 
 	private LinkedHashMap<String, Entity> playerOpenEntity = new LinkedHashMap<String, Entity>(200);
-	private LinkedHashMap<String, BukkitTask> playerOpenEntityInvOpenCheckTask = new LinkedHashMap<String, BukkitTask>(200);
 
 	private HashSet<EntityType> knownEntityTypes  = new HashSet<EntityType>(
 		Arrays.asList(
@@ -78,27 +76,12 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 			if (ModFixNGUtils.isInventoryOpen(player)) {
 				e.setCancelled(true);
 				return;
-			} else {
-				playerOpenEntity.remove(playername);
 			}
 		}
 
 		final Entity entity = e.getRightClicked();
 		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityTypes.contains(entity.getType()) || entity.getType().toString().equals("HORSE")) {
-			removeData(playername);
-			BukkitTask task = Bukkit.getScheduler().runTask(
-				ModFixNG.getInstance(),
-				new Runnable() {
-					@Override
-					public void run() {
-						if (ModFixNGUtils.isInventoryOpen(player)) {
-							playerOpenEntity.put(playername, entity);
-						}
-						playerOpenEntityInvOpenCheckTask.remove(playername);
-					}
-				}
-			);
-			playerOpenEntityInvOpenCheckTask.put(playername, task);
+			playerOpenEntity.put(playername, entity);
 		}
 	}
 
@@ -160,10 +143,6 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 
 	private void removeData(String playername) {
 		playerOpenEntity.remove(playername);
-		if (playerOpenEntityInvOpenCheckTask.containsKey(playername)) {
-			playerOpenEntityInvOpenCheckTask.get(playername).cancel();
-			playerOpenEntityInvOpenCheckTask.remove(playername);
-		}
 	}
 
 	// check if entity is not valid or player is too far away from it, if yes -  force close inventory
