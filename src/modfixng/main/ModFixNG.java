@@ -23,7 +23,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
-//warning: this plugin requires ProtocolLib to run
 public class ModFixNG extends JavaPlugin {
 
 	private static ModFixNG instance;
@@ -53,17 +52,16 @@ public class ModFixNG extends JavaPlugin {
 		commandl = new Commands(config);
 		getServer().getPluginManager().registerEvents(commandl, this);
 		getCommand("modfixng").setExecutor(commandl);
-		loader = new FeatureLoader(this, config);
-		loader.registerOnce();
+		loader = new FeatureLoader(config);
 		loader.loadAll();
 	}
 
 	@Override
 	public void onDisable() {
-		loader.unloadAll();
 		for (Player p : getServer().getOnlinePlayers()) {
 			p.closeInventory();
 		}
+		loader.unloadAll();
 		config = null;
 		commandl = null;
 		protocolManager = null;

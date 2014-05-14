@@ -31,18 +31,13 @@ import modfixng.fixes.RestrictShiftClick;
 import modfixng.fixes.ValidateActions;
 
 public class FeatureLoader {
-	
-	private ModFixNG plugin;
+
 	private Config config;
-	public FeatureLoader(ModFixNG plugin, Config config) {
-		this.plugin = plugin;
+	public FeatureLoader(Config config) {
 		this.config = config;
 	}
 
 	private LinkedList<Feature> loadedFeatures = new LinkedList<Feature>();
-
-	public void registerOnce() {
-	}
 
 	public void loadAll() {
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
