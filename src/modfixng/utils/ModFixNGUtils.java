@@ -114,26 +114,18 @@ public class ModFixNGUtils {
 		}
 	}
 
-	public static boolean isCropanalyzerOpen(Player p) {
-		if (isRunningMCPC()) {
-			return PlainNMSUtils.getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerCropnalyzer");
-		}
-		return false;
-	}
-
 	public static boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		return PlainNMSUtils.isTryingToDropOpenCropanalyzer(p, minecraftslot);
-	}
-
-	public static boolean isToolboxOpen(Player p) {
-		if (isRunningMCPC()) {
-			return PlainNMSUtils.getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerToolbox");
+		if (isRunningMCPC() && PlainNMSUtils.getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerCropnalyzer")) {
+			return PlainNMSUtils.isTryingToDropOpenCropanalyzer(p, minecraftslot);
 		}
 		return false;
 	}
 
-	public static boolean isTryingToDropOpenToolBox(Player p, int minecraftslot)throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		return PlainNMSUtils.isTryingToDropOpenToolBox(p, minecraftslot);
+	public static boolean isTryingToDropOpenToolBox(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		if (isRunningMCPC() && PlainNMSUtils.getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerToolbox")) {
+			return PlainNMSUtils.isTryingToDropOpenToolBox(p, minecraftslot);
+		}
+		return false;
 	}
 
 	private static boolean isRunningMCPC() {

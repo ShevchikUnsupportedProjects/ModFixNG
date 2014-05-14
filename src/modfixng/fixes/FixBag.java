@@ -178,25 +178,21 @@ public class FixBag implements Listener, Feature {
 	}
 	private boolean isInvalidDropInventory(Player player, int slot) {
 		if (config.fixBagCropanalyzerFixEnabled) {
-			if (ModFixNGUtils.isCropanalyzerOpen(player)) {
-				try {
-					if (ModFixNGUtils.isTryingToDropOpenCropanalyzer(player, slot)) {
-						return true;
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
+			try {
+				if (ModFixNGUtils.isTryingToDropOpenCropanalyzer(player, slot)) {
+					return true;
 				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
 		}
 		if (config.fixBagToolboxFixEnabled) {
-			if (ModFixNGUtils.isToolboxOpen(player)) {
-				try {
-					if (ModFixNGUtils.isTryingToDropOpenToolBox(player, slot)) {
-						return true;
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
+			try {
+				if (ModFixNGUtils.isTryingToDropOpenToolBox(player, slot)) {
+					return true;
 				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
 		}
 		return false;
