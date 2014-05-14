@@ -56,8 +56,8 @@ public class Config {
 	public HashSet<String> restrictShiftInvetoryNames = new HashSet<String>();
 
 	public boolean microblockFixEnabled = true;
-	public int microblockFixItemID = 25131;
-	public int microblockFixBlockID = 1281;
+	public int microblockFixItemID = -1;
+	public int microblockFixBlockID = -1;
 
 	public void loadConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);

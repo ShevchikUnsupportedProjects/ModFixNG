@@ -49,7 +49,7 @@ public class FeatureLoader {
 		if (config.fixBagEnabled) {
 			loadFeature(new FixBag(config));
 		}
-		if (config.microblockFixEnabled) {
+		if (config.microblockFixEnabled && config.microblockFixBlockID != -1 && config.microblockFixItemID != -1) {
 			loadFeature(new ForgeMultipartPlaceFix(config));
 		}
 		if (config.fixSlotDesyncEnabled) {
