@@ -31,22 +31,23 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.async.AsyncListenerHandler;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.events.PacketListener;
 
-public class ProperlyCloseEntitiesContainers implements Listener {
+public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 
 	private Config config;
 	public ProperlyCloseEntitiesContainers(Config config) {
 		this.config = config;
-		initClientCloseInventoryFixListener();
-		initServerCloseInventoryFixListener();
-		initEntitiesCheck();
 	}
 
 	private LinkedHashMap<String, Entity> playerOpenEntity = new LinkedHashMap<String, Entity>(200);
@@ -65,10 +66,6 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 	// add player to list when he opens entity inventory
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerOpenedEntity(PlayerInteractEntityEvent e) {
-		if (!config.fixFreecamEntitiesEnabled) {
-			return;
-		}
-
 		final Player player = e.getPlayer();
 		final String playername = player.getName();
 
@@ -85,19 +82,17 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 		}
 	}
 
+	private AsyncListenerHandler alistener;
+	private PacketListener plistener;
 	// remove player from list when he closes inventory
 	private void initClientCloseInventoryFixListener() {
-		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
+		alistener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(ModFixNG.getInstance(), PacketType.Play.Client.CLOSE_WINDOW)
 			) {
 				@Override
 				public void onPacketReceiving(final PacketEvent e) {
-					if (!config.fixFreecamEntitiesEnabled) {
-						return;
-					}
-
 					if (e.getPlayer() == null) {
 						return;
 					}
@@ -113,31 +108,23 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 					);
 				}
 			}
-		).syncStart();
+		);
+		alistener.syncStart();
 	}
 	private void initServerCloseInventoryFixListener() {
-		ModFixNG.getProtocolManager().addPacketListener(
-			new PacketAdapter(
-				PacketAdapter
-				.params(ModFixNG.getInstance(), PacketType.Play.Server.CLOSE_WINDOW)
-			) {
-				@Override
-				public void onPacketSending(PacketEvent e) {
-					if (!config.fixFreecamEntitiesEnabled) {
-						return;
-					}
-
-					removeData(e.getPlayer().getName());
-				}
+		plistener = new PacketAdapter(
+			PacketAdapter
+			.params(ModFixNG.getInstance(), PacketType.Play.Server.CLOSE_WINDOW)
+		) {
+			@Override
+			public void onPacketSending(PacketEvent e) {
+				removeData(e.getPlayer().getName());
 			}
-		);
+		};
+		ModFixNG.getProtocolManager().addPacketListener(plistener);
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
-		if (!config.fixFreecamEntitiesEnabled) {
-			return;
-		}
-
 		removeData(e.getPlayer().getName());
 	}
 
@@ -145,17 +132,14 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 		playerOpenEntity.remove(playername);
 	}
 
+	private BukkitTask task;
 	// check if entity is not valid or player is too far away from it, if yes -  force close inventory
 	private void initEntitiesCheck() {
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(
+		task = Bukkit.getScheduler().runTaskTimer(
 			ModFixNG.getInstance(),
 			new Runnable() {
 				@Override
 				public void run() {
-					if (!config.fixFreecamEntitiesEnabled) {
-						return;
-					}
-
 					for (Player player : Bukkit.getOnlinePlayers()) {
 						if (playerOpenEntity.containsKey(player.getName())) {
 							String playername = player.getName();
@@ -170,6 +154,22 @@ public class ProperlyCloseEntitiesContainers implements Listener {
 			},
 			0, 1
 		);
+	}
+
+	@Override
+	public void load() {
+		Bukkit.getPluginManager().registerEvents(this, ModFixNG.getInstance());
+		initClientCloseInventoryFixListener();
+		initServerCloseInventoryFixListener();
+		initEntitiesCheck();
+	}
+
+	@Override
+	public void unload() {
+		task.cancel();
+		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(alistener);
+		ModFixNG.getProtocolManager().removePacketListener(plistener);
+		HandlerList.unregisterAll(this);
 	}
 
 }

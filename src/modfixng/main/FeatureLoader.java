@@ -50,6 +50,9 @@ public class FeatureLoader {
 	}
 
 	public void loadAll() {
+		if (config.fixFreecamEntitiesEnabled) {
+			loadFeature(new ProperlyCloseEntitiesContainers(config));
+		}
 		if (config.fixBagEnabled) {
 			loadFeature(new FixBag(config));
 		}
