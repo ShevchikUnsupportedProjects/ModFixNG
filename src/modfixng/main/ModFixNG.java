@@ -62,8 +62,8 @@ public class ModFixNG extends JavaPlugin {
 			p.closeInventory();
 		}
 		loader.unloadAll();
-		config = null;
-		commandl = null;
+		loader = null;
+		instance = null;
 		protocolManager = null;
 	}
 
