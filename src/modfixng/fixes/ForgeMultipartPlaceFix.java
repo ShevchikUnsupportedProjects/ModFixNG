@@ -45,7 +45,7 @@ public class ForgeMultipartPlaceFix implements Listener, Feature {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockPlaceEvent(BlockPlaceEvent event) {
 		Block placed = event.getBlockPlaced();
-		
+
 		if (!event.isCancelled()) {
 			if (placed.getTypeId() == config.microblockFixBlockID) {
 				blocksPlaced.put(event.getPlayer().getName(), placed);

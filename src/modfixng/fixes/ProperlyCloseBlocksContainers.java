@@ -77,7 +77,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		if (playerOpenBlock.containsKey(playername)) {
 			if (ModFixNGUtils.isInventoryOpen(player)) {
 				e.setCancelled(true);
-				return;	
+				return;
 			}
 		}
 

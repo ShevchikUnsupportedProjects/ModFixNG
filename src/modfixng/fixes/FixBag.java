@@ -89,7 +89,7 @@ public class FixBag implements Listener, Feature {
 		event.getPlayer().closeInventory();
 	}
 
-	private LinkedList<AsyncListenerHandler> listeners = new LinkedList<AsyncListenerHandler>();	
+	private LinkedList<AsyncListenerHandler> listeners = new LinkedList<AsyncListenerHandler>();
 
 	// restrict using 1-9 buttons in bags inventories if it will move bag to another slot
 	private HashSet<String> knownInventoryNames = new HashSet<String>(

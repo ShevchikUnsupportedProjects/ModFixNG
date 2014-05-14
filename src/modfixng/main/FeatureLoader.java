@@ -22,10 +22,10 @@ import java.util.LinkedList;
 
 import modfixng.fixes.Feature;
 import modfixng.fixes.FixBag;
-import modfixng.fixes.ProperlyCloseBlocksContainers;
-import modfixng.fixes.ProperlyCloseEntitiesContainers;
 import modfixng.fixes.FixPlayerArmorSlotDesync;
 import modfixng.fixes.ForgeMultipartPlaceFix;
+import modfixng.fixes.ProperlyCloseBlocksContainers;
+import modfixng.fixes.ProperlyCloseEntitiesContainers;
 import modfixng.fixes.Restrict19Click;
 import modfixng.fixes.RestrictShiftClick;
 import modfixng.fixes.ValidateActions;
