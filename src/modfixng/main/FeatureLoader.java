@@ -20,8 +20,6 @@ package modfixng.main;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.bukkit.plugin.PluginManager;
-
 import modfixng.fixes.Feature;
 import modfixng.fixes.FixBag;
 import modfixng.fixes.ProperlyCloseBlocksContainers;
@@ -44,11 +42,12 @@ public class FeatureLoader {
 	private LinkedList<Feature> loadedFeatures = new LinkedList<Feature>();
 
 	public void registerOnce() {
-		PluginManager pm = plugin.getServer().getPluginManager();
-		pm.registerEvents(new ProperlyCloseBlocksContainers(config), plugin);
 	}
 
 	public void loadAll() {
+		if (config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
+			loadFeature(new ProperlyCloseBlocksContainers(config));
+		}
 		if (config.fixFreecamEntitiesEnabled) {
 			loadFeature(new ProperlyCloseEntitiesContainers(config));
 		}

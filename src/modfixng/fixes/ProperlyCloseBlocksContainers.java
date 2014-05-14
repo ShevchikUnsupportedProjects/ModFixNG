@@ -32,23 +32,24 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.async.AsyncListenerHandler;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.events.PacketListener;
 
-public class ProperlyCloseBlocksContainers implements Listener {
+public class ProperlyCloseBlocksContainers implements Listener, Feature {
 
 	private Config config;
 	public ProperlyCloseBlocksContainers(Config config) {
 		this.config = config;
-		initClientCloseInventoryFixListener();
-		initServerCloseInventoryFixListener();
-		initBlockCheck();
 	}
 
 	private LinkedHashMap<String, BlockState> playerOpenBlock = new LinkedHashMap<String, BlockState>(200);
@@ -66,10 +67,6 @@ public class ProperlyCloseBlocksContainers implements Listener {
 	// add player to list when he opens block inventory
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerOpenedBlock(PlayerInteractEvent e) {
-		if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
-			return;
-		}
-
 		if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
@@ -90,19 +87,17 @@ public class ProperlyCloseBlocksContainers implements Listener {
 		}
 	}
 
+	private AsyncListenerHandler alistener;
+	private PacketListener plistener;
 	// remove player from list when he closes inventory
 	private void initClientCloseInventoryFixListener() {
-		ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
+		alistener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
 			new PacketAdapter(
 				PacketAdapter
 				.params(ModFixNG.getInstance(), PacketType.Play.Client.CLOSE_WINDOW)
 			) {
 				@Override
 				public void onPacketReceiving(final PacketEvent e) {
-					if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
-						return;
-					}
-
 					if (e.getPlayer() == null) {
 						return;
 					}
@@ -118,24 +113,20 @@ public class ProperlyCloseBlocksContainers implements Listener {
 					);
 				}
 			}
-		).syncStart();
+		);
+		alistener.syncStart();
 	}
 	private void initServerCloseInventoryFixListener() {
-		ModFixNG.getProtocolManager().addPacketListener(
-			new PacketAdapter(
-				PacketAdapter
-				.params(ModFixNG.getInstance(), PacketType.Play.Server.CLOSE_WINDOW)
-			) {
-				@Override
-				public void onPacketSending(PacketEvent e) {
-					if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
-						return;
-					}
-
-					removeData(e.getPlayer().getName());
-				}
+		plistener = new PacketAdapter(
+			PacketAdapter
+			.params(ModFixNG.getInstance(), PacketType.Play.Server.CLOSE_WINDOW)
+		) {
+			@Override
+			public void onPacketSending(PacketEvent e) {
+				removeData(e.getPlayer().getName());
 			}
-		);
+		};
+		ModFixNG.getProtocolManager().addPacketListener(plistener);
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
@@ -150,15 +141,12 @@ public class ProperlyCloseBlocksContainers implements Listener {
 		playerOpenBlock.remove(playername);
 	}
 
+	private BukkitTask task;
 	// check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory
 	private void initBlockCheck() {
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(ModFixNG.getInstance(), new Runnable() {
+		task = Bukkit.getScheduler().runTaskTimer(ModFixNG.getInstance(), new Runnable() {
 			@Override
 			public void run() {
-				if (!config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
-					return;
-				}
-
 				for (Player player : Bukkit.getOnlinePlayers()) {
 					if (playerOpenBlock.containsKey(player.getName())) {
 						String playername = player.getName();
@@ -181,6 +169,22 @@ public class ProperlyCloseBlocksContainers implements Listener {
 			return b.getType() == Material.FURNACE || b.getType() == Material.BURNING_FURNACE;
 		}
 		return bs.getType() == b.getType();
+	}
+
+	@Override
+	public void load() {
+		Bukkit.getPluginManager().registerEvents(this, ModFixNG.getInstance());
+		initClientCloseInventoryFixListener();
+		initServerCloseInventoryFixListener();
+		initBlockCheck();
+	}
+
+	@Override
+	public void unload() {
+		task.cancel();
+		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(alistener);
+		ModFixNG.getProtocolManager().removePacketListener(plistener);
+		HandlerList.unregisterAll(this);
 	}
 
 }
