@@ -57,7 +57,7 @@ public class Commands implements CommandExecutor, Listener {
 		if ((sender instanceof Player)) {
 			// Player, lets check if player isOp or have permission
 			player = (Player) sender;
-			if (!player.isOp() && !player.hasPermission("modfix.conf")) {
+			if (!player.hasPermission("modfix.conf")) {
 				sender.sendMessage(ChatColor.BLUE + "Нет прав");
 				return true;
 			}
@@ -65,7 +65,6 @@ public class Commands implements CommandExecutor, Listener {
 			// Success, this was from the Console or Remote Console
 		} else {
 			// Who are you people?
-			sender.sendMessage(ChatColor.BLUE + "Ты вообще кто такой? давай до свиданья!");
 			return true;
 		}
 
@@ -115,8 +114,6 @@ public class Commands implements CommandExecutor, Listener {
 				msg += ", subid: " + pl.getItemInHand().getDurability();
 			}
 			pl.sendMessage(msg);
-		} else {
-			sender.sendMessage(ChatColor.BLUE + "У консоли нет рук");
 		}
 	}
 
@@ -125,8 +122,6 @@ public class Commands implements CommandExecutor, Listener {
 			Player pl = (Player) sender;
 			pl.sendMessage(ChatColor.BLUE + "Кликните правой кнопкой мыши по блоку, для того чтобы узнать его ID и subID");
 			plbinfoswitch.add(pl.getName());
-		} else {
-			sender.sendMessage(ChatColor.BLUE + "У консоли нет рук");
 		}
 	}
 
@@ -135,8 +130,6 @@ public class Commands implements CommandExecutor, Listener {
 			Player pl = (Player) sender;
 			pl.sendMessage(ChatColor.BLUE + "Кликните правой кнопкой мыши по Entity, для того чтобы узнать её Type ID");
 			pleinfoswitch.add(pl.getName());
-		} else {
-			sender.sendMessage(ChatColor.BLUE + "У консоли нет рук");
 		}
 	}
 
@@ -153,8 +146,6 @@ public class Commands implements CommandExecutor, Listener {
 					}
 				}
 			, 40);
-		} else {
-			sender.sendMessage(ChatColor.BLUE + "У консоли нет рук");
 		}
 	}
 
@@ -186,7 +177,6 @@ public class Commands implements CommandExecutor, Listener {
 			plbinfoswitch.remove(pl.getName());
 			e.setCancelled(true);
 		}
-
 	}
 
 }
