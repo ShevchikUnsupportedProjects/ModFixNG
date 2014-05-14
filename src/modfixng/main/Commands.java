@@ -77,7 +77,7 @@ public class Commands implements CommandExecutor, Listener {
 			config.loadConfig();
 			ModFixNG.getFeatureLoader().unloadAll();
 			ModFixNG.getFeatureLoader().loadAll();
-			sender.sendMessage(ChatColor.BLUE + "Конфиг перезагружен");
+			sender.sendMessage(ChatColor.BLUE + "ModFixNG перезагружен");
 			return true;
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 			displayHelp(sender);
@@ -99,7 +99,7 @@ public class Commands implements CommandExecutor, Listener {
 	}
 
 	private void displayHelp(CommandSender sender) {
-		sender.sendMessage(ChatColor.AQUA + "/modfix reload " + ChatColor.WHITE + "-" + ChatColor.BLUE + " перезагрузить конфиг плагина");
+		sender.sendMessage(ChatColor.AQUA + "/modfix reload " + ChatColor.WHITE + "-" + ChatColor.BLUE + " перезагрузить плагин");
 		sender.sendMessage(ChatColor.AQUA + "/modfix iteminfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить id и subid итема в руке");
 		sender.sendMessage(ChatColor.AQUA + "/modfix entityinfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить Entity Type ID");
 		sender.sendMessage(ChatColor.AQUA + "/modfix blockinfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить id и subid блока");
