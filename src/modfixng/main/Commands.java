@@ -51,12 +51,10 @@ public class Commands implements CommandExecutor, Listener {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String arg2, String[] args) {
-		Player player = null;
-
 		// check permissions
 		if ((sender instanceof Player)) {
 			// Player, lets check if player isOp or have permission
-			player = (Player) sender;
+			Player player = (Player) sender;
 			if (!player.hasPermission("modfix.conf")) {
 				sender.sendMessage(ChatColor.BLUE + "Нет прав");
 				return true;
