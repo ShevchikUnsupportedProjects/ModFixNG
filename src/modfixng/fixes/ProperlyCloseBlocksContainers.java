@@ -19,7 +19,9 @@ package modfixng.fixes;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -52,7 +54,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		this.config = config;
 	}
 
-	private LinkedHashMap<String, BlockState> playerOpenBlock = new LinkedHashMap<String, BlockState>(200);
+	private LinkedHashMap<Player, BlockState> playerOpenBlock = new LinkedHashMap<Player, BlockState>(200);
 
 	private HashSet<Material> knownBlockMaterials  = new HashSet<Material>(
 		Arrays.asList(
@@ -72,9 +74,8 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		}
 
 		final Player player = e.getPlayer();
-		final String playername = player.getName();
 
-		if (playerOpenBlock.containsKey(playername)) {
+		if (playerOpenBlock.containsKey(player)) {
 			if (ModFixNGUtils.isInventoryOpen(player)) {
 				e.setCancelled(true);
 				return;
@@ -83,7 +84,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 
 		final Block b = e.getClickedBlock();
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
-			playerOpenBlock.put(playername, b.getState());
+			playerOpenBlock.put(player, b.getState());
 		}
 	}
 
@@ -107,7 +108,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 						new Runnable() {
 							@Override
 							public void run() {
-								removeData(e.getPlayer().getName());
+								removeData(e.getPlayer());
 							}
 						}
 					);
@@ -123,41 +124,43 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		) {
 			@Override
 			public void onPacketSending(PacketEvent e) {
-				removeData(e.getPlayer().getName());
+				removeData(e.getPlayer());
 			}
 		};
 		ModFixNG.getProtocolManager().addPacketListener(plistener);
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
-		removeData(e.getPlayer().getName());
+		removeData(e.getPlayer());
 	}
 
-	private void removeData(String playername) {
-		playerOpenBlock.remove(playername);
+	private void removeData(Player player) {
+		playerOpenBlock.remove(player);
 	}
 
 	private BukkitTask task;
 	// check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory
 	private void initBlockCheck() {
-		task = Bukkit.getScheduler().runTaskTimer(ModFixNG.getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				for (Player player : Bukkit.getOnlinePlayers()) {
-					if (playerOpenBlock.containsKey(player.getName())) {
-						String playername = player.getName();
-						BlockState bs = playerOpenBlock.get(playername);
+		task = Bukkit.getScheduler().runTaskTimer(
+			ModFixNG.getInstance(), 
+			new Runnable() {
+				@Override
+				public void run() {
+					Iterator<Entry<Player, BlockState>> it = playerOpenBlock.entrySet().iterator();
+					while (it.hasNext()) {
+						Entry<Player, BlockState> entry = it.next();
+						Player player = entry.getKey();
+						BlockState bs = entry.getValue();
 						Block b = bs.getBlock();
-						if (!b.getWorld().getName().equals(player.getWorld().getName()) || b.getLocation().distanceSquared(player.getLocation()) > 36) {
-							if (!isValid(bs, b)) {
-								player.closeInventory();
-								playerOpenBlock.remove(playername);
-							}
+						if (b.getWorld() != player.getWorld() || b.getLocation().distanceSquared(player.getLocation()) > 36 || !isValid(bs, b)) {
+							it.remove();
+							player.closeInventory();
 						}
 					}
 				}
-			}
-		}, 0, 1);
+			},
+			0, 1
+		);
 	}
 
 	private boolean isValid(BlockState bs, Block b) {
