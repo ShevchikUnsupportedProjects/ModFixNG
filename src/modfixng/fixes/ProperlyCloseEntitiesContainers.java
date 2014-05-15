@@ -19,7 +19,9 @@ package modfixng.fixes;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -50,7 +52,7 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		this.config = config;
 	}
 
-	private LinkedHashMap<String, Entity> playerOpenEntity = new LinkedHashMap<String, Entity>(200);
+	private LinkedHashMap<Player, Entity> playerOpenEntity = new LinkedHashMap<Player, Entity>(200);
 
 	private HashSet<EntityType> knownEntityTypes  = new HashSet<EntityType>(
 		Arrays.asList(
@@ -67,9 +69,8 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerOpenedEntity(PlayerInteractEntityEvent e) {
 		final Player player = e.getPlayer();
-		final String playername = player.getName();
 
-		if (playerOpenEntity.containsKey(playername)) {
+		if (playerOpenEntity.containsKey(player)) {
 			if (ModFixNGUtils.isInventoryOpen(player)) {
 				e.setCancelled(true);
 				return;
@@ -78,7 +79,7 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 
 		final Entity entity = e.getRightClicked();
 		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityTypes.contains(entity.getType()) || entity.getType().toString().equals("HORSE")) {
-			playerOpenEntity.put(playername, entity);
+			playerOpenEntity.put(player, entity);
 		}
 	}
 
@@ -97,15 +98,7 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 						return;
 					}
 
-					Bukkit.getScheduler().scheduleSyncDelayedTask(
-						ModFixNG.getInstance(),
-						new Runnable() {
-							@Override
-							public void run() {
-								removeData(e.getPlayer().getName());
-							}
-						}
-					);
+					removeData(e.getPlayer());
 				}
 			}
 		);
@@ -118,18 +111,18 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		) {
 			@Override
 			public void onPacketSending(PacketEvent e) {
-				removeData(e.getPlayer().getName());
+				removeData(e.getPlayer());
 			}
 		};
 		ModFixNG.getProtocolManager().addPacketListener(plistener);
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
-		removeData(e.getPlayer().getName());
+		removeData(e.getPlayer());
 	}
 
-	private void removeData(String playername) {
-		playerOpenEntity.remove(playername);
+	private void removeData(Player player) {
+		playerOpenEntity.remove(player);
 	}
 
 	private BukkitTask task;
@@ -140,14 +133,14 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 			new Runnable() {
 				@Override
 				public void run() {
-					for (Player player : Bukkit.getOnlinePlayers()) {
-						if (playerOpenEntity.containsKey(player.getName())) {
-							String playername = player.getName();
-							Entity entity = playerOpenEntity.get(playername);
-							if (!entity.isValid() || !entity.getWorld().getName().equals(player.getWorld().getName()) || entity.getLocation().distanceSquared(player.getLocation()) > 36) {
-								player.closeInventory();
-								playerOpenEntity.remove(playername);
-							}
+					Iterator<Entry<Player, Entity>> it = playerOpenEntity.entrySet().iterator();
+					while (it.hasNext()) {
+						Entry<Player, Entity> entry = it.next();
+						Player player = entry.getKey();
+						Entity entity = entry.getValue();
+						if (!entity.isValid() || entity.getWorld() != player.getWorld() || entity.getLocation().distanceSquared(player.getLocation()) > 36) {
+							it.remove();
+							player.closeInventory();
 						}
 					}
 				}
@@ -170,10 +163,11 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(alistener);
 		ModFixNG.getProtocolManager().removePacketListener(plistener);
 		HandlerList.unregisterAll(this);
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (playerOpenEntity.containsKey(player.getName())) {
-				player.closeInventory();
-			}
+		Iterator<Player> it = playerOpenEntity.keySet().iterator();
+		while (it.hasNext()) {
+			Player player = it.next();
+			it.remove();
+			player.closeInventory();
 		}
 	}
 
