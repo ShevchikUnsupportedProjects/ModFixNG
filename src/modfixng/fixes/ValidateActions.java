@@ -33,6 +33,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -60,6 +61,15 @@ public class ValidateActions implements Listener, Feature {
 			event.setCancelled(true);
 			return;
 		}
+	}
+
+	// deny active slot switch while invnetory is opened
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerSlotSwitch(PlayerItemHeldEvent event) {
+		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+			event.setCancelled(true);
+			return;
+		}		
 	}
 
 	// deny commands use if inventory opened
