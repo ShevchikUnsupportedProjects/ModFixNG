@@ -18,10 +18,8 @@
 package modfixng.fixes;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -54,7 +52,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		this.config = config;
 	}
 
-	private LinkedHashMap<Player, BlockState> playerOpenBlock = new LinkedHashMap<Player, BlockState>(200);
+	private HashMap<String, BlockState> playerOpenBlock = new HashMap<String, BlockState>(200);
 
 	private HashSet<Material> knownBlockMaterials  = new HashSet<Material>(
 		Arrays.asList(
@@ -73,9 +71,10 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 			return;
 		}
 
-		final Player player = e.getPlayer();
+		Player player = e.getPlayer();
+		String playername = player.getName();
 
-		if (playerOpenBlock.containsKey(player)) {
+		if (playerOpenBlock.containsKey(playername)) {
 			if (ModFixNGUtils.isInventoryOpen(player)) {
 				e.setCancelled(true);
 				return;
@@ -84,7 +83,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 
 		final Block b = e.getClickedBlock();
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
-			playerOpenBlock.put(player, b.getState());
+			playerOpenBlock.put(playername, b.getState());
 		}
 	}
 
@@ -103,7 +102,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 						return;
 					}
 
-					removeData(e.getPlayer());
+					removeData(e.getPlayer().getName());
 				}
 			}
 		);
@@ -116,18 +115,18 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		) {
 			@Override
 			public void onPacketSending(PacketEvent e) {
-				removeData(e.getPlayer());
+				removeData(e.getPlayer().getName());
 			}
 		};
 		ModFixNG.getProtocolManager().addPacketListener(plistener);
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
-		removeData(e.getPlayer());
+		removeData(e.getPlayer().getName());
 	}
 
-	private void removeData(Player player) {
-		playerOpenBlock.remove(player);
+	private void removeData(String name) {
+		playerOpenBlock.remove(name);
 	}
 
 	private BukkitTask task;
@@ -138,15 +137,15 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 			new Runnable() {
 				@Override
 				public void run() {
-					Iterator<Entry<Player, BlockState>> it = playerOpenBlock.entrySet().iterator();
-					while (it.hasNext()) {
-						Entry<Player, BlockState> entry = it.next();
-						Player player = entry.getKey();
-						BlockState bs = entry.getValue();
-						Block b = bs.getBlock();
-						if (b.getWorld() != player.getWorld() || b.getLocation().distanceSquared(player.getLocation()) > 36 || !isValid(bs, b)) {
-							it.remove();
-							player.closeInventory();
+					for (Player player : Bukkit.getOnlinePlayers()) {
+						String playername = player.getName();
+						if (playerOpenBlock.containsKey(playername)) {
+							BlockState bs = playerOpenBlock.get(playername);
+							Block b = bs.getBlock();
+							if (b.getWorld() != player.getWorld() || b.getLocation().distanceSquared(player.getLocation()) > 36 || !isValid(bs, b)) {
+								playerOpenBlock.remove(player.getName());
+								player.closeInventory();
+							}	
 						}
 					}
 				}
@@ -176,11 +175,12 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(alistener);
 		ModFixNG.getProtocolManager().removePacketListener(plistener);
 		HandlerList.unregisterAll(this);
-		Iterator<Player> it = playerOpenBlock.keySet().iterator();
-		while (it.hasNext()) {
-			Player player = it.next();
-			it.remove();
-			player.closeInventory();
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			String playername = player.getName();
+			if (playerOpenBlock.containsKey(playername)) {
+				playerOpenBlock.remove(player.getName());
+				player.closeInventory();
+			}
 		}
 	}
 
