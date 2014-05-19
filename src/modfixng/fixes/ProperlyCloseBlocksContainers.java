@@ -178,7 +178,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			String playername = player.getName();
 			if (playerOpenBlock.containsKey(playername)) {
-				playerOpenBlock.remove(player.getName());
+				playerOpenBlock.remove(playername);
 				player.closeInventory();
 			}
 		}
