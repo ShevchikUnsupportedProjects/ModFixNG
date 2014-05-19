@@ -103,15 +103,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 						return;
 					}
 
-					Bukkit.getScheduler().scheduleSyncDelayedTask(
-						ModFixNG.getInstance(),
-						new Runnable() {
-							@Override
-							public void run() {
-								removeData(e.getPlayer());
-							}
-						}
-					);
+					removeData(e.getPlayer());
 				}
 			}
 		);
