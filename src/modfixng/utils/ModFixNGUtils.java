@@ -21,6 +21,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import modfixng.main.ModFixNG;
+
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -29,7 +31,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.utility.MinecraftReflection;
 
@@ -51,25 +52,25 @@ public class ModFixNGUtils {
 		return blstring;
 	}
 
-	public static void updateSlot(ProtocolManager protocolManager, Player player, int inventory, int minecraftslot, ItemStack item) {
-		PacketContainer updateslot = protocolManager.createPacket(PacketType.Play.Server.SET_SLOT);
+	public static void updateSlot(Player player, int inventory, int minecraftslot, ItemStack item) {
+		PacketContainer updateslot = ModFixNG.getProtocolManager().createPacket(PacketType.Play.Server.SET_SLOT);
 		updateslot.getIntegers().write(0, inventory);
 		updateslot.getIntegers().write(1, minecraftslot);
 		updateslot.getItemModifier().write(0, item);
 		try {
-			protocolManager.sendServerPacket(player, updateslot);
+			ModFixNG.getProtocolManager().sendServerPacket(player, updateslot);
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}
 
+	private static Class<?> invclass = MinecraftReflection.getMinecraftClass("IInventory");
 	public static boolean hasInventory(Block b) {
 		try {
 			World world = b.getWorld();
 			Method getTEMethod = world.getClass().getDeclaredMethod("getTileEntityAt", int.class, int.class, int.class);
 			getTEMethod.setAccessible(true);
 			Object te = getTEMethod.invoke(world, b.getX(), b.getY(), b.getZ());
-			Class<?> invclass = MinecraftReflection.getMinecraftClass("IInventory");
 			if (te != null && invclass.isAssignableFrom(te.getClass())) {
 				return true;
 			}

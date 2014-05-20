@@ -36,10 +36,10 @@ public class FixPlayerArmorSlotDesync implements Feature {
 				@Override
 				public void run() {
 					for (Player player : Bukkit.getOnlinePlayers()) {
-						ModFixNGUtils.updateSlot(ModFixNG.getProtocolManager(), player, 0, 5, player.getInventory().getHelmet());
-						ModFixNGUtils.updateSlot(ModFixNG.getProtocolManager(), player, 0, 6, player.getInventory().getChestplate());
-						ModFixNGUtils.updateSlot(ModFixNG.getProtocolManager(), player, 0, 7, player.getInventory().getLeggings());
-						ModFixNGUtils.updateSlot(ModFixNG.getProtocolManager(), player, 0, 8, player.getInventory().getBoots());
+						ModFixNGUtils.updateSlot(player, 0, 5, player.getInventory().getHelmet());
+						ModFixNGUtils.updateSlot(player, 0, 6, player.getInventory().getChestplate());
+						ModFixNGUtils.updateSlot(player, 0, 7, player.getInventory().getLeggings());
+						ModFixNGUtils.updateSlot(player, 0, 8, player.getInventory().getBoots());
 					}
 				}
 			},
