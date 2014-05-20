@@ -55,7 +55,7 @@ public class FeatureLoader {
 		if (config.fixSlotDesyncEnabled) {
 			loadFeature(new FixPlayerArmorSlotDesync());
 		}
-		if (config.validateActionsEnabled) {
+		if (config.validateActionsEnabled || config.fixBagEnabled) {
 			loadFeature(new ValidateActions());
 		}
 		if (config.restrict19Enabled) {
