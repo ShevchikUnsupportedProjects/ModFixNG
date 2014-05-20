@@ -39,6 +39,18 @@ public class FeatureLoader {
 
 	private LinkedList<Feature> loadedFeatures = new LinkedList<Feature>();
 
+	public LinkedList<Feature> getLoadedFeaturesCopy() {
+		return new LinkedList<Feature>(loadedFeatures);
+	}
+
+	public LinkedList<String> getLoadedFeaturesNames() {
+		LinkedList<String> names = new LinkedList<String>();
+		for (Feature feature : loadedFeatures) {
+			names.add(feature.getName());
+		}
+		return names;
+	}
+
 	public void loadAll() {
 		if (config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
 			loadFeature(new ProperlyCloseBlocksContainers(config));
