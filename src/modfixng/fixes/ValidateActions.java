@@ -176,4 +176,9 @@ public class ValidateActions implements Listener, Feature {
 		HandlerList.unregisterAll(this);
 	}
 
+	@Override
+	public String getName() {
+		return "ValidateActions";
+	}
+
 }

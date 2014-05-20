@@ -57,4 +57,9 @@ public class FixPlayerArmorSlotDesync implements Feature {
 		task.cancel();
 	}
 
+	@Override
+	public String getName() {
+		return "FixArmorDesync";
+	}
+
 }

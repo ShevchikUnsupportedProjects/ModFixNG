@@ -213,4 +213,9 @@ public class FixBag implements Listener, Feature {
 		HandlerList.unregisterAll(this);
 	}
 
+	@Override
+	public String getName() {
+		return "BagFix";
+	}
+
 }

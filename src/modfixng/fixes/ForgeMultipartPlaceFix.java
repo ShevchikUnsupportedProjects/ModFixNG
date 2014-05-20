@@ -81,4 +81,9 @@ public class ForgeMultipartPlaceFix implements Listener, Feature {
 		HandlerList.unregisterAll(this);
 	}
 
+	@Override
+	public String getName() {
+		return "ForgeMultipartFix";
+	}
+
 }

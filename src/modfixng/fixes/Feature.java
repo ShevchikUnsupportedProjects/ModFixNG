@@ -19,6 +19,8 @@ package modfixng.fixes;
 
 public interface Feature {
 
+	public String getName();
+
 	public void load();
 
 	public void unload();

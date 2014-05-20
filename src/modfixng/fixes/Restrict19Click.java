@@ -68,4 +68,9 @@ public class Restrict19Click implements Feature {
 		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
 	}
 
+	@Override
+	public String getName() {
+		return "Inventory19ClickRestrict";
+	}
+
 }

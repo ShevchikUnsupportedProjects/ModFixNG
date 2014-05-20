@@ -77,4 +77,9 @@ public class RestrictShiftClick implements Feature {
 		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
 	}
 
+	@Override
+	public String getName() {
+		return "InventoryShiftClickRestrict";
+	}
+
 }

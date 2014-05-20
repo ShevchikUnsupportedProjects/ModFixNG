@@ -171,4 +171,9 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		}
 	}
 
+	@Override
+	public String getName() {
+		return "ProperlyCloseEntitiesContainers";
+	}
+
 }

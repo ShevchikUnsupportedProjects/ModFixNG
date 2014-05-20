@@ -183,5 +183,9 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 			}
 		}
 	}
+	@Override
+	public String getName() {
+		return "ProperlyCloseBlocksContainers";
+	}
 
 }
