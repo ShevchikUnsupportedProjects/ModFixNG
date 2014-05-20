@@ -76,6 +76,12 @@ public class Commands implements CommandExecutor, Listener {
 			ModFixNG.getFeatureLoader().loadAll();
 			sender.sendMessage(ChatColor.BLUE + "ModFixNG перезагружен");
 			return true;
+		} else if (args.length == 1 && args[0].equalsIgnoreCase("status")) {
+			sender.sendMessage(ChatColor.BLUE + "Активные модули:");
+			for (String name : ModFixNG.getFeatureLoader().getLoadedFeaturesNames()) {
+				sender.sendMessage(ChatColor.BLUE + name);
+			}
+			return true;
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 			displayHelp(sender);
 			return true;
