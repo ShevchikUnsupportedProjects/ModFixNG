@@ -39,11 +39,11 @@ public class Config {
 	public boolean fixBagCropanalyzerFixEnabled = true;
 	public boolean fixBagToolboxFixEnabled = true;
 
-	public boolean fixFreecamEntitiesEnabled = true;
-	public HashSet<Short> fixFreecamEntitiesEntitiesIDs = new HashSet<Short>();
+	public boolean properlyCloseEntitiesContainersEnabled = true;
+	public HashSet<Short> properlyCloseEntitiesContainersEntitiesIDs = new HashSet<Short>();
 
-	public boolean fixFreecamBlockCloseInventoryOnBreakCheckEnabled = true;
-	public HashSet<String> fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = new HashSet<String>();
+	public boolean properlyCloseBlocksContainers = true;
+	public HashSet<String> properlyCloseBlocksContainersBlocksIDs = new HashSet<String>();
 
 	public boolean validateActionsEnabled = true;
 
@@ -55,38 +55,38 @@ public class Config {
 	public boolean restrictShiftEnabled = true;
 	public HashSet<String> restrictShiftInvetoryNames = new HashSet<String>();
 
-	public boolean microblockFixEnabled = true;
-	public int microblockFixItemID = -1;
-	public int microblockFixBlockID = -1;
+	public boolean fixMultipartEnabled = true;
+	public int fixMultipartItemID = -1;
+	public int fixMultipartBlockID = -1;
 
 	public void loadConfig() {
 		YamlConfigurationWrapper config = YamlConfigurationWrapper.loadConfiguration(configfile);
 
-		fixBagEnabled = config.getBoolean("BackPackFix.enabled", fixBagEnabled);
-		fixBag19ButtonClickEnabled = config.getBoolean("BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
+		fixBagEnabled = config.get(boolean.class, "BackPackFix.enabled", fixBagEnabled);
+		fixBag19ButtonClickEnabled = config.get(boolean.class, "BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
 		fixBag19ButtonClickBagInventoryNames = new HashSet<String>(config.getStringList("BackPackFix.restrict19ButtonClick.inventoryNames"));
-		fixBagCropanalyzerFixEnabled = config.getBoolean("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
-		fixBagToolboxFixEnabled = config.getBoolean("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
+		fixBagCropanalyzerFixEnabled = config.get(boolean.class, "BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
+		fixBagToolboxFixEnabled = config.get(boolean.class, "BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 
-		fixFreecamBlockCloseInventoryOnBreakCheckEnabled = config.getBoolean("ProperlyCloseInventories.checkBlocks.enabled", fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
-		fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs = config.getHashSet(String.class, "ProperlyCloseInventories.checkBlocks.IDs");
+		properlyCloseBlocksContainers = config.get(boolean.class, "ProperlyCloseInventories.checkBlocks.enabled", properlyCloseBlocksContainers);
+		properlyCloseBlocksContainersBlocksIDs = config.getHashSet(String.class, "ProperlyCloseInventories.checkBlocks.IDs", properlyCloseBlocksContainersBlocksIDs);
 
-		fixFreecamEntitiesEnabled = config.getBoolean("ProperlyCloseInventories.checkEntities.enabled", fixFreecamEntitiesEnabled);
-		fixFreecamEntitiesEntitiesIDs = config.getHashSet(Short.class, "ProperlyCloseInventories.checkEntities.IDs");
+		properlyCloseEntitiesContainersEnabled = config.get(boolean.class, "ProperlyCloseInventories.checkEntities.enabled", properlyCloseEntitiesContainersEnabled);
+		properlyCloseEntitiesContainersEntitiesIDs = config.getHashSet(Short.class, "ProperlyCloseInventories.checkEntities.IDs", properlyCloseEntitiesContainersEntitiesIDs);
 
-		validateActionsEnabled = config.getBoolean("ValidateActions.enabled", validateActionsEnabled);
+		fixSlotDesyncEnabled = config.get(boolean.class, "ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
-		fixSlotDesyncEnabled = config.getBoolean("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
+		fixMultipartEnabled = config.get(boolean.class, "MicroblockFix.enabled", fixMultipartEnabled);
+		fixMultipartItemID = config.get(int.class, "MicroblockFix.itemID", fixMultipartItemID);
+		fixMultipartBlockID = config.get(int.class, "MicroblockFix.blockID", fixMultipartBlockID);
 
-		restrict19Enabled = config.getBoolean("Restrict19ButtonClick.enabled", restrict19Enabled);
-		restrict19InvetoryNames = config.getHashSet(String.class, "Restrict19ButtonClick.inventoryNames");
+		validateActionsEnabled = config.get(boolean.class, "ValidateActions.enabled", validateActionsEnabled);
 
-		restrictShiftEnabled = config.getBoolean("RestrictShiftButtonClick.enabled", restrictShiftEnabled);
-		restrictShiftInvetoryNames = config.getHashSet(String.class, "RestrictShiftButtonClick.inventoryNames");
+		restrict19Enabled = config.get(boolean.class, "Restrict19ButtonClick.enabled", restrict19Enabled);
+		restrict19InvetoryNames = config.getHashSet(String.class, "Restrict19ButtonClick.inventoryNames", restrict19InvetoryNames);
 
-		microblockFixEnabled = config.getBoolean("MicroblockFix.enabled", microblockFixEnabled);
-		microblockFixItemID = config.getInt("MicroblockFix.itemID", microblockFixItemID);
-		microblockFixBlockID = config.getInt("MicroblockFix.blockID", microblockFixBlockID);
+		restrictShiftEnabled = config.get(boolean.class, "RestrictShiftButtonClick.enabled", restrictShiftEnabled);
+		restrictShiftInvetoryNames = config.getHashSet(String.class, "RestrictShiftButtonClick.inventoryNames", restrictShiftInvetoryNames);
 
 		saveConfig();
 	}
@@ -100,11 +100,11 @@ public class Config {
 		config.set("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
 		config.set("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 
-		config.set("ProperlyCloseInventories.checkBlocks.enabled", fixFreecamBlockCloseInventoryOnBreakCheckEnabled);
-		config.set("ProperlyCloseInventories.checkBlocks.IDs", fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs);
+		config.set("ProperlyCloseInventories.checkBlocks.enabled", properlyCloseBlocksContainers);
+		config.set("ProperlyCloseInventories.checkBlocks.IDs", properlyCloseBlocksContainersBlocksIDs);
 
-		config.set("ProperlyCloseInventories.checkEntities.enabled", fixFreecamEntitiesEnabled);
-		config.set("ProperlyCloseInventories.checkEntities.IDs", fixFreecamEntitiesEntitiesIDs);
+		config.set("ProperlyCloseInventories.checkEntities.enabled", properlyCloseEntitiesContainersEnabled);
+		config.set("ProperlyCloseInventories.checkEntities.IDs", properlyCloseEntitiesContainersEntitiesIDs);
 
 		config.set("ValidateActions.enabled", validateActionsEnabled);
 
@@ -116,9 +116,9 @@ public class Config {
 		config.set("RestrictShiftButtonClick.enabled", restrictShiftEnabled);
 		config.set("RestrictShiftButtonClick.inventoryNames", restrictShiftInvetoryNames);
 
-		config.set("MicroblockFix.enabled", microblockFixEnabled);
-		config.set("MicroblockFix.itemID", microblockFixItemID);
-		config.set("MicroblockFix.blockID", microblockFixBlockID);
+		config.set("MicroblockFix.enabled", fixMultipartEnabled);
+		config.set("MicroblockFix.itemID", fixMultipartItemID);
+		config.set("MicroblockFix.blockID", fixMultipartBlockID);
 
 		try {
 			config.save(configfile);
@@ -138,7 +138,16 @@ public class Config {
 		}
 
 		@SuppressWarnings("unchecked")
-		private <T> HashSet<T> getHashSet(Class<T> t, String path) {
+		private <T> T get(Class<T> t, String path, T defaultValue) {
+			try {
+				return (T) get(path);
+			} catch (Exception e) {
+			}
+			return defaultValue;
+		}
+
+		@SuppressWarnings("unchecked")
+		private <T> HashSet<T> getHashSet(Class<T> t, String path, HashSet<T> defaultValue) {
 			try {
 				HashSet<T> set = new HashSet<T>();
 				List<?> list = getList(path, new ArrayList<T>());
@@ -148,7 +157,7 @@ public class Config {
 				return set;
 			} catch (Exception e) {
 			}
-			return new HashSet<T>();
+			return defaultValue;
 		}
 
 		@Override

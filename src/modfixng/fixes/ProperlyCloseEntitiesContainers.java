@@ -77,7 +77,7 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		}
 
 		final Entity entity = e.getRightClicked();
-		if (config.fixFreecamEntitiesEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityTypes.contains(entity.getType()) || entity.getType().toString().equals("HORSE")) {
+		if (config.properlyCloseEntitiesContainersEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityTypes.contains(entity.getType()) || entity.getType().toString().equals("HORSE")) {
 			playerOpenEntity.put(playername, entity);
 		}
 	}

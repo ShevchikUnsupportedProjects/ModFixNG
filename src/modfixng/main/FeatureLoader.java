@@ -53,16 +53,16 @@ public class FeatureLoader {
 	}
 
 	public void loadAll() {
-		if (config.fixFreecamBlockCloseInventoryOnBreakCheckEnabled) {
+		if (config.properlyCloseBlocksContainers) {
 			loadFeature(new ProperlyCloseBlocksContainers(config));
 		}
-		if (config.fixFreecamEntitiesEnabled) {
+		if (config.properlyCloseEntitiesContainersEnabled) {
 			loadFeature(new ProperlyCloseEntitiesContainers(config));
 		}
 		if (config.fixBagEnabled && ModFixNGUtils.isRunningMCPC()) {
 			loadFeature(new FixBag(config));
 		}
-		if (config.microblockFixEnabled && config.microblockFixBlockID != -1 && config.microblockFixItemID != -1 && ModFixNGUtils.isRunningMCPC()) {
+		if (config.fixMultipartEnabled && config.fixMultipartBlockID != -1 && config.fixMultipartItemID != -1 && ModFixNGUtils.isRunningMCPC()) {
 			loadFeature(new ForgeMultipartPlaceFix(config));
 		}
 		if (config.fixSlotDesyncEnabled) {

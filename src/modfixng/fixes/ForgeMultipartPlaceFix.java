@@ -47,15 +47,15 @@ public class ForgeMultipartPlaceFix implements Listener, Feature {
 		Block placed = event.getBlockPlaced();
 
 		if (!event.isCancelled()) {
-			if (placed.getTypeId() == config.microblockFixBlockID) {
+			if (placed.getTypeId() == config.fixMultipartBlockID) {
 				blocksPlaced.put(event.getPlayer().getName(), placed);
 			}
 		}
 
 		if (event.isCancelled()) {
 			ItemStack item = event.getPlayer().getItemInHand();
-			if (item.getTypeId() == config.microblockFixItemID) {
-				if (placed.getTypeId() != config.microblockFixBlockID) {
+			if (item.getTypeId() == config.fixMultipartItemID) {
+				if (placed.getTypeId() != config.fixMultipartBlockID) {
 					String name = event.getPlayer().getName();
 					if (blocksPlaced.containsKey(name)) {
 						blocksPlaced.get(name).setType(Material.AIR);

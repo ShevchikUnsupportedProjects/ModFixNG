@@ -82,7 +82,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		}
 
 		final Block b = e.getClickedBlock();
-		if (config.fixFreecamBlockCloseInventoryOnBreakCheckBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
+		if (config.properlyCloseBlocksContainersBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
 			playerOpenBlock.put(playername, b.getState());
 		}
 	}
