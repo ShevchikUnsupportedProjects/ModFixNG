@@ -17,6 +17,8 @@
 
 package modfixng.main;
 
+import modfixng.utils.ModFixNGUtils;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -52,6 +54,7 @@ public class ModFixNG extends JavaPlugin {
 		commandl = new Commands(config);
 		getServer().getPluginManager().registerEvents(commandl, this);
 		getCommand("modfixng").setExecutor(commandl);
+		ModFixNGUtils.checkMCPC();
 		loader = new FeatureLoader(config);
 		loader.loadAll();
 	}

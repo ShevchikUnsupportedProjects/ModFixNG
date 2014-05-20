@@ -139,8 +139,12 @@ public class ModFixNGUtils {
 		return f.get(item);
 	}
 
-	private static boolean isRunningMCPC() {
-		return (MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP"));
+	private static boolean runningMCPC = false;
+	public static void checkMCPC() {
+		runningMCPC = MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP");
+	}
+	public static boolean isRunningMCPC() {
+		return runningMCPC;
 	}
 
 }
