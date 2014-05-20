@@ -29,6 +29,7 @@ import modfixng.fixes.ProperlyCloseEntitiesContainers;
 import modfixng.fixes.Restrict19Click;
 import modfixng.fixes.RestrictShiftClick;
 import modfixng.fixes.ValidateActions;
+import modfixng.utils.ModFixNGUtils;
 
 public class FeatureLoader {
 
@@ -58,16 +59,16 @@ public class FeatureLoader {
 		if (config.fixFreecamEntitiesEnabled) {
 			loadFeature(new ProperlyCloseEntitiesContainers(config));
 		}
-		if (config.fixBagEnabled) {
+		if (config.fixBagEnabled && ModFixNGUtils.isRunningMCPC()) {
 			loadFeature(new FixBag(config));
 		}
-		if (config.microblockFixEnabled && config.microblockFixBlockID != -1 && config.microblockFixItemID != -1) {
+		if (config.microblockFixEnabled && config.microblockFixBlockID != -1 && config.microblockFixItemID != -1 && ModFixNGUtils.isRunningMCPC()) {
 			loadFeature(new ForgeMultipartPlaceFix(config));
 		}
 		if (config.fixSlotDesyncEnabled) {
 			loadFeature(new FixPlayerArmorSlotDesync());
 		}
-		if (config.validateActionsEnabled || config.fixBagEnabled) {
+		if (config.validateActionsEnabled || (config.fixBagEnabled && ModFixNGUtils.isRunningMCPC())) {
 			loadFeature(new ValidateActions());
 		}
 		if (config.restrict19Enabled) {
