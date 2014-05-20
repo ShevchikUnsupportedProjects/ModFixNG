@@ -69,7 +69,7 @@ public class ValidateActions implements Listener, Feature {
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 			return;
-		}		
+		}
 	}
 
 	// deny commands use if inventory opened

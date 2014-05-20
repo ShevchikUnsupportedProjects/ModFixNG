@@ -133,7 +133,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 	// check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory
 	private void initBlockCheck() {
 		task = Bukkit.getScheduler().runTaskTimer(
-			ModFixNG.getInstance(), 
+			ModFixNG.getInstance(),
 			new Runnable() {
 				@Override
 				public void run() {
@@ -145,7 +145,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 							if (b.getWorld() != player.getWorld() || b.getLocation().distanceSquared(player.getLocation()) > 36 || !isValid(bs, b)) {
 								playerOpenBlock.remove(player.getName());
 								player.closeInventory();
-							}	
+							}
 						}
 					}
 				}
@@ -183,6 +183,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 			}
 		}
 	}
+
 	@Override
 	public String getName() {
 		return "ProperlyCloseBlocksContainers";
