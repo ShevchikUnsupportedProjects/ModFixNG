@@ -20,6 +20,7 @@ package modfixng.fixes;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -58,16 +59,21 @@ public class FixBag implements Listener, Feature {
 
 		p.closeInventory();
 
-		event.getDrops().clear();
-		for (ItemStack item : p.getInventory().getContents()) {
-			if (item != null) {
-				event.getDrops().add(item);
+		List<ItemStack> drops = event.getDrops();
+		drops.clear();
+		try {
+			for (ItemStack item : p.getInventory().getContents()) {
+				if (item != null) {
+					drops.add(ModFixNGUtils.getItemStackWrapperCopy(item));
+				}
 			}
-		}
-		for (ItemStack armor : p.getInventory().getArmorContents()) {
-			if (armor != null) {
-				event.getDrops().add(armor);
+			for (ItemStack armor : p.getInventory().getArmorContents()) {
+				if (armor != null) {
+					drops.add(ModFixNGUtils.getItemStackWrapperCopy(armor));
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
