@@ -30,6 +30,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -75,6 +76,15 @@ public class ValidateActions implements Listener, Feature {
 	// deny commands use if inventory opened
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
+		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+			event.setCancelled(true);
+			return;
+		}
+	}
+
+	// restrict block break while inventory is opened
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onBlockBreak(BlockBreakEvent event) {
 		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 			return;
