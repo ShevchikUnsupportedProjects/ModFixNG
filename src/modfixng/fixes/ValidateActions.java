@@ -183,6 +183,7 @@ public class ValidateActions implements Listener, Feature {
 		for (AsyncListenerHandler listener : listeners) {
 			ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
 		}
+		listeners.clear();
 		HandlerList.unregisterAll(this);
 	}
 
