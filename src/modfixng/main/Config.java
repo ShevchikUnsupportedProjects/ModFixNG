@@ -140,7 +140,10 @@ public class Config {
 		@SuppressWarnings("unchecked")
 		private <T> T get(Class<T> t, String path, T defaultValue) {
 			try {
-				return (T) get(path);
+				Object obj = get(path);
+				if (obj != null) {
+					return (T) obj;
+				}
 			} catch (Exception e) {
 			}
 			return defaultValue;
