@@ -176,6 +176,9 @@ public class ValidateActions implements Listener, Feature {
 		Bukkit.getPluginManager().registerEvents(this, ModFixNG.getInstance());
 		initDropButtonPlayClickListener();
 		initInventoryClickListener();
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			players.add(player.getName());
+		}
 	}
 
 	@Override
