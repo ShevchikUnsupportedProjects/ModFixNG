@@ -65,7 +65,7 @@ public class Config {
 
 		fixBagEnabled = config.get(boolean.class, "BackPackFix.enabled", fixBagEnabled);
 		fixBag19ButtonClickEnabled = config.get(boolean.class, "BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
-		fixBag19ButtonClickBagInventoryNames = new HashSet<String>(config.getStringList("BackPackFix.restrict19ButtonClick.inventoryNames"));
+		fixBag19ButtonClickBagInventoryNames = config.getHashSet(String.class, "BackPackFix.restrict19ButtonClick.inventoryNames", fixBag19ButtonClickBagInventoryNames);
 		fixBagCropanalyzerFixEnabled = config.get(boolean.class, "BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
 		fixBagToolboxFixEnabled = config.get(boolean.class, "BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 
