@@ -138,12 +138,11 @@ public class Commands implements CommandExecutor, Listener {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-	public void onPlayerCheckEntityID(PlayerInteractEntityEvent e) {
+	public void onPlayerCheckEntityType(PlayerInteractEntityEvent e) {
 		Player pl = e.getPlayer();
 		if (pleinfoswitch.contains(pl.getName())) {
-			pl.sendMessage(ChatColor.BLUE + "Entity Type ID: " + e.getRightClicked().getType().getTypeId());
+			pl.sendMessage(ChatColor.BLUE + "Entity Type: " + e.getRightClicked().getType().toString());
 			pleinfoswitch.remove(pl.getName());
 			e.setCancelled(true);
 		}

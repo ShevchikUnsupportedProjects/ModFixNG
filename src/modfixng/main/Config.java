@@ -41,7 +41,7 @@ public class Config {
 	public boolean fixBagToolboxFixEnabled = true;
 
 	public boolean properlyCloseEntitiesContainersEnabled = true;
-	public HashSet<Short> properlyCloseEntitiesContainersEntitiesIDs = new HashSet<Short>();
+	public HashSet<String> properlyCloseEntitiesContainersEntitiesTypes = new HashSet<String>();
 
 	public boolean properlyCloseBlocksContainers = true;
 	public HashSet<String> properlyCloseBlocksContainersBlocksMaterials = new HashSet<String>();
@@ -73,7 +73,7 @@ public class Config {
 		properlyCloseBlocksContainersBlocksMaterials = config.getHashSet(String.class, "ProperlyCloseInventories.checkBlocks.materials", properlyCloseBlocksContainersBlocksMaterials);
 
 		properlyCloseEntitiesContainersEnabled = config.get(boolean.class, "ProperlyCloseInventories.checkEntities.enabled", properlyCloseEntitiesContainersEnabled);
-		properlyCloseEntitiesContainersEntitiesIDs = config.getHashSet(Short.class, "ProperlyCloseInventories.checkEntities.IDs", properlyCloseEntitiesContainersEntitiesIDs);
+		properlyCloseEntitiesContainersEntitiesTypes = config.getHashSet(String.class, "ProperlyCloseInventories.checkEntities.types", properlyCloseEntitiesContainersEntitiesTypes);
 
 		fixSlotDesyncEnabled = config.get(boolean.class, "ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
@@ -105,7 +105,7 @@ public class Config {
 		config.set("ProperlyCloseInventories.checkBlocks.materials", properlyCloseBlocksContainersBlocksMaterials);
 
 		config.set("ProperlyCloseInventories.checkEntities.enabled", properlyCloseEntitiesContainersEnabled);
-		config.set("ProperlyCloseInventories.checkEntities.IDs", properlyCloseEntitiesContainersEntitiesIDs);
+		config.set("ProperlyCloseInventories.checkEntities.types", properlyCloseEntitiesContainersEntitiesTypes);
 
 		config.set("ValidateActions.enabled", validateActionsEnabled);
 

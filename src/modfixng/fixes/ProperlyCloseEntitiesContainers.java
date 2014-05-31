@@ -65,7 +65,6 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		)
 	);
 	// add player to list when he opens entity inventory
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerOpenedEntity(PlayerInteractEntityEvent e) {
 		Player player = e.getPlayer();
@@ -79,7 +78,7 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		}
 
 		final Entity entity = e.getRightClicked();
-		if (config.properlyCloseEntitiesContainersEntitiesIDs.contains(entity.getType().getTypeId()) || knownEntityTypes.contains(entity.getType())) {
+		if (config.properlyCloseEntitiesContainersEntitiesTypes.contains(entity.getType().toString()) || knownEntityTypes.contains(entity.getType())) {
 			playerOpenEntity.put(playername, entity);
 		}
 	}
