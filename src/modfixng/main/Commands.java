@@ -36,7 +36,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class Commands implements CommandExecutor, Listener {
 
@@ -86,9 +85,6 @@ public class Commands implements CommandExecutor, Listener {
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 			displayHelp(sender);
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("iteminfo")) {
-			displayItemInfo(sender);
-			return true;
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("blockinfo")) {
 			displayBlockInfo(sender);
 			return true;
@@ -108,18 +104,6 @@ public class Commands implements CommandExecutor, Listener {
 		sender.sendMessage(ChatColor.AQUA + "/modfix entityinfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить Entity Type ID");
 		sender.sendMessage(ChatColor.AQUA + "/modfix blockinfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить id и subid блока");
 		sender.sendMessage(ChatColor.AQUA + "/modfix inventoryinfo" + ChatColor.WHITE + "-" + ChatColor.BLUE + "получить имя открытого инвентаря");
-	}
-
-	private void displayItemInfo(CommandSender sender) {
-		if (sender instanceof Player) {
-			Player pl = (Player) sender;
-			ItemStack i = pl.getItemInHand();
-			String msg = ChatColor.BLUE + "Item id: " + i.getTypeId();
-			if (i.getDurability() != 0) {
-				msg += ", subid: " + pl.getItemInHand().getDurability();
-			}
-			pl.sendMessage(msg);
-		}
 	}
 
 	private void displayBlockInfo(CommandSender sender) {
@@ -154,6 +138,7 @@ public class Commands implements CommandExecutor, Listener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
 	public void onPlayerCheckEntityID(PlayerInteractEntityEvent e) {
 		Player pl = e.getPlayer();
@@ -164,6 +149,7 @@ public class Commands implements CommandExecutor, Listener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
 	public void onPlayerCheckBlockID(PlayerInteractEvent e) {
 		if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) {

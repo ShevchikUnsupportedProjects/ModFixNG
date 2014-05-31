@@ -36,16 +36,16 @@ public class PlainNMSUtils {
 	}
 
 	protected static boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		net.minecraft.server.v1_5_R3.ItemStack clickeditem = (net.minecraft.server.v1_5_R3.ItemStack) getPlayerContainer(p).b.get(minecraftslot);
+		net.minecraft.server.v1_6_R3.ItemStack clickeditem = (net.minecraft.server.v1_6_R3.ItemStack) getPlayerContainer(p).b.get(minecraftslot);
 		if (clickeditem.hasTag() && clickeditem.getTag().hasKey("uid")) {
 			int clickeduid = clickeditem.getTag().getInt("uid");
-			net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
+			net.minecraft.server.v1_6_R3.Container container = getPlayerContainer(p);
 			Field cropanalyzerField = container.getClass().getDeclaredField("cropnalyzer");
 			cropanalyzerField.setAccessible(true);
 			Object cropanalyzer = cropanalyzerField.get(container);
 			Field itemStackField = cropanalyzer.getClass().getDeclaredField("itemStack");
 			itemStackField.setAccessible(true);
-			net.minecraft.server.v1_5_R3.ItemStack opencropanalyzeritemstack = (net.minecraft.server.v1_5_R3.ItemStack) itemStackField.get(cropanalyzer);
+			net.minecraft.server.v1_6_R3.ItemStack opencropanalyzeritemstack = (net.minecraft.server.v1_6_R3.ItemStack) itemStackField.get(cropanalyzer);
 			int openuid = opencropanalyzeritemstack.getTag().getInt("uid");
 			return openuid == clickeduid;
 		}
@@ -53,25 +53,25 @@ public class PlainNMSUtils {
 	}
 
 	protected static boolean isTryingToDropOpenToolBox(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		net.minecraft.server.v1_5_R3.ItemStack clickeditem = (net.minecraft.server.v1_5_R3.ItemStack) getPlayerContainer(p).b.get(minecraftslot);
+		net.minecraft.server.v1_6_R3.ItemStack clickeditem = (net.minecraft.server.v1_6_R3.ItemStack) getPlayerContainer(p).b.get(minecraftslot);
 		if (clickeditem.hasTag() && clickeditem.getTag().hasKey("uid")) {
 			int clickeduid = clickeditem.getTag().getInt("uid");
-			net.minecraft.server.v1_5_R3.Container container = getPlayerContainer(p);
+			net.minecraft.server.v1_6_R3.Container container = getPlayerContainer(p);
 			Field tooboxField = container.getClass().getDeclaredField("Toolbox");
 			tooboxField.setAccessible(true);
 			Object toolbox = tooboxField.get(container);
 			Field itemStackField = toolbox.getClass().getSuperclass().getDeclaredField("itemStack");
 			itemStackField.setAccessible(true);
-			net.minecraft.server.v1_5_R3.ItemStack opentoolbox = (net.minecraft.server.v1_5_R3.ItemStack) itemStackField.get(toolbox);
+			net.minecraft.server.v1_6_R3.ItemStack opentoolbox = (net.minecraft.server.v1_6_R3.ItemStack) itemStackField.get(toolbox);
 			int openuid = opentoolbox.getTag().getInt("uid");
 			return openuid == clickeduid;
 		}
 		return false;
 	}
 
-	private static net.minecraft.server.v1_5_R3.Container getPlayerContainer(Player p) {
-		org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer cplayer = (org.bukkit.craftbukkit.v1_5_R3.entity.CraftPlayer) p;
-		net.minecraft.server.v1_5_R3.EntityHuman nmshuman = cplayer.getHandle();
+	private static net.minecraft.server.v1_6_R3.Container getPlayerContainer(Player p) {
+		org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer cplayer = (org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer) p;
+		net.minecraft.server.v1_6_R3.EntityHuman nmshuman = cplayer.getHandle();
 		return nmshuman.activeContainer;
 	}
 

@@ -28,14 +28,12 @@ import modfixng.utils.ModFixNGUtils;
 import modfixng.utils.PacketContainerReadable;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -74,18 +72,6 @@ public class FixBag implements Listener, Feature {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
-	// close inventory on portal enter or exit
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-	public void onMove(PlayerMoveEvent event) {
-		if (event.getFrom().getBlock().equals(event.getTo().getBlock())) {
-			return;
-		}
-
-		if (event.getTo().getBlock().getType() == Material.PORTAL || event.getFrom().getBlock().getType() == Material.PORTAL) {
-			event.getPlayer().closeInventory();
 		}
 	}
 

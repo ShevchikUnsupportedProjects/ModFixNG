@@ -42,6 +42,7 @@ public class ForgeMultipartPlaceFix implements Listener, Feature {
 
 	private HashMap<String, Block> blocksPlaced = new HashMap<String, Block>();
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockPlaceEvent(BlockPlaceEvent event) {
 		Block placed = event.getBlockPlaced();

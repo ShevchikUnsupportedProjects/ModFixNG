@@ -36,6 +36,7 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 
 public class ModFixNGUtils {
 
+	@SuppressWarnings("deprecation")
 	public static String getMaterialString(Block bl) {
 		String blstring = String.valueOf(bl.getType());
 		if (bl.getData() != 0) {
