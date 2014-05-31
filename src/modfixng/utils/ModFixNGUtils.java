@@ -36,18 +36,10 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 
 public class ModFixNGUtils {
 
-	public static String getIDstring(Block bl) {
-		String blstring = String.valueOf(bl.getTypeId());
+	public static String getMaterialString(Block bl) {
+		String blstring = String.valueOf(bl.getType());
 		if (bl.getData() != 0) {
 			blstring += ":" + bl.getData();
-		}
-		return blstring;
-	}
-
-	public static String getIDstring(ItemStack item) {
-		String blstring = String.valueOf(item.getTypeId());
-		if (item.getDurability() != 0) {
-			blstring += ":" + item.getDurability();
 		}
 		return blstring;
 	}

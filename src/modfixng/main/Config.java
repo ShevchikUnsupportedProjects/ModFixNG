@@ -43,7 +43,7 @@ public class Config {
 	public HashSet<Short> properlyCloseEntitiesContainersEntitiesIDs = new HashSet<Short>();
 
 	public boolean properlyCloseBlocksContainers = true;
-	public HashSet<String> properlyCloseBlocksContainersBlocksIDs = new HashSet<String>();
+	public HashSet<String> properlyCloseBlocksContainersBlocksMaterials = new HashSet<String>();
 
 	public boolean validateActionsEnabled = true;
 
@@ -69,7 +69,7 @@ public class Config {
 		fixBagToolboxFixEnabled = config.get(boolean.class, "BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 
 		properlyCloseBlocksContainers = config.get(boolean.class, "ProperlyCloseInventories.checkBlocks.enabled", properlyCloseBlocksContainers);
-		properlyCloseBlocksContainersBlocksIDs = config.getHashSet(String.class, "ProperlyCloseInventories.checkBlocks.IDs", properlyCloseBlocksContainersBlocksIDs);
+		properlyCloseBlocksContainersBlocksMaterials = config.getHashSet(String.class, "ProperlyCloseInventories.checkBlocks.materials", properlyCloseBlocksContainersBlocksMaterials);
 
 		properlyCloseEntitiesContainersEnabled = config.get(boolean.class, "ProperlyCloseInventories.checkEntities.enabled", properlyCloseEntitiesContainersEnabled);
 		properlyCloseEntitiesContainersEntitiesIDs = config.getHashSet(Short.class, "ProperlyCloseInventories.checkEntities.IDs", properlyCloseEntitiesContainersEntitiesIDs);
@@ -101,7 +101,7 @@ public class Config {
 		config.set("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 
 		config.set("ProperlyCloseInventories.checkBlocks.enabled", properlyCloseBlocksContainers);
-		config.set("ProperlyCloseInventories.checkBlocks.IDs", properlyCloseBlocksContainersBlocksIDs);
+		config.set("ProperlyCloseInventories.checkBlocks.materials", properlyCloseBlocksContainersBlocksMaterials);
 
 		config.set("ProperlyCloseInventories.checkEntities.enabled", properlyCloseEntitiesContainersEnabled);
 		config.set("ProperlyCloseInventories.checkEntities.IDs", properlyCloseEntitiesContainersEntitiesIDs);

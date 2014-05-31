@@ -60,7 +60,6 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 				//some vanilla minecraft item that has gui but doesn't implement IInventory
 				Material.ANVIL,
 				Material.ENCHANTMENT_TABLE,
-				Material.BREWING_STAND
 			}
 		)
 	);
@@ -82,7 +81,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		}
 
 		final Block b = e.getClickedBlock();
-		if (config.properlyCloseBlocksContainersBlocksIDs.contains(ModFixNGUtils.getIDstring(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
+		if (config.properlyCloseBlocksContainersBlocksMaterials.contains(ModFixNGUtils.getMaterialString(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
 			playerOpenBlock.put(playername, b.getState());
 		}
 	}
