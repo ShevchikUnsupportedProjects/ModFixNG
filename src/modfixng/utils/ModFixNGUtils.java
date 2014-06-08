@@ -28,6 +28,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.PacketType;
@@ -78,7 +79,12 @@ public class ModFixNGUtils {
 			return PlainNMSUtils.getOpenInventoryName(p);
 		} else {
 			if (isInventoryOpen(p)) {
-				return p.getOpenInventory().getTopInventory().getHolder().getClass().getName();
+				InventoryHolder holder = p.getOpenInventory().getTopInventory().getHolder();
+				if (holder != null) {
+					return holder.getClass().getName();
+				} else {
+					return "NOHOLDER";
+				}
 			} else {
 				return p.getInventory().getClass().getName();
 			}
