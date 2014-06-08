@@ -20,8 +20,6 @@ package modfixng.main;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.bukkit.Material;
-
 import modfixng.fixes.Feature;
 import modfixng.fixes.FixBag;
 import modfixng.fixes.FixPlayerArmorSlotDesync;
@@ -64,7 +62,7 @@ public class FeatureLoader {
 		if (config.fixBagEnabled && ModFixNGUtils.isRunningMCPC()) {
 			loadFeature(new FixBag(config));
 		}
-		if (config.fixMultipartEnabled && config.fixMultipartBlockMaterial != Material.AIR && config.fixMultipartItemMaterial != Material.AIR && ModFixNGUtils.isRunningMCPC()) {
+		if (config.fixMultipartEnabled && !config.fixMultipartBlockMaterial.equalsIgnoreCase("AIR") && !config.fixMultipartItemMaterial.equalsIgnoreCase("AIR") && ModFixNGUtils.isRunningMCPC()) {
 			loadFeature(new ForgeMultipartPlaceFix(config));
 		}
 		if (config.fixSlotDesyncEnabled) {

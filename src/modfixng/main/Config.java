@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config {
@@ -57,8 +56,8 @@ public class Config {
 	public HashSet<String> restrictShiftInvetoryNames = new HashSet<String>();
 
 	public boolean fixMultipartEnabled = true;
-	public Material fixMultipartItemMaterial = Material.AIR;
-	public Material fixMultipartBlockMaterial = Material.AIR;
+	public String fixMultipartItemMaterial = "AIR";
+	public String fixMultipartBlockMaterial = "AIR";
 
 	public void loadConfig() {
 		YamlConfigurationWrapper config = YamlConfigurationWrapper.loadConfiguration(configfile);
@@ -78,8 +77,8 @@ public class Config {
 		fixSlotDesyncEnabled = config.get(boolean.class, "ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
 		fixMultipartEnabled = config.get(boolean.class, "MicroblockFix.enabled", fixMultipartEnabled);
-		fixMultipartItemMaterial = config.get(Material.class, "MicroblockFix.itemMaterial", fixMultipartItemMaterial);
-		fixMultipartBlockMaterial = config.get(Material.class, "MicroblockFix.blockMaterial", fixMultipartBlockMaterial);
+		fixMultipartItemMaterial = config.get(String.class, "MicroblockFix.itemMaterial", fixMultipartItemMaterial);
+		fixMultipartBlockMaterial = config.get(String.class, "MicroblockFix.blockMaterial", fixMultipartBlockMaterial);
 
 		validateActionsEnabled = config.get(boolean.class, "ValidateActions.enabled", validateActionsEnabled);
 

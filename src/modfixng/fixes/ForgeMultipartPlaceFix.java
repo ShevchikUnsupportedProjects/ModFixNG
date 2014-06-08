@@ -47,15 +47,15 @@ public class ForgeMultipartPlaceFix implements Listener, Feature {
 		Block placed = event.getBlockPlaced();
 
 		if (!event.isCancelled()) {
-			if (placed.getType() == config.fixMultipartBlockMaterial) {
+			if (placed.getType().toString().equalsIgnoreCase(config.fixMultipartBlockMaterial)) {
 				blocksPlaced.put(event.getPlayer().getName(), placed);
 			}
 		}
 
 		if (event.isCancelled()) {
 			ItemStack item = event.getPlayer().getItemInHand();
-			if (item.getType() == config.fixMultipartItemMaterial) {
-				if (placed.getType() != config.fixMultipartBlockMaterial) {
+			if (item.getType().toString().equalsIgnoreCase(config.fixMultipartItemMaterial)) {
+				if (!placed.getType().toString().equalsIgnoreCase(config.fixMultipartBlockMaterial)) {
 					String name = event.getPlayer().getName();
 					if (blocksPlaced.containsKey(name)) {
 						blocksPlaced.get(name).setType(Material.AIR);
