@@ -134,6 +134,7 @@ public class Config {
 			try {
 				wrapper.load(file);
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			return wrapper;
 		}
