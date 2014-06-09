@@ -39,7 +39,7 @@ public class ModFixNGUtils {
 
 	@SuppressWarnings("deprecation")
 	public static String getMaterialString(Block bl) {
-		String blstring = String.valueOf(bl.getType());
+		String blstring = String.valueOf(bl.getType().toString());
 		if (bl.getData() != 0) {
 			blstring += ":" + bl.getData();
 		}
