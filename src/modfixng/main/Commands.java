@@ -158,7 +158,7 @@ public class Commands implements CommandExecutor, Listener {
 		Player pl = e.getPlayer();
 		if (plbinfoswitch.contains(pl.getName())) {
 			Block b = e.getClickedBlock();
-			String msg = ChatColor.BLUE + "Block material: " + b.getType();
+			String msg = ChatColor.BLUE + "Block material: " + b.getType().toString();
 			if (b.getData() != 0) {
 				msg += ", subid: " + e.getClickedBlock().getData();
 			}
