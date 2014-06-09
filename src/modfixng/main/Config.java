@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config {
@@ -56,8 +57,8 @@ public class Config {
 	public HashSet<String> restrictShiftInvetoryNames = new HashSet<String>();
 
 	public boolean fixMultipartEnabled = true;
-	public String fixMultipartItemMaterial = "AIR";
-	public String fixMultipartBlockMaterial = "AIR";
+	public Material fixMultipartItemMaterial = Material.AIR;
+	public Material fixMultipartBlockMaterial = Material.AIR;
 
 	public void loadConfig() {
 		YamlConfigurationWrapper config = YamlConfigurationWrapper.loadConfiguration(configfile);
@@ -77,8 +78,8 @@ public class Config {
 		fixSlotDesyncEnabled = config.get(boolean.class, "ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
 		fixMultipartEnabled = config.get(boolean.class, "MicroblockFix.enabled", fixMultipartEnabled);
-		fixMultipartItemMaterial = config.get(String.class, "MicroblockFix.itemMaterial", fixMultipartItemMaterial);
-		fixMultipartBlockMaterial = config.get(String.class, "MicroblockFix.blockMaterial", fixMultipartBlockMaterial);
+		fixMultipartItemMaterial = config.getMaterial("MicroblockFix.itemMaterial", fixMultipartItemMaterial);
+		fixMultipartBlockMaterial = config.getMaterial("MicroblockFix.blockMaterial", fixMultipartBlockMaterial);
 
 		validateActionsEnabled = config.get(boolean.class, "ValidateActions.enabled", validateActionsEnabled);
 
@@ -150,6 +151,18 @@ public class Config {
 			return defaultValue;
 		}
 
+		private Material getMaterial(String path, Material defaultValue) {
+			try {
+				String value = getString(path);
+				Material mat = Material.getMaterial(value);
+				if (mat != null) {
+					return mat;
+				}
+			} catch (Exception e) {
+			}
+			return defaultValue;		
+		}
+
 		@SuppressWarnings("unchecked")
 		private <T> HashSet<T> getHashSet(Class<T> t, String path, HashSet<T> defaultValue) {
 			try {
@@ -169,6 +182,8 @@ public class Config {
 			if (obj instanceof HashSet) {
 				ArrayList<Object> list = new ArrayList<Object>((HashSet<?>) obj);
 				set(path, list);
+			} else if (obj instanceof Material) {
+				set(path, ((Material) obj).toString());
 			} else {
 				super.set(path, obj);
 			}
