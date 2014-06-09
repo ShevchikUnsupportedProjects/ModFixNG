@@ -77,9 +77,9 @@ public class Config {
 
 		fixSlotDesyncEnabled = config.get(boolean.class, "ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
-		fixMultipartEnabled = config.get(boolean.class, "MicroblockFix.enabled", fixMultipartEnabled);
-		fixMultipartItemMaterial = config.getMaterial("MicroblockFix.itemMaterial", fixMultipartItemMaterial);
-		fixMultipartBlockMaterial = config.getMaterial("MicroblockFix.blockMaterial", fixMultipartBlockMaterial);
+		fixMultipartEnabled = config.get(boolean.class, "MultipartFix.enabled", fixMultipartEnabled);
+		fixMultipartItemMaterial = config.getMaterial("MultipartFix.itemMaterial", fixMultipartItemMaterial);
+		fixMultipartBlockMaterial = config.getMaterial("MultipartFix.blockMaterial", fixMultipartBlockMaterial);
 
 		validateActionsEnabled = config.get(boolean.class, "ValidateActions.enabled", validateActionsEnabled);
 
@@ -117,9 +117,9 @@ public class Config {
 		config.set("RestrictShiftButtonClick.enabled", restrictShiftEnabled);
 		config.set("RestrictShiftButtonClick.inventoryNames", restrictShiftInvetoryNames);
 
-		config.set("MicroblockFix.enabled", fixMultipartEnabled);
-		config.set("MicroblockFix.itemMaterial", fixMultipartItemMaterial);
-		config.set("MicroblockFix.blockMaterial", fixMultipartBlockMaterial);
+		config.set("MultipartFix.enabled", fixMultipartEnabled);
+		config.set("MultipartFix.itemMaterial", fixMultipartItemMaterial);
+		config.set("MultipartFix.blockMaterial", fixMultipartBlockMaterial);
 
 		try {
 			config.save(configfile);
