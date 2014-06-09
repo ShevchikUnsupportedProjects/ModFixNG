@@ -100,9 +100,9 @@ public class Commands implements CommandExecutor, Listener {
 
 	private void displayHelp(CommandSender sender) {
 		sender.sendMessage(ChatColor.AQUA + "/modfix reload " + ChatColor.WHITE + "-" + ChatColor.BLUE + " перезагрузить плагин");
-		sender.sendMessage(ChatColor.AQUA + "/modfix iteminfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить id и subid итема в руке");
-		sender.sendMessage(ChatColor.AQUA + "/modfix entityinfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить Entity Type ID");
-		sender.sendMessage(ChatColor.AQUA + "/modfix blockinfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить id и subid блока");
+		sender.sendMessage(ChatColor.AQUA + "/modfix iteminfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить material и subid итема в руке");
+		sender.sendMessage(ChatColor.AQUA + "/modfix entityinfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить entity type");
+		sender.sendMessage(ChatColor.AQUA + "/modfix blockinfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить material и subid блока");
 		sender.sendMessage(ChatColor.AQUA + "/modfix inventoryinfo" + ChatColor.WHITE + "-" + ChatColor.BLUE + "получить имя открытого инвентаря");
 	}
 
