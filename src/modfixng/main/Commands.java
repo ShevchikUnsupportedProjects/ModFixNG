@@ -85,6 +85,9 @@ public class Commands implements CommandExecutor, Listener {
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 			displayHelp(sender);
 			return true;
+		} else if (args.length == 1 && args[0].equalsIgnoreCase("iteminfo")) {
+			displayItemInfo(sender);
+			return true;
 		} else if (args.length == 1 && args[0].equalsIgnoreCase("blockinfo")) {
 			displayBlockInfo(sender);
 			return true;
@@ -100,10 +103,17 @@ public class Commands implements CommandExecutor, Listener {
 
 	private void displayHelp(CommandSender sender) {
 		sender.sendMessage(ChatColor.AQUA + "/modfix reload " + ChatColor.WHITE + "-" + ChatColor.BLUE + " перезагрузить плагин");
-		sender.sendMessage(ChatColor.AQUA + "/modfix iteminfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить material и subid итема в руке");
+		sender.sendMessage(ChatColor.AQUA + "/modfix iteminfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить material итема в руке");
 		sender.sendMessage(ChatColor.AQUA + "/modfix entityinfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить entity type");
 		sender.sendMessage(ChatColor.AQUA + "/modfix blockinfo " + ChatColor.WHITE + "-" + ChatColor.BLUE + " получить material и subid блока");
 		sender.sendMessage(ChatColor.AQUA + "/modfix inventoryinfo" + ChatColor.WHITE + "-" + ChatColor.BLUE + "получить имя открытого инвентаря");
+	}
+
+	private void displayItemInfo(CommandSender sender) {
+		if (sender instanceof Player) {
+			Player pl = (Player) sender;
+			pl.sendMessage(ChatColor.BLUE + "Item material: "+pl.getItemInHand().getType().toString());
+		}
 	}
 
 	private void displayBlockInfo(CommandSender sender) {
