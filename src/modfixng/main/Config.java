@@ -18,12 +18,14 @@
 package modfixng.main;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config {
@@ -133,7 +135,8 @@ public class Config {
 			YamlConfigurationWrapper wrapper = new YamlConfigurationWrapper();
 			try {
 				wrapper.load(file);
-			} catch (Exception e) {
+			} catch (FileNotFoundException e) {
+			} catch (IOException | InvalidConfigurationException e) {
 				e.printStackTrace();
 			}
 			return wrapper;
