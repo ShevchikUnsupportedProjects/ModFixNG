@@ -63,13 +63,11 @@ public class FixBag implements Listener, Feature {
 			for (ItemStack item : p.getInventory().getContents()) {
 				if (item != null) {
 					drops.add(item);
-					//drops.add(ModFixNGUtils.getItemStackWrapperCopy(item));
 				}
 			}
 			for (ItemStack armor : p.getInventory().getArmorContents()) {
 				if (armor != null) {
 					drops.add(armor);
-					//drops.add(ModFixNGUtils.getItemStackWrapperCopy(armor));
 				}
 			}
 		} catch (Exception e) {

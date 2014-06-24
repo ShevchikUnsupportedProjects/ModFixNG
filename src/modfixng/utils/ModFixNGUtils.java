@@ -17,7 +17,6 @@
 
 package modfixng.utils;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -115,10 +114,6 @@ public class ModFixNGUtils {
 		}
 	}
 
-	public static ItemStack getItemStackWrapperCopy(ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		return MinecraftReflection.getBukkitItemStack(getNMSItemStack(item));
-	}
-
 	public static boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		if (isRunningMCPC() && PlainNMSUtils.getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerCropnalyzer")) {
 			return PlainNMSUtils.isTryingToDropOpenCropanalyzer(p, minecraftslot);
@@ -131,12 +126,6 @@ public class ModFixNGUtils {
 			return PlainNMSUtils.isTryingToDropOpenToolBox(p, minecraftslot);
 		}
 		return false;
-	}
-
-	private static Object getNMSItemStack(ItemStack item) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Field f = item.getClass().getDeclaredField("handle");
-		f.setAccessible(true);
-		return f.get(item);
 	}
 
 	private static boolean runningMCPC = false;
