@@ -17,20 +17,16 @@
 
 package modfixng.fixes;
 
-import java.util.HashMap;
-
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class ForgeMultipartPlaceFix implements Listener, Feature {
@@ -40,35 +36,18 @@ public class ForgeMultipartPlaceFix implements Listener, Feature {
 		this.config = config;
 	}
 
-	private HashMap<String, Block> blocksPlaced = new HashMap<String, Block>();
-
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockPlaceEvent(BlockPlaceEvent event) {
 		Block placed = event.getBlockPlaced();
 
-		if (!event.isCancelled()) {
-			if (placed.getType() == config.fixMultipartBlockMaterial) {
-				blocksPlaced.put(event.getPlayer().getName(), placed);
-			}
-		}
-
 		if (event.isCancelled()) {
 			ItemStack item = event.getPlayer().getItemInHand();
 			if (item.getType() == config.fixMultipartItemMaterial) {
-				if (placed.getType() != config.fixMultipartBlockMaterial) {
-					String name = event.getPlayer().getName();
-					if (blocksPlaced.containsKey(name)) {
-						blocksPlaced.get(name).setType(Material.AIR);
-						blocksPlaced.remove(name);
-					}
+				if (placed.getType() != config.fixMultipartBlockMaterial && placed.isLiquid()) {
+					event.setCancelled(false);
 				}
 			}
 		}
-	}
-
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onQuit(PlayerQuitEvent event) {
-		blocksPlaced.remove(event.getPlayer().getName());
 	}
 
 	@Override
