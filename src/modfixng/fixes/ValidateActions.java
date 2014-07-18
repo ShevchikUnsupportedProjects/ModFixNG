@@ -43,7 +43,6 @@ import com.comphenix.protocol.async.AsyncListenerHandler;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.events.PacketListener;
 
 public class ValidateActions implements Listener, Feature {
 
@@ -94,7 +93,6 @@ public class ValidateActions implements Listener, Feature {
 
 
 	private LinkedList<AsyncListenerHandler> alisteners = new LinkedList<AsyncListenerHandler>();
-	private LinkedList<PacketListener> plisteners = new LinkedList<PacketListener>();
 
 	private HashSet<String> players = new HashSet<String>();
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -108,33 +106,35 @@ public class ValidateActions implements Listener, Feature {
 
 	// deny block dig drop mode packets if inventory opened
 	public void initDropButtonPlayClickListener() {
-		PacketListener listener = new PacketAdapter(
-			PacketAdapter
-			.params(ModFixNG.getInstance(), PacketType.Play.Client.BLOCK_DIG)
-			.listenerPriority(ListenerPriority.LOWEST)
-		) {
-			@Override
-			public void onPacketReceiving(PacketEvent e) {
-				Player player = e.getPlayer();
-				if (player == null) {
-					return;
-				}
-
-				if (!players.contains(player.getName())) {
-					e.setCancelled(true);
-					return;
-				}
-
-				int status = e.getPacket().getIntegers().getValues().get(4);
-				if (status == 3 || status == 4) {
-					if (ModFixNGUtils.isInventoryOpen(player)) {
+		AsyncListenerHandler listener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
+			new PacketAdapter(
+				PacketAdapter
+				.params(ModFixNG.getInstance(), PacketType.Play.Client.BLOCK_DIG)
+				.listenerPriority(ListenerPriority.LOWEST)
+			) {
+				@Override
+				public void onPacketReceiving(PacketEvent e) {
+					Player player = e.getPlayer();
+					if (player == null) {
+						return;
+					}
+	
+					if (!players.contains(player.getName())) {
 						e.setCancelled(true);
+						return;
+					}
+	
+					int status = e.getPacket().getIntegers().getValues().get(4);
+					if (status == 3 || status == 4) {
+						if (ModFixNGUtils.isInventoryOpen(player)) {
+							e.setCancelled(true);
+						}
 					}
 				}
 			}
-		};
-		ModFixNG.getProtocolManager().addPacketListener(listener);
-		plisteners.add(listener);
+		);
+		listener.syncStart();
+		alisteners.add(listener);
 	}
 
 	// do not allow to click invalid inventory
@@ -183,10 +183,6 @@ public class ValidateActions implements Listener, Feature {
 
 	@Override
 	public void unload() {
-		for (PacketListener listener : plisteners) {
-			ModFixNG.getProtocolManager().removePacketListener(listener);
-		}
-		plisteners.clear();
 		for (AsyncListenerHandler listener : alisteners) {
 			ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
 		}
