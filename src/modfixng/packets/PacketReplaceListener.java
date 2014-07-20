@@ -43,7 +43,7 @@ public class PacketReplaceListener {
 						return;
 					}
 
-					PacketContainer newpacket = new PacketContainer(e.getPacketType(), NMSPacketAccess.getPacketFactory().getBlockDigPacket(player, e.getPacket()));
+					PacketContainer newpacket = NMSPacketAccess.getPacketFactory().getBlockDigPacket(player, e.getPacket());
 					e.setPacket(newpacket);
 				}
 			}
@@ -64,7 +64,7 @@ public class PacketReplaceListener {
 						return;
 					}
 
-					PacketContainer newpacket = new PacketContainer(e.getPacketType(), NMSPacketAccess.getPacketFactory().getWindowClosePacket(player, e.getPacket()));
+					PacketContainer newpacket = NMSPacketAccess.getPacketFactory().getWindowClosePacket(player, e.getPacket());
 					e.setPacket(newpacket);
 				}
 			}
