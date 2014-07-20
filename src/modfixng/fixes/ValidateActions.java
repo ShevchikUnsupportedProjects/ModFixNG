@@ -88,7 +88,7 @@ public class ValidateActions implements Listener, Feature {
 	//do not allow to close invalid inventory
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPacketInInventoryClose(CloseInventoryPacketCloseInventoryEvent event) {
-		if (!ModFixNGUtils.isContainerValid(event.getId(), event.getPlayer())) {
+		if (!ModFixNGUtils.isContainerValid(event.getPlayer(), event.getId())) {
 			event.setCancelled(true);
 			event.getPlayer().closeInventory();
 		}
@@ -98,7 +98,7 @@ public class ValidateActions implements Listener, Feature {
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPacketInInvetoryClick(ClickInventoryPacketClickInventoryEvent event) {
-		if (!ModFixNGUtils.isContainerValid(event.getId(), event.getPlayer())) {
+		if (!ModFixNGUtils.isContainerValid(event.getPlayer(), event.getId())) {
 			event.setCancelled(true);
 			event.getPlayer().updateInventory();
 		}

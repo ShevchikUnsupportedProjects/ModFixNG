@@ -102,7 +102,7 @@ public class ModFixNGUtils {
 		}
 	}
 
-	public static boolean isContainerValid(int invid , Player p) {
+	public static boolean isContainerValid(Player p, int invid) {
 		if (isRunningMCPC()) {
 			return PlainNMSUtils.getOpenInventoryId(p) == invid;
 		} else {
