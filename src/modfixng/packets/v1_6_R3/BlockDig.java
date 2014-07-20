@@ -18,7 +18,6 @@
 package modfixng.packets.v1_6_R3;
 
 import modfixng.events.BlockDigPacketItemDropEvent;
-
 import net.minecraft.server.v1_6_R3.Connection;
 import net.minecraft.server.v1_6_R3.Packet14BlockDig;
 

@@ -18,7 +18,6 @@
 package modfixng.packets.v1_6_R3;
 
 import modfixng.events.CloseInventoryPacketCloseInventoryEvent;
-
 import net.minecraft.server.v1_6_R3.Connection;
 import net.minecraft.server.v1_6_R3.Packet101CloseWindow;
 

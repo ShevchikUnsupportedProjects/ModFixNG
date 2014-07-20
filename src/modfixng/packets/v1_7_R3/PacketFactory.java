@@ -33,7 +33,7 @@ public class PacketFactory implements PacketFactoryInterface {
 		newpacket.getIntegers().write(1, container.getIntegers().read(1));
 		newpacket.getIntegers().write(2, container.getIntegers().read(2));
 		newpacket.getIntegers().write(3, container.getIntegers().read(3));
-		newpacket.getIntegers().write(4, container.getIntegers().read(4));	
+		newpacket.getIntegers().write(4, container.getIntegers().read(4));
 		return newpacket;
 	}
 
