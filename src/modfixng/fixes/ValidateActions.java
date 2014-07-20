@@ -21,7 +21,7 @@ import modfixng.events.BlockDigPacketItemDropEvent;
 import modfixng.events.ClickInventoryPacketClickInventoryEvent;
 import modfixng.events.CloseInventoryPacketCloseInventoryEvent;
 import modfixng.main.ModFixNG;
-import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -39,7 +39,7 @@ public class ValidateActions implements Listener, Feature {
 	// deny entity interact if inventory opened
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerInteractBlock(PlayerInteractEvent event) {
-		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 		}
 	}
@@ -47,7 +47,7 @@ public class ValidateActions implements Listener, Feature {
 	// deny entity interact if inventory opened
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 		}
 	}
@@ -55,7 +55,7 @@ public class ValidateActions implements Listener, Feature {
 	// deny active slot switch while invnetory is opened
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerSlotSwitch(PlayerItemHeldEvent event) {
-		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 		}
 	}
@@ -63,7 +63,7 @@ public class ValidateActions implements Listener, Feature {
 	// deny commands use if inventory opened
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
-		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 		}
 	}
@@ -71,7 +71,7 @@ public class ValidateActions implements Listener, Feature {
 	// restrict block break while inventory is opened
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 		}
 	}
@@ -79,7 +79,7 @@ public class ValidateActions implements Listener, Feature {
 	//deny drop by q button (not in inventory) while inventory is open
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPacketInItemDrop(BlockDigPacketItemDropEvent event) {
-		if (ModFixNGUtils.isInventoryOpen(event.getPlayer())) {
+		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 			return;
 		}
@@ -88,7 +88,7 @@ public class ValidateActions implements Listener, Feature {
 	//do not allow to close invalid inventory
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPacketInInventoryClose(CloseInventoryPacketCloseInventoryEvent event) {
-		if (!ModFixNGUtils.isContainerValid(event.getPlayer(), event.getId())) {
+		if (!NMSUtilsAccess.getNMSUtils().isContainerValid(event.getPlayer(), event.getId())) {
 			event.setCancelled(true);
 			event.getPlayer().closeInventory();
 		}
@@ -98,7 +98,7 @@ public class ValidateActions implements Listener, Feature {
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPacketInInvetoryClick(ClickInventoryPacketClickInventoryEvent event) {
-		if (!ModFixNGUtils.isContainerValid(event.getPlayer(), event.getId())) {
+		if (!NMSUtilsAccess.getNMSUtils().isContainerValid(event.getPlayer(), event.getId())) {
 			event.setCancelled(true);
 			event.getPlayer().updateInventory();
 		}

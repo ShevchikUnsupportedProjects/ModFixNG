@@ -21,7 +21,7 @@ import modfixng.events.ClickInventoryPacketClickInventoryEvent;
 import modfixng.events.ClickInventoryPacketClickInventoryEvent.Mode;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
-import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -41,7 +41,7 @@ public class RestrictShiftClick implements Feature, Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPacketInInventoryClick(ClickInventoryPacketClickInventoryEvent event) {
 		if (event.getMode() == Mode.SHIFT_MOUSE_CLICK) {
-			String invname = ModFixNGUtils.getOpenInventoryName(event.getPlayer());
+			String invname = NMSUtilsAccess.getNMSUtils().getOpenInventoryName(event.getPlayer());
 			if (config.restrictShiftInvetoryNames.contains(invname)) {
 				event.setCancelled(true);
 				event.getPlayer().updateInventory();

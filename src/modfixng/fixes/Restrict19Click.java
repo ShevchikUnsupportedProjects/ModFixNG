@@ -7,7 +7,7 @@ import modfixng.events.ClickInventoryPacketClickInventoryEvent;
 import modfixng.events.ClickInventoryPacketClickInventoryEvent.Mode;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
-import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -33,7 +33,7 @@ public class Restrict19Click implements Feature, Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPacketInInventoryClick(ClickInventoryPacketClickInventoryEvent event) {
 		if (event.getMode() == Mode.NUMBER_KEY_PRESS) {
-			String invname = ModFixNGUtils.getOpenInventoryName(event.getPlayer());
+			String invname = NMSUtilsAccess.getNMSUtils().getOpenInventoryName(event.getPlayer());
 			if (knownInvNames.contains(invname) || config.restrict19InvetoryNames.contains(invname)) {
 				event.setCancelled(true);
 				event.getPlayer().updateInventory();

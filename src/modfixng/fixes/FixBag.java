@@ -25,7 +25,7 @@ import modfixng.events.ClickInventoryPacketClickInventoryEvent;
 import modfixng.events.ClickInventoryPacketClickInventoryEvent.Mode;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
-import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -101,7 +101,7 @@ public class FixBag implements Listener, Feature {
 		if (event.getMode() == Mode.NUMBER_KEY_PRESS) {
 			final int heldslot = event.getPlayer().getInventory().getHeldItemSlot();
 			if (heldslot == event.getButton()) {
-				String inventoryName = ModFixNGUtils.getOpenInventoryName(event.getPlayer());
+				String inventoryName = NMSUtilsAccess.getNMSUtils().getOpenInventoryName(event.getPlayer());
 				if (config.fixBag19ButtonClickBagInventoryNames.contains(inventoryName) || knownInventoryNames.contains(inventoryName)) {
 					event.setCancelled(true);
 					event.getPlayer().updateInventory();
@@ -128,7 +128,7 @@ public class FixBag implements Listener, Feature {
 	private boolean isInvalidDropInventory(Player player, int slot) {
 		if (config.fixBagCropanalyzerFixEnabled) {
 			try {
-				if (ModFixNGUtils.isTryingToDropOpenCropanalyzer(player, slot)) {
+				if (NMSUtilsAccess.getNMSUtils().isTryingToDropOpenCropanalyzer(player, slot)) {
 					return true;
 				}
 			} catch (Exception ex) {
@@ -137,7 +137,7 @@ public class FixBag implements Listener, Feature {
 		}
 		if (config.fixBagToolboxFixEnabled) {
 			try {
-				if (ModFixNGUtils.isTryingToDropOpenToolBox(player, slot)) {
+				if (NMSUtilsAccess.getNMSUtils().isTryingToDropOpenToolBox(player, slot)) {
 					return true;
 				}
 			} catch (Exception ex) {

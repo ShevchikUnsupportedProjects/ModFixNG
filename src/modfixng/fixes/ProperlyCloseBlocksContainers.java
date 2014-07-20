@@ -25,6 +25,7 @@ import modfixng.events.CloseInventoryPacketCloseInventoryEvent;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -74,14 +75,14 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		String playername = player.getName();
 
 		if (playerOpenBlock.containsKey(playername)) {
-			if (ModFixNGUtils.isInventoryOpen(player)) {
+			if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(player)) {
 				e.setCancelled(true);
 				return;
 			}
 		}
 
 		final Block b = e.getClickedBlock();
-		if (config.properlyCloseBlocksContainersBlocksMaterials.contains(ModFixNGUtils.getMaterialString(b)) || ModFixNGUtils.hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
+		if (config.properlyCloseBlocksContainersBlocksMaterials.contains(ModFixNGUtils.getMaterialString(b)) || NMSUtilsAccess.getNMSUtils().hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
 			playerOpenBlock.put(playername, b.getState());
 		}
 	}

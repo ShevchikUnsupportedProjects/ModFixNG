@@ -18,16 +18,11 @@
 package modfixng.utils;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import modfixng.main.ModFixNG;
 
-import org.bukkit.GameMode;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import com.comphenix.protocol.PacketType;
@@ -55,77 +50,6 @@ public class ModFixNGUtils {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private static Class<?> invclass = MinecraftReflection.getMinecraftClass("IInventory");
-	public static boolean hasInventory(Block b) {
-		try {
-			World world = b.getWorld();
-			Method getTEMethod = world.getClass().getDeclaredMethod("getTileEntityAt", int.class, int.class, int.class);
-			getTEMethod.setAccessible(true);
-			Object te = getTEMethod.invoke(world, b.getX(), b.getY(), b.getZ());
-			if (te != null && invclass.isAssignableFrom(te.getClass())) {
-				return true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	public static String getOpenInventoryName(Player p) {
-		if (isRunningMCPC()) {
-			return PlainNMSUtils.getOpenInventoryName(p);
-		} else {
-			if (isInventoryOpen(p)) {
-				InventoryHolder holder = p.getOpenInventory().getTopInventory().getHolder();
-				if (holder != null) {
-					return holder.getClass().getName();
-				} else {
-					return "NOHOLDER";
-				}
-			} else {
-				return p.getInventory().getClass().getName();
-			}
-		}
-	}
-
-	public static boolean isInventoryOpen(Player p) {
-		if (isRunningMCPC()) {
-			return PlainNMSUtils.isInventoryOpen(p);
-		} else {
-			if (p.getGameMode() != GameMode.CREATIVE) {
-				return p.getOpenInventory().getType() != InventoryType.CRAFTING;
-			} else {
-				return p.getOpenInventory().getType() != InventoryType.CREATIVE;
-			}
-		}
-	}
-
-	public static boolean isContainerValid(Player p, int invid) {
-		if (isRunningMCPC()) {
-			return PlainNMSUtils.getOpenInventoryId(p) == invid;
-		} else {
-			if (ModFixNGUtils.isInventoryOpen(p)) {
-				return invid != 0;
-			} else {
-				return invid == 0;
-			}
-		}
-	}
-
-	public static boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		if (isRunningMCPC() && PlainNMSUtils.getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerCropnalyzer")) {
-			return PlainNMSUtils.isTryingToDropOpenCropanalyzer(p, minecraftslot);
-		}
-		return false;
-	}
-
-	public static boolean isTryingToDropOpenToolBox(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		if (isRunningMCPC() && PlainNMSUtils.getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerToolbox")) {
-			return PlainNMSUtils.isTryingToDropOpenToolBox(p, minecraftslot);
-		}
-		return false;
 	}
 
 	private static boolean runningMCPC = false;

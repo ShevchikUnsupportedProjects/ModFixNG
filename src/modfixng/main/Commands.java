@@ -20,6 +20,7 @@ package modfixng.main;
 import java.util.HashSet;
 
 import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -119,7 +120,7 @@ public class Commands implements CommandExecutor, Listener {
 	private void displayBlockInfo(CommandSender sender) {
 		if (sender instanceof Player) {
 			Player pl = (Player) sender;
-			pl.sendMessage(ChatColor.BLUE + "Кликните правой кнопкой мыши по блоку, для того чтобы узнать его ID и subID");
+			pl.sendMessage(ChatColor.BLUE + "Кликните правой кнопкой мыши по блоку, для того чтобы узнать его Material и subID");
 			plbinfoswitch.add(pl.getName());
 		}
 	}
@@ -127,7 +128,7 @@ public class Commands implements CommandExecutor, Listener {
 	private void displayEntityInfo(CommandSender sender) {
 		if (sender instanceof Player) {
 			Player pl = (Player) sender;
-			pl.sendMessage(ChatColor.BLUE + "Кликните правой кнопкой мыши по Entity, для того чтобы узнать её Type ID");
+			pl.sendMessage(ChatColor.BLUE + "Кликните правой кнопкой мыши по Entity, для того чтобы узнать её Type");
 			pleinfoswitch.add(pl.getName());
 		}
 	}
@@ -140,7 +141,7 @@ public class Commands implements CommandExecutor, Listener {
 				new Runnable() {
 					@Override
 					public void run() {
-						pl.sendMessage(ChatColor.BLUE + "Open inventory name: "+ModFixNGUtils.getOpenInventoryName(pl));
+						pl.sendMessage(ChatColor.BLUE + "Open inventory name: "+NMSUtilsAccess.getNMSUtils().getOpenInventoryName(pl));
 						pl.closeInventory();
 					}
 				}
@@ -172,7 +173,7 @@ public class Commands implements CommandExecutor, Listener {
 			if (b.getData() != 0) {
 				msg += ", subid: " + e.getClickedBlock().getData();
 			}
-			msg += ", has inventory: " + ModFixNGUtils.hasInventory(b);
+			msg += ", has inventory: " + NMSUtilsAccess.getNMSUtils().hasInventory(b);
 			pl.sendMessage(msg);
 			plbinfoswitch.remove(pl.getName());
 			e.setCancelled(true);

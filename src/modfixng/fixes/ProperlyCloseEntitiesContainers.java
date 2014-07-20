@@ -24,7 +24,7 @@ import java.util.HashSet;
 import modfixng.events.CloseInventoryPacketCloseInventoryEvent;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
-import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -71,7 +71,7 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		String playername = player.getName();
 
 		if (playerOpenEntity.containsKey(playername)) {
-			if (ModFixNGUtils.isInventoryOpen(player)) {
+			if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(player)) {
 				e.setCancelled(true);
 				return;
 			}

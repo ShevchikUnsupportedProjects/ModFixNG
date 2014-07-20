@@ -20,6 +20,7 @@ package modfixng.main;
 import modfixng.packets.NMSPacketAccess;
 import modfixng.packets.PacketReplaceListener;
 import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -53,10 +54,11 @@ public class ModFixNG extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		//init nms access
-		init = NMSPacketAccess.init();
+		init = NMSPacketAccess.init() && NMSUtilsAccess.init();
 		if (!init) {
 			getLogger().severe("Can't load nms access");
 			NMSPacketAccess.getError().printStackTrace();
+			NMSUtilsAccess.getError().printStackTrace();
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
 		}
