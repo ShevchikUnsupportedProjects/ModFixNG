@@ -20,8 +20,6 @@ package modfixng.main;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.bukkit.Material;
-
 import modfixng.fixes.Feature;
 import modfixng.fixes.FixBag;
 import modfixng.fixes.FixPlayerArmorSlotDesync;
@@ -32,6 +30,8 @@ import modfixng.fixes.Restrict19Click;
 import modfixng.fixes.RestrictShiftClick;
 import modfixng.fixes.ValidateActions;
 import modfixng.utils.ModFixNGUtils;
+
+import org.bukkit.Material;
 
 public class FeatureLoader {
 

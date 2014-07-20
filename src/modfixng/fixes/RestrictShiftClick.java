@@ -17,19 +17,19 @@
 
 package modfixng.fixes;
 
+import modfixng.events.ClickInventoryPacketClickInventoryEvent;
+import modfixng.events.ClickInventoryPacketClickInventoryEvent.Mode;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
-import modfixng.utils.PacketContainerReadable;
 
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.async.AsyncListenerHandler;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-
-public class RestrictShiftClick implements Feature {
+public class RestrictShiftClick implements Feature, Listener {
 
 	private Config config;
 
@@ -37,44 +37,26 @@ public class RestrictShiftClick implements Feature {
 		this.config = config;
 	}
 
-	private AsyncListenerHandler listener;
-
-	private void initShiftInventoryClickListener() {
-		listener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
-			new PacketAdapter(
-				PacketAdapter
-				.params(ModFixNG.getInstance(), PacketType.Play.Client.WINDOW_CLICK)
-			) {
-				@SuppressWarnings("deprecation")
-				@Override
-				public void onPacketReceiving(PacketEvent e) {
-					if (e.getPlayer() == null) {
-						return;
-					}
-
-					final Player player = e.getPlayer();
-					// check click type(checking for button)
-					if (e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE) == PacketContainerReadable.InventoryClick.Mode.SHIFT_MOUSE_CLICK) {
-						String invname = ModFixNGUtils.getOpenInventoryName(player);
-						if (config.restrictShiftInvetoryNames.contains(invname)) {
-							e.setCancelled(true);
-							player.updateInventory();
-						}
-					}
-				}
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPacketInInventoryClick(ClickInventoryPacketClickInventoryEvent event) {
+		if (event.getMode() == Mode.SHIFT_MOUSE_CLICK) {
+			String invname = ModFixNGUtils.getOpenInventoryName(event.getPlayer());
+			if (config.restrictShiftInvetoryNames.contains(invname)) {
+				event.setCancelled(true);
+				event.getPlayer().updateInventory();
 			}
-		);
-		listener.syncStart();
+		}
 	}
 
 	@Override
 	public void load() {
-		initShiftInventoryClickListener();
+		Bukkit.getPluginManager().registerEvents(this, ModFixNG.getInstance());
 	}
 
 	@Override
 	public void unload() {
-		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
+		HandlerList.unregisterAll(this);
 	}
 
 	@Override

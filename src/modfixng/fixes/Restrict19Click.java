@@ -3,19 +3,19 @@ package modfixng.fixes;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import modfixng.events.ClickInventoryPacketClickInventoryEvent;
+import modfixng.events.ClickInventoryPacketClickInventoryEvent.Mode;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
-import modfixng.utils.PacketContainerReadable;
 
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.async.AsyncListenerHandler;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-
-public class Restrict19Click implements Feature {
+public class Restrict19Click implements Feature, Listener {
 
 	private Config config;
 
@@ -23,49 +23,32 @@ public class Restrict19Click implements Feature {
 		this.config = config;
 	}
 
-	private AsyncListenerHandler listener;
-
 	private HashSet<String> knownInvNames = new HashSet<String>(
 		Arrays.asList(
 			"ic2.core.block.wiring.ContainerElectricBlock"
 		)
 	);
-	private void init19ButtonInventoryClickListener() {
-		listener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
-			new PacketAdapter(
-				PacketAdapter
-				.params(ModFixNG.getInstance(), PacketType.Play.Client.WINDOW_CLICK)
-			) {
-				@SuppressWarnings("deprecation")
-				@Override
-				public void onPacketReceiving(PacketEvent e) {
-					if (e.getPlayer() == null) {
-						return;
-					}
 
-					final Player player = e.getPlayer();
-					// check click type(checking for button)
-					if (e.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE) == PacketContainerReadable.InventoryClick.Mode.NUMBER_KEY_PRESS) {
-						String invname = ModFixNGUtils.getOpenInventoryName(player);
-						if (knownInvNames.contains(invname) || config.restrict19InvetoryNames.contains(invname)) {
-							e.setCancelled(true);
-							player.updateInventory();
-						}
-					}
-				}
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPacketInInventoryClick(ClickInventoryPacketClickInventoryEvent event) {
+		if (event.getMode() == Mode.NUMBER_KEY_PRESS) {
+			String invname = ModFixNGUtils.getOpenInventoryName(event.getPlayer());
+			if (knownInvNames.contains(invname) || config.restrict19InvetoryNames.contains(invname)) {
+				event.setCancelled(true);
+				event.getPlayer().updateInventory();
 			}
-		);
-		listener.syncStart();
+		}
 	}
 
 	@Override
 	public void load() {
-		init19ButtonInventoryClickListener();
+		Bukkit.getPluginManager().registerEvents(this, ModFixNG.getInstance());
 	}
 
 	@Override
 	public void unload() {
-		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
+		HandlerList.unregisterAll(this);
 	}
 
 	@Override

@@ -19,13 +19,13 @@ package modfixng.fixes;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 
+import modfixng.events.ClickInventoryPacketClickInventoryEvent;
+import modfixng.events.ClickInventoryPacketClickInventoryEvent.Mode;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
-import modfixng.utils.PacketContainerReadable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -36,11 +36,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.async.AsyncListenerHandler;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
 
 public class FixBag implements Listener, Feature {
 
@@ -81,8 +76,6 @@ public class FixBag implements Listener, Feature {
 		event.getPlayer().closeInventory();
 	}
 
-	private LinkedList<AsyncListenerHandler> listeners = new LinkedList<AsyncListenerHandler>();
-
 	// restrict using 1-9 buttons in bags inventories if it will move bag to another slot
 	private HashSet<String> knownInventoryNames = new HashSet<String>(
 		Arrays.asList(
@@ -97,77 +90,41 @@ public class FixBag implements Listener, Feature {
 			}
 		)
 	);
-	private void init19ButtonInventoryClickListener() {
+
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPacketInInvetory19Click(ClickInventoryPacketClickInventoryEvent event) {
 		if (!config.fixBag19ButtonClickEnabled) {
 			return;
 		}
 
-		AsyncListenerHandler listener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
-			new PacketAdapter(
-				PacketAdapter
-				.params(ModFixNG.getInstance(), PacketType.Play.Client.WINDOW_CLICK)
-			) {
-				@SuppressWarnings("deprecation")
-				@Override
-				public void onPacketReceiving(PacketEvent event) {
-					if (event.getPlayer() == null) {
-						return;
-					}
-
-					Player player = event.getPlayer();
-					// check click type(checking for 1-9 buttons)
-					if (event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE) == PacketContainerReadable.InventoryClick.Mode.NUMBER_KEY_PRESS) {
-						// check to which slot we want to move item(checking if it is the holding bag slot)
-						final int heldslot = player.getInventory().getHeldItemSlot();
-						if (heldslot == event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.BUTTON)) {
-							// check inventory name (checking if one of the inventory names in list)
-							String inventoryName = ModFixNGUtils.getOpenInventoryName(player);
-							if (config.fixBag19ButtonClickBagInventoryNames.contains(inventoryName) || knownInventoryNames.contains(inventoryName)) {
-								event.setCancelled(true);
-								player.updateInventory();
-							}
-						}
-					}
+		if (event.getMode() == Mode.NUMBER_KEY_PRESS) {
+			final int heldslot = event.getPlayer().getInventory().getHeldItemSlot();
+			if (heldslot == event.getButton()) {
+				String inventoryName = ModFixNGUtils.getOpenInventoryName(event.getPlayer());
+				if (config.fixBag19ButtonClickBagInventoryNames.contains(inventoryName) || knownInventoryNames.contains(inventoryName)) {
+					event.setCancelled(true);
+					event.getPlayer().updateInventory();
 				}
 			}
-		);
-		listener.syncStart();
-		listeners.add(listener);
+		}
 	}
 
 	// close inventory if trying to drop opened toolbox or cropnalyzer(q button in inventory)
-	public void initDropButtonInventoryClickListener() {
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPacketInInventoryDropClick(ClickInventoryPacketClickInventoryEvent event) {
 		if (!config.fixBagCropanalyzerFixEnabled && !config.fixBagToolboxFixEnabled) {
 			return;
 		}
-
-		AsyncListenerHandler listener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
-			new PacketAdapter(
-				PacketAdapter
-				.params(ModFixNG.getInstance(), PacketType.Play.Client.WINDOW_CLICK)
-			) {
-				@SuppressWarnings("deprecation")
-				@Override
-				public void onPacketReceiving(PacketEvent event) {
-					if (event.getPlayer() == null) {
-						return;
-					}
-
-					int mode = event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.MODE);
-					int button = event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.BUTTON);
-					if (mode == PacketContainerReadable.InventoryClick.Mode.DROP && button != -999) {
-						int slot = event.getPacket().getIntegers().getValues().get(PacketContainerReadable.InventoryClick.PacketIndex.SLOT);
-						if (isInvalidDropInventory(event.getPlayer(), slot)) {
-							event.setCancelled(true);
-							event.getPlayer().updateInventory();
-						}
-					}
-				}
+		if (event.getMode() == Mode.DROP && event.getButton() != -999) {
+			if (isInvalidDropInventory(event.getPlayer(), event.getSlot())) {
+				event.setCancelled(true);
+				event.getPlayer().updateInventory();
 			}
-		);
-		listener.syncStart();
-		listeners.add(listener);
+		}
 	}
+
 	private boolean isInvalidDropInventory(Player player, int slot) {
 		if (config.fixBagCropanalyzerFixEnabled) {
 			try {
@@ -193,16 +150,10 @@ public class FixBag implements Listener, Feature {
 	@Override
 	public void load() {
 		Bukkit.getPluginManager().registerEvents(this, ModFixNG.getInstance());
-		init19ButtonInventoryClickListener();
-		initDropButtonInventoryClickListener();
 	}
 
 	@Override
 	public void unload() {
-		for (AsyncListenerHandler listener : listeners) {
-			ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(listener);
-		}
-		listeners.clear();
 		HandlerList.unregisterAll(this);
 	}
 

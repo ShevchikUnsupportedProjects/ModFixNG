@@ -17,8 +17,11 @@
 
 package modfixng.main;
 
+import modfixng.packets.NMSPacketAccess;
+import modfixng.packets.PacketReplaceListener;
 import modfixng.utils.ModFixNGUtils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,22 +48,46 @@ public class ModFixNG extends JavaPlugin {
 	private Config config;
 	private Commands commandl;
 
+	private boolean init = false;
+
 	@Override
 	public void onEnable() {
+		//init nms access
+		init = NMSPacketAccess.init();
+		if (!init) {
+			getLogger().severe("Can't load nms access");
+			NMSPacketAccess.getError().printStackTrace();
+			Bukkit.getPluginManager().disablePlugin(this);
+			return;
+		}
+		//set instance
 		instance = this;
+		//get protocol access
 		protocolManager = ProtocolLibrary.getProtocolManager();
+		//init packet replacer
+		PacketReplaceListener packetslistener = new PacketReplaceListener();
+		packetslistener.initInBlockDigListener();
+		packetslistener.initInCloseInventoryListener();
+		packetslistener.initInClickInventoryListener();
+		//init config
 		config = new Config(this);
 		config.loadConfig();
+		//init commands
 		commandl = new Commands(config);
 		getServer().getPluginManager().registerEvents(commandl, this);
 		getCommand("modfixng").setExecutor(commandl);
+		//check platform
 		ModFixNGUtils.checkMCPC();
+		//init fixes
 		loader = new FeatureLoader(config);
 		loader.loadAll();
 	}
 
 	@Override
 	public void onDisable() {
+		if (!init) {
+			return;
+		}
 		for (Player p : getServer().getOnlinePlayers()) {
 			p.closeInventory();
 		}
