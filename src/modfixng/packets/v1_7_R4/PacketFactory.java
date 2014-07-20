@@ -26,19 +26,36 @@ import com.comphenix.protocol.events.PacketContainer;
 public class PacketFactory implements PacketFactoryInterface {
 
 	@Override
-	public Object getBlockDigPacket(Player player, PacketContainer container) {
-		return new BlockDig(player, container.getHandle());
+	public PacketContainer getBlockDigPacket(Player player, PacketContainer container) {
+		Object nmsPacket = new BlockDig(player);
+		PacketContainer newpacket = new PacketContainer(container.getType(), nmsPacket);
+		newpacket.getIntegers().write(0, container.getIntegers().read(0));
+		newpacket.getIntegers().write(1, container.getIntegers().read(1));
+		newpacket.getIntegers().write(2, container.getIntegers().read(2));
+		newpacket.getIntegers().write(3, container.getIntegers().read(3));
+		newpacket.getIntegers().write(4, container.getIntegers().read(4));	
+		return newpacket;
 	}
 
 	@Override
-	public Object getWindowClosePacket(Player player, PacketContainer container) {
-		int id = container.getIntegers().getValues().get(0);
-		return new CloseInventory(player, id);
+	public PacketContainer getWindowClosePacket(Player player, PacketContainer container) {
+		Object nmsPacket = new CloseInventory(player, container.getIntegers().read(0));
+		PacketContainer newpacket = new PacketContainer(container.getType(), nmsPacket);
+		newpacket.getIntegers().write(0, container.getIntegers().read(0));
+		return newpacket;
 	}
 
 	@Override
-	public Object getWindowClickPacket(Player player, PacketContainer container) {
-		return new InventoryClick(player, container.getHandle());
+	public PacketContainer getWindowClickPacket(Player player, PacketContainer container) {
+		Object nmsPacket = new InventoryClick(player);
+		PacketContainer newpacket = new PacketContainer(container.getType(), nmsPacket);
+		newpacket.getIntegers().write(0, container.getIntegers().read(0));
+		newpacket.getIntegers().write(1, container.getIntegers().read(1));
+		newpacket.getIntegers().write(2, container.getIntegers().read(2));
+		newpacket.getIntegers().write(3, container.getIntegers().read(3));
+		newpacket.getShorts().write(0, container.getShorts().read(0));
+		newpacket.getItemModifier().write(0, container.getItemModifier().read(0));
+		return newpacket;
 	}
 
 }

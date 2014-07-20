@@ -27,47 +27,10 @@ import org.bukkit.entity.Player;
 
 public class BlockDig extends PacketPlayInBlockDig {
 
-	private int fielda;
-	private int fieldb;
-	private int fieldc;
-	private int fieldface;
-	private int fielde;
-
 	private Player player;
 
-	protected BlockDig(Player player, Object originalPacket) {
+	protected BlockDig(Player player) {
 		this.player = player;
-		PacketPlayInBlockDig packet = (PacketPlayInBlockDig) originalPacket;
-		fielda = packet.c();
-		fieldb = packet.d();
-		fieldc = packet.e();
-		fieldface = packet.f();
-		fielde = packet.g();
-	}
-
-	@Override
-	public int c() {
-		return fielda;
-	}
-
-	@Override
-	public int d() {
-		return fieldb;
-	}
-
-	@Override
-	public int e() {
-		return fieldc;
-	}
-
-	@Override
-	public int f() {
-		return fieldface;
-	}
-
-	@Override
-	public int g() {
-		return fielde;
 	}
 
 	@Override

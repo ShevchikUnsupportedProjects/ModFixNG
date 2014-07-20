@@ -23,10 +23,10 @@ import com.comphenix.protocol.events.PacketContainer;
 
 public interface PacketFactoryInterface {
 
-	public Object getBlockDigPacket(Player player, PacketContainer container);
+	public PacketContainer getBlockDigPacket(Player player, PacketContainer container);
 
-	public Object getWindowClosePacket(Player player, PacketContainer container);
+	public PacketContainer getWindowClosePacket(Player player, PacketContainer container);
 
-	public Object getWindowClickPacket(Player player, PacketContainer container);
+	public PacketContainer getWindowClickPacket(Player player, PacketContainer container);
 
 }

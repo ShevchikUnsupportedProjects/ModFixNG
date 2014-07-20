@@ -85,7 +85,7 @@ public class PacketReplaceListener {
 						return;
 					}
 
-					PacketContainer newpacket = new PacketContainer(e.getPacketType(), NMSPacketAccess.getPacketFactory().getWindowClickPacket(player, e.getPacket()));
+					PacketContainer newpacket = NMSPacketAccess.getPacketFactory().getWindowClickPacket(player, e.getPacket());
 					e.setPacket(newpacket);
 				}
 			}

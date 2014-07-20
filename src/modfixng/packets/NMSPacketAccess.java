@@ -32,6 +32,7 @@ public class NMSPacketAccess {
 	public static boolean init() {
 		String packageName = Bukkit.getServer().getClass().getPackage().getName();
 		String nmspackageversion = packageName.substring(packageName.lastIndexOf('.') + 1);
+		System.out.println(nmspackageversion);
 		try {
 			String versioned = NMSPacketAccess.class.getPackage().getName()+"."+nmspackageversion+".";
 			packetfactory = (PacketFactoryInterface) Class.forName(versioned+"PacketFactory").newInstance();

@@ -28,13 +28,13 @@ import org.bukkit.entity.Player;
 
 public class CloseInventory extends PacketPlayInCloseWindow {
 
-	private int fielda;
+	private int id;
 
 	private Player player;
 
 	protected CloseInventory(Player player, int id) {
 		this.player = player;
-		fielda = id;
+		this.id = id;
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class CloseInventory extends PacketPlayInCloseWindow {
 		if (cplayer.getHandle().playerConnection.isDisconnected()) {
 			return;
 		}
-		CloseInventoryPacketCloseInventoryEvent event = new CloseInventoryPacketCloseInventoryEvent(player, fielda);
+		CloseInventoryPacketCloseInventoryEvent event = new CloseInventoryPacketCloseInventoryEvent(player, id);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			return;

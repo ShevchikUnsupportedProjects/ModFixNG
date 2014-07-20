@@ -18,7 +18,6 @@
 package modfixng.packets.v1_7_R4;
 
 import modfixng.events.ClickInventoryPacketClickInventoryEvent;
-import net.minecraft.server.v1_7_R4.ItemStack;
 import net.minecraft.server.v1_7_R4.PacketPlayInListener;
 import net.minecraft.server.v1_7_R4.PacketPlayInWindowClick;
 
@@ -28,54 +27,10 @@ import org.bukkit.entity.Player;
 
 public class InventoryClick extends PacketPlayInWindowClick {
 
-	private int fielda;
-	private int fieldslot;
-	private int fieldbutton;
-	private short fieldd;
-	private ItemStack fielditem;
-	private int fieldshift;
-
 	private Player player;
 
-	public InventoryClick(Player player, Object originalPacket) {
+	public InventoryClick(Player player) {
 		this.player = player;
-		PacketPlayInWindowClick packet = (PacketPlayInWindowClick) originalPacket;
-		fielda = packet.c();
-		fieldslot = packet.d();
-		fieldbutton = packet.e();
-		fieldd = packet.f();
-		fielditem = packet.g();
-		fieldshift = packet.h();
-	}
-
-	@Override
-	public int c() {
-		return fielda;
-	}
-
-	@Override
-	public int d() {
-		return fieldslot;
-	}
-
-	@Override
-	public int e() {
-		return fieldbutton;
-	}
-
-	@Override
-	public short f() {
-		return fieldd;
-	}
-
-	@Override
-	public ItemStack g() {
-		return fielditem;
-	}
-
-	@Override
-	public int h() {
-		return fieldshift;
 	}
 
 	@Override
@@ -84,7 +39,7 @@ public class InventoryClick extends PacketPlayInWindowClick {
 		if (cplayer.getHandle().playerConnection.isDisconnected()) {
 			return;
 		}
-		ClickInventoryPacketClickInventoryEvent event = new ClickInventoryPacketClickInventoryEvent(player, fielda, fieldslot, fieldshift, fieldbutton);
+		ClickInventoryPacketClickInventoryEvent event = new ClickInventoryPacketClickInventoryEvent(player, c(), d(), h(), e());
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			return;
