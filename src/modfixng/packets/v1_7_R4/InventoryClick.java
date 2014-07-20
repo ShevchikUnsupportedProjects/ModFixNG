@@ -23,59 +23,59 @@ import net.minecraft.server.v1_7_R4.PacketPlayInListener;
 import net.minecraft.server.v1_7_R4.PacketPlayInWindowClick;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class InventoryClick extends PacketPlayInWindowClick {
 
-	private int a;
-	private int slot;
-	private int button;
-	private short d;
-	private ItemStack item;
-	private int shift;
+	private int fielda;
+	private int fieldslot;
+	private int fieldbutton;
+	private short fieldd;
+	private ItemStack fielditem;
+	private int fieldshift;
 
 	private Player player;
 
 	public InventoryClick(Player player, Object originalPacket) {
 		this.player = player;
 		PacketPlayInWindowClick packet = (PacketPlayInWindowClick) originalPacket;
-		a = packet.c();
-		slot = packet.d();
-		button = packet.e();
-		d = packet.f();
-		item = packet.g();
-		shift = packet.h();
+		fielda = packet.c();
+		fieldslot = packet.d();
+		fieldbutton = packet.e();
+		fieldd = packet.f();
+		fielditem = packet.g();
+		fieldshift = packet.h();
 	}
 
 	@Override
 	public int c() {
-		return a;
+		return fielda;
 	}
 
 	@Override
 	public int d() {
-		return slot;
+		return fieldslot;
 	}
 
 	@Override
 	public int e() {
-		return button;
+		return fieldbutton;
 	}
 
 	@Override
 	public short f() {
-		return d;
+		return fieldd;
 	}
 
 	@Override
 	public ItemStack g() {
-		return item;
+		return fielditem;
 	}
 
 	@Override
 	public int h() {
-		return shift;
+		return fieldshift;
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class InventoryClick extends PacketPlayInWindowClick {
 		if (cplayer.getHandle().playerConnection.isDisconnected()) {
 			return;
 		}
-		ClickInventoryPacketClickInventoryEvent event = new ClickInventoryPacketClickInventoryEvent(player, a, slot, shift, button);
+		ClickInventoryPacketClickInventoryEvent event = new ClickInventoryPacketClickInventoryEvent(player, fielda, fieldslot, fieldshift, fieldbutton);
 		Bukkit.getPluginManager().callEvent(event);
 		if (event.isCancelled()) {
 			return;
