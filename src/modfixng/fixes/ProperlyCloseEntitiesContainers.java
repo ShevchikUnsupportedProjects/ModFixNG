@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import modfixng.events.CloseInventoryPacketCloseInventoryEvent;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
@@ -38,7 +39,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.async.AsyncListenerHandler;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
@@ -83,26 +83,11 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		}
 	}
 
-	private AsyncListenerHandler alistener;
 	private PacketListener plistener;
 	// remove player from list when he closes inventory
-	private void initClientCloseInventoryFixListener() {
-		alistener = ModFixNG.getProtocolManager().getAsynchronousManager().registerAsyncHandler(
-			new PacketAdapter(
-				PacketAdapter
-				.params(ModFixNG.getInstance(), PacketType.Play.Client.CLOSE_WINDOW)
-			) {
-				@Override
-				public void onPacketReceiving(final PacketEvent e) {
-					if (e.getPlayer() == null) {
-						return;
-					}
-
-					removeData(e.getPlayer().getName());
-				}
-			}
-		);
-		alistener.syncStart();
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPacketInInventoryClose(CloseInventoryPacketCloseInventoryEvent event) {
+		removeData(event.getPlayer().getName());
 	}
 	private void initServerCloseInventoryFixListener() {
 		plistener = new PacketAdapter(
@@ -152,7 +137,6 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 	@Override
 	public void load() {
 		Bukkit.getPluginManager().registerEvents(this, ModFixNG.getInstance());
-		initClientCloseInventoryFixListener();
 		initServerCloseInventoryFixListener();
 		initEntitiesCheck();
 	}
@@ -160,7 +144,6 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 	@Override
 	public void unload() {
 		task.cancel();
-		ModFixNG.getProtocolManager().getAsynchronousManager().unregisterAsyncHandler(alistener);
 		ModFixNG.getProtocolManager().removePacketListener(plistener);
 		HandlerList.unregisterAll(this);
 		for (Player player : Bukkit.getOnlinePlayers()) {
