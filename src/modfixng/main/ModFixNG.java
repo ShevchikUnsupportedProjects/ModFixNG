@@ -57,7 +57,7 @@ public class ModFixNG extends JavaPlugin {
 		//get protocol access
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		//init nms access
-		init = NMSPacketAccess.init() && NMSUtilsAccess.init();
+		init = NMSPacketAccess.init() & NMSUtilsAccess.init();
 		if (!init) {
 			getLogger().severe("Can't load nms access");
 			NMSPacketAccess.getError().printStackTrace();
