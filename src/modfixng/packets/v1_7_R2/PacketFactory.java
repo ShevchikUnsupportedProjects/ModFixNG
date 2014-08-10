@@ -17,16 +17,13 @@
 
 package modfixng.packets.v1_7_R2;
 
-import modfixng.packets.PacketFactoryInterface;
-
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.events.PacketContainer;
 
-public class PacketFactory implements PacketFactoryInterface {
+public class PacketFactory {
 
-	@Override
-	public PacketContainer getBlockDigPacket(Player player, PacketContainer container) {
+	protected static PacketContainer getBlockDigPacket(Player player, PacketContainer container) {
 		Object nmsPacket = new BlockDig(player);
 		PacketContainer newpacket = new PacketContainer(container.getType(), nmsPacket);
 		newpacket.getIntegers().write(0, container.getIntegers().read(0));
@@ -37,16 +34,14 @@ public class PacketFactory implements PacketFactoryInterface {
 		return newpacket;
 	}
 
-	@Override
-	public PacketContainer getWindowClosePacket(Player player, PacketContainer container) {
+	protected static PacketContainer getWindowClosePacket(Player player, PacketContainer container) {
 		Object nmsPacket = new CloseInventory(player, container.getIntegers().read(0));
 		PacketContainer newpacket = new PacketContainer(container.getType(), nmsPacket);
 		newpacket.getIntegers().write(0, container.getIntegers().read(0));
 		return newpacket;
 	}
 
-	@Override
-	public PacketContainer getWindowClickPacket(Player player, PacketContainer container) {
+	protected static PacketContainer getWindowClickPacket(Player player, PacketContainer container) {
 		Object nmsPacket = new InventoryClick(player);
 		PacketContainer newpacket = new PacketContainer(container.getType(), nmsPacket);
 		newpacket.getIntegers().write(0, container.getIntegers().read(0));

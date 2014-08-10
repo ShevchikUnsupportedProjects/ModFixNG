@@ -15,9 +15,10 @@
  *
  */
 
-package modfixng.packets;
+package modfixng.packets.v1_7_R3;
 
 import modfixng.main.ModFixNG;
+import modfixng.packets.PacketHookInterface;
 
 import org.bukkit.entity.Player;
 
@@ -27,7 +28,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 
-public class ProtocolLibPacketHook implements PacketHookInterface {
+public class PacketHook implements PacketHookInterface {
 
 	public void initInBlockDigListener() {
 		ModFixNG.getProtocolManager().addPacketListener(
@@ -43,7 +44,7 @@ public class ProtocolLibPacketHook implements PacketHookInterface {
 						return;
 					}
 
-					PacketContainer newpacket = NMSPacketAccess.getPacketFactory().getBlockDigPacket(player, e.getPacket());
+					PacketContainer newpacket = PacketFactory.getBlockDigPacket(player, e.getPacket());
 					e.setPacket(newpacket);
 				}
 			}
@@ -64,7 +65,7 @@ public class ProtocolLibPacketHook implements PacketHookInterface {
 						return;
 					}
 
-					PacketContainer newpacket = NMSPacketAccess.getPacketFactory().getWindowClosePacket(player, e.getPacket());
+					PacketContainer newpacket = PacketFactory.getWindowClosePacket(player, e.getPacket());
 					e.setPacket(newpacket);
 				}
 			}
@@ -85,7 +86,7 @@ public class ProtocolLibPacketHook implements PacketHookInterface {
 						return;
 					}
 
-					PacketContainer newpacket = NMSPacketAccess.getPacketFactory().getWindowClickPacket(player, e.getPacket());
+					PacketContainer newpacket = PacketFactory.getWindowClickPacket(player, e.getPacket());
 					e.setPacket(newpacket);
 				}
 			}
