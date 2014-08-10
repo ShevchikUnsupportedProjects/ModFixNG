@@ -18,7 +18,6 @@
 package modfixng.main;
 
 import modfixng.packets.NMSPacketAccess;
-import modfixng.packets.PacketReplaceListener;
 import modfixng.utils.ModFixNGUtils;
 import modfixng.utils.NMSUtilsAccess;
 
@@ -53,6 +52,10 @@ public class ModFixNG extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		//set instance
+		instance = this;
+		//get protocol access
+		protocolManager = ProtocolLibrary.getProtocolManager();
 		//init nms access
 		init = NMSPacketAccess.init() && NMSUtilsAccess.init();
 		if (!init) {
@@ -62,15 +65,6 @@ public class ModFixNG extends JavaPlugin {
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
 		}
-		//set instance
-		instance = this;
-		//get protocol access
-		protocolManager = ProtocolLibrary.getProtocolManager();
-		//init packet replacer
-		PacketReplaceListener packetslistener = new PacketReplaceListener();
-		packetslistener.initInBlockDigListener();
-		packetslistener.initInCloseInventoryListener();
-		packetslistener.initInClickInventoryListener();
 		//init config
 		config = new Config(this);
 		config.loadConfig();
@@ -87,6 +81,8 @@ public class ModFixNG extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		instance = null;
+		protocolManager = null;
 		if (!init) {
 			return;
 		}
@@ -95,8 +91,6 @@ public class ModFixNG extends JavaPlugin {
 		}
 		loader.unloadAll();
 		loader = null;
-		instance = null;
-		protocolManager = null;
 	}
 
 }

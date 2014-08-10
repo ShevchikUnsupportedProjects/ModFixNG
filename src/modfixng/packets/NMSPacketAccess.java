@@ -35,6 +35,19 @@ public class NMSPacketAccess {
 		try {
 			String versioned = NMSPacketAccess.class.getPackage().getName()+"."+nmspackageversion+".";
 			packetfactory = (PacketFactoryInterface) Class.forName(versioned+"PacketFactory").newInstance();
+			try {
+				//init version specific hook if available
+				PacketHookInterface phook = (PacketHookInterface) Class.forName(versioned+"PacketHook").newInstance();
+				phook.initInBlockDigListener();
+				phook.initInCloseInventoryListener();
+				phook.initInClickInventoryListener();
+			} catch (Throwable t) {
+				//init protocollib packet replacer (works for 1_7_R1, 1_7_R2, 1_7_R3, 1_7_R4)
+				ProtocolLibPacketHook phook = new ProtocolLibPacketHook();
+				phook.initInBlockDigListener();
+				phook.initInCloseInventoryListener();
+				phook.initInClickInventoryListener();
+			}
 		} catch (Throwable t) {
 			error = t;
 			return false;
