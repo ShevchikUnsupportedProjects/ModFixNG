@@ -15,20 +15,20 @@
  *
  */
 
-package modfixng.utils.v1_7_R3;
+package modfixng.utils.v1_6_R3;
 
 import java.lang.reflect.Field;
 
 import modfixng.utils.NMSUtilsInterface;
-import net.minecraft.server.v1_7_R3.Container;
-import net.minecraft.server.v1_7_R3.EntityHuman;
-import net.minecraft.server.v1_7_R3.IInventory;
-import net.minecraft.server.v1_7_R3.ItemStack;
-import net.minecraft.server.v1_7_R3.TileEntity;
+import net.minecraft.server.v1_6_R3.Container;
+import net.minecraft.server.v1_6_R3.EntityHuman;
+import net.minecraft.server.v1_6_R3.IInventory;
+import net.minecraft.server.v1_6_R3.ItemStack;
+import net.minecraft.server.v1_6_R3.TileEntity;
 
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class NMSUtils implements NMSUtilsInterface {
