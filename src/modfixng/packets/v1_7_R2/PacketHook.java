@@ -30,6 +30,7 @@ import com.comphenix.protocol.events.PacketEvent;
 
 public class PacketHook implements PacketHookInterface {
 
+	@Override
 	public void initInBlockDigListener() {
 		ModFixNG.getProtocolManager().addPacketListener(
 			new PacketAdapter(
@@ -51,6 +52,7 @@ public class PacketHook implements PacketHookInterface {
 		);
 	}
 
+	@Override
 	public void initInCloseInventoryListener() {
 		ModFixNG.getProtocolManager().addPacketListener(
 			new PacketAdapter(
@@ -72,6 +74,7 @@ public class PacketHook implements PacketHookInterface {
 		);
 	}
 
+	@Override
 	public void initInClickInventoryListener() {
 		ModFixNG.getProtocolManager().addPacketListener(
 			new PacketAdapter(
