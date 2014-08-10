@@ -18,23 +18,26 @@
 package modfixng.utils.v1_7_R1;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import modfixng.utils.NMSUtilsInterface;
 import net.minecraft.server.v1_7_R1.Container;
 import net.minecraft.server.v1_7_R1.EntityHuman;
 import net.minecraft.server.v1_7_R1.IInventory;
 import net.minecraft.server.v1_7_R1.ItemStack;
+import net.minecraft.server.v1_7_R1.PlayerInventory;
+import net.minecraft.server.v1_7_R1.Slot;
 import net.minecraft.server.v1_7_R1.TileEntity;
 
-import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_7_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
+import org.bukkit.craftbukkit.v1_7_R1.inventory.CraftItemStack;
 
 public class NMSUtils implements NMSUtilsInterface {
 
 	@Override
-	public boolean hasInventory(Block b) {
+	public boolean hasInventory(org.bukkit.block.Block b) {
 		CraftWorld cworld = (CraftWorld) b.getWorld();
 		TileEntity te = cworld.getTileEntityAt(b.getX(), b.getY(), b.getZ());
 		if (te != null && te instanceof IInventory) {
@@ -44,27 +47,41 @@ public class NMSUtils implements NMSUtilsInterface {
 	}
 
 	@Override
-	public boolean isInventoryOpen(Player p) {
+	public boolean isInventoryOpen(org.bukkit.entity.Player p) {
 		return getOpenInventoryId(p) != 0;
 	}
 
 	@Override
-	public String getOpenInventoryName(Player p) {
+	public String getOpenInventoryName(org.bukkit.entity.Player p) {
 		return getPlayerContainer(p).getClass().getName();
 	}
 
 	@Override
-	public boolean isContainerValid(Player p, int invid) {
+	public ArrayList<org.bukkit.inventory.ItemStack> getOpenInvetnoryItems(org.bukkit.entity.Player p) {
+		ArrayList<org.bukkit.inventory.ItemStack> items = new ArrayList<org.bukkit.inventory.ItemStack>();
+		Container container = getPlayerContainer(p);
+		@SuppressWarnings("unchecked")
+		List<Slot> slots = container.c;
+		for (Slot slot : slots) {
+			if (!(slot.inventory instanceof PlayerInventory)) {
+				items.add(CraftItemStack.asCraftMirror(slot.getItem()));
+			}
+		}
+		return items;
+	}
+
+	@Override
+	public boolean isContainerValid(org.bukkit.entity.Player p, int invid) {
 		return getOpenInventoryId(p) == invid;
 	}
 
 	@Override
-	public int getOpenInventoryId(Player p) {
+	public int getOpenInventoryId(org.bukkit.entity.Player p) {
 		return getPlayerContainer(p).windowId;
 	}
 
 	@Override
-	public boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public boolean isTryingToDropOpenCropanalyzer(org.bukkit.entity.Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		if (!getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerCropnalyzer")) {
 			return false;
 		}
@@ -85,7 +102,7 @@ public class NMSUtils implements NMSUtilsInterface {
 	}
 
 	@Override
-	public boolean isTryingToDropOpenToolBox(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public boolean isTryingToDropOpenToolBox(org.bukkit.entity.Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		if (!getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerToolbox")) {
 			return false;
 		}
@@ -105,7 +122,7 @@ public class NMSUtils implements NMSUtilsInterface {
 		return false;
 	}
 
-	private Container getPlayerContainer(Player p) {
+	private Container getPlayerContainer(org.bukkit.entity.Player p) {
 		CraftPlayer cplayer = (CraftPlayer) p;
 		EntityHuman nmshuman = cplayer.getHandle();
 		return nmshuman.activeContainer;

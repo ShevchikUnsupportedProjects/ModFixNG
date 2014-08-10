@@ -17,8 +17,11 @@
 
 package modfixng.utils;
 
+import java.util.ArrayList;
+
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public interface NMSUtilsInterface {
 
@@ -27,6 +30,8 @@ public interface NMSUtilsInterface {
 	public boolean isInventoryOpen(Player p);
 
 	public String getOpenInventoryName(Player p);
+
+	public ArrayList<ItemStack> getOpenInvetnoryItems(Player p);
 
 	public boolean isContainerValid(Player p, int invid);
 
