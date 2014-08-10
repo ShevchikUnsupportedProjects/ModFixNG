@@ -81,9 +81,9 @@ public class ModFixNG extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		instance = null;
-		protocolManager = null;
 		if (!init) {
+			protocolManager = null;
+			instance = null;
 			return;
 		}
 		for (Player p : getServer().getOnlinePlayers()) {
@@ -91,6 +91,8 @@ public class ModFixNG extends JavaPlugin {
 		}
 		loader.unloadAll();
 		loader = null;
+		protocolManager = null;
+		instance = null;
 	}
 
 }
