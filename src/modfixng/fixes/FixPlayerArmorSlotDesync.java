@@ -59,7 +59,7 @@ public class FixPlayerArmorSlotDesync implements Feature {
 
 	@Override
 	public String getName() {
-		return "FixArmorDesync";
+		return "ArmorDesyncFix";
 	}
 
 }

@@ -42,7 +42,7 @@ public class FixForestryCraftingTable implements Listener, Feature {
 
 	@Override
 	public String getName() {
-		return "FixForestryCraftingTable";
+		return "ForestryCraftingTableFix";
 	}
 
 }
