@@ -62,7 +62,7 @@ public class Config {
 	public Material fixMultipartItemMaterial = Material.AIR;
 	public Material fixMultipartBlockMaterial = Material.AIR;
 
-	public boolean fixForestryCraftingTable = true;
+	public boolean fixForestryCraftingTable = false;
 
 	public void loadConfig() {
 		YamlConfigurationWrapper config = YamlConfigurationWrapper.loadConfiguration(configfile);
@@ -93,7 +93,7 @@ public class Config {
 		restrictShiftEnabled = config.get(boolean.class, "RestrictShiftButtonClick.enabled", restrictShiftEnabled);
 		restrictShiftInvetoryNames = config.getHashSet(String.class, "RestrictShiftButtonClick.inventoryNames", restrictShiftInvetoryNames);
 
-		fixForestryCraftingTable = config.get(boolean.class, "ForestryCraftingTableFix.enabled", fixForestryCraftingTable);
+		//fixForestryCraftingTable = config.get(boolean.class, "ForestryCraftingTableFix.enabled", fixForestryCraftingTable);
 
 		saveConfig();
 	}
@@ -127,7 +127,7 @@ public class Config {
 		config.set("MultipartFix.itemMaterial", fixMultipartItemMaterial);
 		config.set("MultipartFix.blockMaterial", fixMultipartBlockMaterial);
 
-		config.set("ForestryCraftingTableFix.enabled", fixForestryCraftingTable);
+		//config.set("ForestryCraftingTableFix.enabled", fixForestryCraftingTable);
 
 		try {
 			config.save(configfile);
