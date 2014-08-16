@@ -10,7 +10,7 @@ public class PacketHook implements PacketHookInterface {
 
 	@Override
 	public void initInBlockDigListener() {
-		hookPacket(CloseInventory.class, CloseInventory.getPacketID());
+		hookPacket(BlockDig.class, BlockDig.getPacketID());
 	}
 
 	@Override
