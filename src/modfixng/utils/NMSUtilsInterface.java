@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public interface NMSUtilsInterface {
 
@@ -31,7 +30,9 @@ public interface NMSUtilsInterface {
 
 	public String getOpenInventoryName(Player p);
 
-	public ArrayList<ItemStack> getOpenInvetnoryItems(Player p);
+	public boolean isTopInventoryClick(Player p, int slot);
+
+	public ArrayList<org.bukkit.inventory.ItemStack> getTopInvetnoryItems(Player p);
 
 	public boolean isContainerValid(Player p, int invid);
 

@@ -30,9 +30,9 @@ import net.minecraft.server.v1_7_R3.PlayerInventory;
 import net.minecraft.server.v1_7_R3.Slot;
 import net.minecraft.server.v1_7_R3.TileEntity;
 
+import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
 
 public class NMSUtils implements NMSUtilsInterface {
 
@@ -57,17 +57,13 @@ public class NMSUtils implements NMSUtilsInterface {
 	}
 
 	@Override
-	public ArrayList<org.bukkit.inventory.ItemStack> getOpenInvetnoryItems(org.bukkit.entity.Player p) {
-		ArrayList<org.bukkit.inventory.ItemStack> items = new ArrayList<org.bukkit.inventory.ItemStack>();
-		Container container = getPlayerContainer(p);
+	public boolean isTopInventoryClick(org.bukkit.entity.Player p, int slot) {
 		@SuppressWarnings("unchecked")
-		List<Slot> slots = container.c;
-		for (Slot slot : slots) {
-			if (!(slot.inventory instanceof PlayerInventory)) {
-				items.add(CraftItemStack.asCraftMirror(slot.getItem()));
-			}
+		List<Slot> slots = getPlayerContainer(p).c;
+		if (slot >= 0 && slot < slots.size() && !(slots.get(slot).inventory instanceof PlayerInventory)) {
+			return true;
 		}
-		return items;
+		return false;
 	}
 
 	@Override
@@ -99,6 +95,20 @@ public class NMSUtils implements NMSUtilsInterface {
 			return openuid == clickeduid;
 		}
 		return false;
+	}
+
+	@Override
+	public ArrayList<org.bukkit.inventory.ItemStack> getTopInvetnoryItems(org.bukkit.entity.Player p) {
+		ArrayList<org.bukkit.inventory.ItemStack> items = new ArrayList<org.bukkit.inventory.ItemStack>();
+		Container container = getPlayerContainer(p);
+		@SuppressWarnings("unchecked")
+		List<Slot> slots = container.c;
+		for (Slot slot : slots) {
+			if (!(slot.inventory instanceof PlayerInventory)) {
+				items.add(CraftItemStack.asCraftMirror(slot.getItem()));
+			}
+		}
+		return items;
 	}
 
 	@Override

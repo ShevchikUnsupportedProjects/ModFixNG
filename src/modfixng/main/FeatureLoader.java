@@ -22,7 +22,7 @@ import java.util.LinkedList;
 
 import modfixng.fixes.Feature;
 import modfixng.fixes.FixBag;
-import modfixng.fixes.FixForestryCraftingTable;
+import modfixng.fixes.FixForestryCraftingContainers;
 import modfixng.fixes.FixPlayerArmorSlotDesync;
 import modfixng.fixes.ForgeMultipartPlaceFix;
 import modfixng.fixes.ProperlyCloseBlocksContainers;
@@ -80,8 +80,8 @@ public class FeatureLoader {
 		if (config.restrictShiftEnabled) {
 			loadFeature(new RestrictShiftClick(config));
 		}
-		if (config.fixForestryCraftingTable && ModFixNGUtils.isRunningMCPC()) {
-			loadFeature(new FixForestryCraftingTable());
+		if (config.fixForestryCraftingContainers && ModFixNGUtils.isRunningMCPC()) {
+			loadFeature(new FixForestryCraftingContainers());
 		}
 	}
 

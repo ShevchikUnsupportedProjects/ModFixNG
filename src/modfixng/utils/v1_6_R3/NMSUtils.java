@@ -57,7 +57,17 @@ public class NMSUtils implements NMSUtilsInterface {
 	}
 
 	@Override
-	public ArrayList<org.bukkit.inventory.ItemStack> getOpenInvetnoryItems(org.bukkit.entity.Player p) {
+	public boolean isTopInventoryClick(org.bukkit.entity.Player p, int slot) {
+		@SuppressWarnings("unchecked")
+		List<Slot> slots = getPlayerContainer(p).c;
+		if (slot >= 0 && slot < slots.size() && !(slots.get(slot).inventory instanceof PlayerInventory)) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public ArrayList<org.bukkit.inventory.ItemStack> getTopInvetnoryItems(org.bukkit.entity.Player p) {
 		ArrayList<org.bukkit.inventory.ItemStack> items = new ArrayList<org.bukkit.inventory.ItemStack>();
 		Container container = getPlayerContainer(p);
 		@SuppressWarnings("unchecked")
