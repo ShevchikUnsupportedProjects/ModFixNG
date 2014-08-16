@@ -122,7 +122,7 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 						String playername = player.getName();
 						if (playerOpenEntity.containsKey(playername)) {
 							Entity entity = playerOpenEntity.get(playername);
-							if (!entity.isValid() || entity.getWorld() != player.getWorld() || entity.getLocation().distanceSquared(player.getLocation()) > 36) {
+							if (!entity.isValid() || (entity.getWorld() != player.getWorld()) || (entity.getLocation().distanceSquared(player.getLocation()) > 36)) {
 								playerOpenEntity.remove(playername);
 								player.closeInventory();
 							}

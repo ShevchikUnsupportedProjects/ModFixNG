@@ -43,7 +43,7 @@ public class ForgeMultipartPlaceFix implements Listener, Feature {
 		if (event.isCancelled()) {
 			ItemStack item = event.getPlayer().getItemInHand();
 			if (item.getType() == config.fixMultipartItemMaterial) {
-				if (placed.getType() != config.fixMultipartBlockMaterial && placed.isLiquid()) {
+				if ((placed.getType() != config.fixMultipartBlockMaterial) && placed.isLiquid()) {
 					event.setCancelled(false);
 				}
 			}

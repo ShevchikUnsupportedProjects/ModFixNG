@@ -39,7 +39,7 @@ public class BlockDig extends PacketPlayInBlockDig {
 		if (cplayer.getHandle().playerConnection.isDisconnected()) {
 			return;
 		}
-		if (g() == 3 || g() == 4) {
+		if ((g() == 3) || (g() == 4)) {
 			BlockDigPacketItemDropEvent event = new BlockDigPacketItemDropEvent(player);
 			Bukkit.getPluginManager().callEvent(event);
 			if (event.isCancelled()) {

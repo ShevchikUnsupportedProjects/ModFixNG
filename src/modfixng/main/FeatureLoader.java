@@ -65,7 +65,7 @@ public class FeatureLoader {
 		if (config.fixBagEnabled && ModFixNGUtils.isRunningMCPC()) {
 			loadFeature(new FixBag(config));
 		}
-		if (config.fixMultipartEnabled && config.fixMultipartBlockMaterial != Material.AIR  && config.fixMultipartItemMaterial != Material.AIR && ModFixNGUtils.isRunningMCPC()) {
+		if (config.fixMultipartEnabled && (config.fixMultipartBlockMaterial != Material.AIR)  && (config.fixMultipartItemMaterial != Material.AIR) && ModFixNGUtils.isRunningMCPC()) {
 			loadFeature(new ForgeMultipartPlaceFix(config));
 		}
 		if (config.fixSlotDesyncEnabled) {

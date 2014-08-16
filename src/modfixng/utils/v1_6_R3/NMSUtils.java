@@ -40,7 +40,7 @@ public class NMSUtils implements NMSUtilsInterface {
 	public boolean hasInventory(org.bukkit.block.Block b) {
 		CraftWorld cworld = (CraftWorld) b.getWorld();
 		TileEntity te = cworld.getTileEntityAt(b.getX(), b.getY(), b.getZ());
-		if (te != null && te instanceof IInventory) {
+		if ((te != null) && (te instanceof IInventory)) {
 			return true;
 		}
 		return false;
@@ -60,7 +60,7 @@ public class NMSUtils implements NMSUtilsInterface {
 	public boolean isTopInventoryClick(org.bukkit.entity.Player p, int slot) {
 		@SuppressWarnings("unchecked")
 		List<Slot> slots = getPlayerContainer(p).c;
-		if (slot >= 0 && slot < slots.size() && !(slots.get(slot).inventory instanceof PlayerInventory)) {
+		if ((slot >= 0) && (slot < slots.size()) && !(slots.get(slot).inventory instanceof PlayerInventory)) {
 			return true;
 		}
 		return false;

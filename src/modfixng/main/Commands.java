@@ -59,7 +59,7 @@ public class Commands implements CommandExecutor, Listener {
 				sender.sendMessage(ChatColor.BLUE + "Нет прав");
 				return true;
 			}
-		} else if (sender instanceof ConsoleCommandSender || sender instanceof RemoteConsoleCommandSender) {
+		} else if ((sender instanceof ConsoleCommandSender) || (sender instanceof RemoteConsoleCommandSender)) {
 			// Success, this was from the Console or Remote Console
 		} else {
 			// Who are you people?
@@ -70,32 +70,32 @@ public class Commands implements CommandExecutor, Listener {
 		if (args.length == 0) {
 			sender.sendMessage(ChatColor.BLUE + "Используйте команд /modfix help для получения списка комманд");
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+		} else if ((args.length == 1) && args[0].equalsIgnoreCase("reload")) {
 			config.loadConfig();
 			ModFixNG.getFeatureLoader().unloadAll();
 			ModFixNG.getFeatureLoader().loadAll();
 			sender.sendMessage(ChatColor.BLUE + "ModFixNG перезагружен");
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("status")) {
+		} else if ((args.length == 1) && args[0].equalsIgnoreCase("status")) {
 			sender.sendMessage(ChatColor.BLUE + "MCPC+: "+ModFixNGUtils.isRunningMCPC());
 			sender.sendMessage(ChatColor.BLUE + "Активные модули:");
 			for (String name : ModFixNG.getFeatureLoader().getLoadedFeaturesNames()) {
 				sender.sendMessage(ChatColor.BLUE + name);
 			}
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
+		} else if ((args.length == 1) && args[0].equalsIgnoreCase("help")) {
 			displayHelp(sender);
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("iteminfo")) {
+		} else if ((args.length == 1) && args[0].equalsIgnoreCase("iteminfo")) {
 			displayItemInfo(sender);
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("blockinfo")) {
+		} else if ((args.length == 1) && args[0].equalsIgnoreCase("blockinfo")) {
 			displayBlockInfo(sender);
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("entityinfo")) {
+		} else if ((args.length == 1) && args[0].equalsIgnoreCase("entityinfo")) {
 			displayEntityInfo(sender);
 			return true;
-		} else if (args.length == 1 && args[0].equalsIgnoreCase("inventoryinfo")) {
+		} else if ((args.length == 1) && args[0].equalsIgnoreCase("inventoryinfo")) {
 			displayInventoryNameInfo(sender);
 			return true;
 		}

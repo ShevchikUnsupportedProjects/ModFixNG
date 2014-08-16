@@ -127,7 +127,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 						if (playerOpenBlock.containsKey(playername)) {
 							BlockState bs = playerOpenBlock.get(playername);
 							Block b = bs.getBlock();
-							if (b.getWorld() != player.getWorld() || b.getLocation().distanceSquared(player.getLocation()) > 36 || !isValid(bs, b)) {
+							if ((b.getWorld() != player.getWorld()) || (b.getLocation().distanceSquared(player.getLocation()) > 36) || !isValid(bs, b)) {
 								playerOpenBlock.remove(player.getName());
 								player.closeInventory();
 							}
@@ -140,8 +140,8 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 	}
 
 	private boolean isValid(BlockState bs, Block b) {
-		if (bs.getType() == Material.FURNACE || bs.getType() == Material.BURNING_FURNACE) {
-			return b.getType() == Material.FURNACE || b.getType() == Material.BURNING_FURNACE;
+		if ((bs.getType() == Material.FURNACE) || (bs.getType() == Material.BURNING_FURNACE)) {
+			return (b.getType() == Material.FURNACE) || (b.getType() == Material.BURNING_FURNACE);
 		}
 		return bs.getType() == b.getType();
 	}
