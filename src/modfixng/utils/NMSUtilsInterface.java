@@ -30,8 +30,6 @@ public interface NMSUtilsInterface {
 
 	public String getOpenInventoryName(Player p);
 
-	public boolean isTopInventoryClick(Player p, int slot);
-
 	public ArrayList<org.bukkit.inventory.ItemStack> getTopInvetnoryItems(Player p);
 
 	public boolean isContainerValid(Player p, int invid);
