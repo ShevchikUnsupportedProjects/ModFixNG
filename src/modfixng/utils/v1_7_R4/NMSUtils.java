@@ -63,7 +63,7 @@ public class NMSUtils implements NMSUtilsInterface {
 		@SuppressWarnings("unchecked")
 		List<Slot> slots = container.c;
 		for (Slot slot : slots) {
-			if (slot.getItem() != null && !(slot.inventory instanceof PlayerInventory)) {
+			if ((slot.getItem() != null) && !(slot.inventory instanceof PlayerInventory)) {
 				items.add(CraftItemStack.asCraftMirror(slot.getItem()));
 			}
 		}
