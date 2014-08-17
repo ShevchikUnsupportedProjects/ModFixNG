@@ -67,6 +67,20 @@ public class NMSUtils implements NMSUtilsInterface {
 	}
 
 	@Override
+	public ArrayList<org.bukkit.inventory.ItemStack> getTopInvetnoryItems(org.bukkit.entity.Player p) {
+		ArrayList<org.bukkit.inventory.ItemStack> items = new ArrayList<org.bukkit.inventory.ItemStack>();
+		Container container = getPlayerContainer(p);
+		@SuppressWarnings("unchecked")
+		List<Slot> slots = container.c;
+		for (Slot slot : slots) {
+			if (slot.getItem() != null && !(slot.inventory instanceof PlayerInventory)) {
+				items.add(CraftItemStack.asCraftMirror(slot.getItem()));
+			}
+		}
+		return items;
+	}
+
+	@Override
 	public boolean isContainerValid(org.bukkit.entity.Player p, int invid) {
 		return getOpenInventoryId(p) == invid;
 	}
@@ -95,20 +109,6 @@ public class NMSUtils implements NMSUtilsInterface {
 			return openuid == clickeduid;
 		}
 		return false;
-	}
-
-	@Override
-	public ArrayList<org.bukkit.inventory.ItemStack> getTopInvetnoryItems(org.bukkit.entity.Player p) {
-		ArrayList<org.bukkit.inventory.ItemStack> items = new ArrayList<org.bukkit.inventory.ItemStack>();
-		Container container = getPlayerContainer(p);
-		@SuppressWarnings("unchecked")
-		List<Slot> slots = container.c;
-		for (Slot slot : slots) {
-			if (!(slot.inventory instanceof PlayerInventory)) {
-				items.add(CraftItemStack.asCraftMirror(slot.getItem()));
-			}
-		}
-		return items;
 	}
 
 	@Override
