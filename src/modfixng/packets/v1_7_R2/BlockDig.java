@@ -46,7 +46,7 @@ public class BlockDig extends PacketPlayInBlockDig {
 				return;
 			}
 		}
-	    paramPacketPlayInListener.a(this);
+		paramPacketPlayInListener.a(this);
 	}
 
 }

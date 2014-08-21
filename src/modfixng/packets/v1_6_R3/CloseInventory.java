@@ -44,7 +44,7 @@ public class CloseInventory extends Packet101CloseWindow {
 				return;
 			}
 		}
-	    paramConnection.handleContainerClose(this);
+		paramConnection.handleContainerClose(this);
 	}
 
 }

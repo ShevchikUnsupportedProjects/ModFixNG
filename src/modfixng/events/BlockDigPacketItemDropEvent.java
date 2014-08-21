@@ -32,23 +32,23 @@ public class BlockDigPacketItemDropEvent extends PlayerEvent implements Cancella
 
 	private boolean cancelled = false;
 
-    @Override
+	@Override
 	public boolean isCancelled() {
-        return cancelled;
-    }
+		return cancelled;
+	}
 
-    @Override
+	@Override
 	public void setCancelled(boolean cancel) {
-        cancelled = cancel;
-    }
+		cancelled = cancel;
+	}
 
-    @Override
+	@Override
 	public HandlerList getHandlers() {
-        return handlers;
-    }
+		return handlers;
+	}
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
 }

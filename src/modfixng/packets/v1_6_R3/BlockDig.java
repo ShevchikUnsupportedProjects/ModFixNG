@@ -46,7 +46,7 @@ public class BlockDig extends Packet14BlockDig {
 				}
 			}
 		}
-	    paramConnection.a(this);
+		paramConnection.a(this);
 	}
 
 }
