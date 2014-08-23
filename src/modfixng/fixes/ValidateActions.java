@@ -37,7 +37,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 public class ValidateActions implements Listener, Feature {
 
 	// deny entity interact if inventory opened
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractBlock(PlayerInteractEvent event) {
 		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
