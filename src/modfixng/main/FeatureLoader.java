@@ -17,7 +17,6 @@
 
 package modfixng.main;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import modfixng.fixes.Feature;
@@ -29,6 +28,7 @@ import modfixng.fixes.ProperlyCloseBlocksContainers;
 import modfixng.fixes.ProperlyCloseEntitiesContainers;
 import modfixng.fixes.Restrict19Click;
 import modfixng.fixes.RestrictShiftClick;
+import modfixng.fixes.TreeGenerationFix;
 import modfixng.fixes.ValidateActions;
 import modfixng.utils.ModFixNGUtils;
 
@@ -83,6 +83,9 @@ public class FeatureLoader {
 		if (config.fixForestryCraftingContainers && ModFixNGUtils.isRunningMCPC()) {
 			loadFeature(new FixForestryCraftingContainers());
 		}
+		if (config.fixTreeGeneration && ModFixNGUtils.isRunningMCPC()) {
+			loadFeature(new TreeGenerationFix());
+		}
 	}
 
 	public void loadFeature(Feature feature) {
@@ -91,10 +94,8 @@ public class FeatureLoader {
 	}
 
 	public void unloadAll() {
-		Iterator<Feature> fit = loadedFeatures.iterator();
-		while (fit.hasNext()) {
-			fit.next().unload();
-			fit.remove();
+		for (Feature feature : getLoadedFeaturesCopy()) {
+			unloadFeature(feature);
 		}
 	}
 
