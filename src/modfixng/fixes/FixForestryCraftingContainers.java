@@ -19,7 +19,8 @@ public class FixForestryCraftingContainers implements Listener, Feature {
 	private HashSet<String> forestryInventoryNames = new HashSet<String>(
 		Arrays.asList(
 			new String[] {
-				"forestry.factory.gui.ContainerWorktable"
+				"forestry.factory.gui.ContainerWorktable",
+				"forestry.factory.gui.ContainerCarpenter"
 			}
 		)
 	);
