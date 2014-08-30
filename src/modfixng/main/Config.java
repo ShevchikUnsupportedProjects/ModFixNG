@@ -64,8 +64,6 @@ public class Config {
 
 	public boolean fixForestryCraftingContainers = true;
 
-	public boolean fixTreeGeneration = true;
-
 	public void loadConfig() {
 		YamlConfigurationWrapper config = YamlConfigurationWrapper.loadConfiguration(configfile);
 
@@ -96,8 +94,6 @@ public class Config {
 		restrictShiftInvetoryNames = config.getHashSet(String.class, "RestrictShiftButtonClick.inventoryNames", restrictShiftInvetoryNames);
 
 		fixForestryCraftingContainers = config.get(boolean.class, "ForestryCraftingContainersFix.enabled", fixForestryCraftingContainers);
-
-		fixTreeGeneration = config.get(boolean.class, "TreeGenerationFix.enabled", fixTreeGeneration);
 
 		saveConfig();
 	}
@@ -132,8 +128,6 @@ public class Config {
 		config.set("MultipartFix.blockMaterial", fixMultipartBlockMaterial);
 
 		config.set("ForestryCraftingContainersFix.enabled", fixForestryCraftingContainers);
-
-		config.set("TreeGenerationFix.enabled", fixTreeGeneration);
 
 		try {
 			config.save(configfile);
