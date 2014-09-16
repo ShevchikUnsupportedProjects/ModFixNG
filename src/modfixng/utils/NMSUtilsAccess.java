@@ -32,15 +32,25 @@ public class NMSUtilsAccess {
 	public static boolean init() {
 		String packageName = Bukkit.getServer().getClass().getPackage().getName();
 		String nmspackageversion = packageName.substring(packageName.lastIndexOf('.') + 1);
+		Bukkit.getLogger().info("[ModFixNG] Loading Utils for server version: "+nmspackageversion);
 		try {
 			String versioned = NMSUtilsAccess.class.getPackage().getName()+"."+nmspackageversion+".";
 			nmsutils = (NMSUtilsInterface) Class.forName(versioned+"NMSUtils").newInstance();
 		} catch (Throwable t) {
-			error = t;
-			return false;
+			Bukkit.getLogger().info("Didnt found proper version... Trying to use failback 1.6.4 version");
+			try {
+				String versioned = NMSUtilsAccess.class.getPackage().getName()+".v1_6_3_R3.";
+				nmsutils = (NMSUtilsInterface) Class.forName(versioned+"NMSUtils").newInstance();
+			} 
+			catch (Throwable tt) {
+				error = t;
+				return false;
+			}
+			return true;			
 		}
 		return true;
 	}
+
 
 	public static NMSUtilsInterface getNMSUtils() {
 		return nmsutils;
