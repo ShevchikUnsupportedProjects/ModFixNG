@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import modfixng.events.ClickInventoryPacketClickInventoryEvent;
 import modfixng.events.CloseInventoryPacketCloseInventoryEvent;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -114,6 +115,19 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		playerOpenBlock.remove(name);
 	}
 
+	//check valid on inventory click
+	@EventHandler
+	public void onClick(ClickInventoryPacketClickInventoryEvent event) {
+		Player player = event.getPlayer();
+		BlockState blockstate = playerOpenBlock.get(player.getName());
+		Block block = blockstate.getBlock();
+		if (!isValid(player, blockstate, block)) {
+			event.setCancelled(true);
+			removeData(player.getName());
+			player.closeInventory();
+		}
+	}
+
 	private BukkitTask task;
 	// check if block is broken or player is too far away from it or the block is broken, if yes - force close inventory
 	private void initBlockCheck() {
@@ -125,10 +139,10 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 					for (Player player : Bukkit.getOnlinePlayers()) {
 						String playername = player.getName();
 						if (playerOpenBlock.containsKey(playername)) {
-							BlockState bs = playerOpenBlock.get(playername);
-							Block b = bs.getBlock();
-							if ((b.getWorld() != player.getWorld()) || (b.getLocation().distanceSquared(player.getLocation()) > 36) || !isValid(bs, b)) {
-								playerOpenBlock.remove(player.getName());
+							BlockState blockstate = playerOpenBlock.get(playername);
+							Block block = blockstate.getBlock();
+							if (!isValid(player, blockstate, block)) {
+								removeData(playername);
 								player.closeInventory();
 							}
 						}
@@ -139,7 +153,10 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		);
 	}
 
-	private boolean isValid(BlockState bs, Block b) {
+	private boolean isValid(Player player, BlockState bs, Block b) {
+		if (!b.getWorld().equals(player.getWorld()) || b.getLocation().distanceSquared(player.getLocation()) > 36) {
+			return false;
+		}
 		if ((bs.getType() == Material.FURNACE) || (bs.getType() == Material.BURNING_FURNACE)) {
 			return (b.getType() == Material.FURNACE) || (b.getType() == Material.BURNING_FURNACE);
 		}

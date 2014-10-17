@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import modfixng.events.ClickInventoryPacketClickInventoryEvent;
 import modfixng.events.CloseInventoryPacketCloseInventoryEvent;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -110,6 +111,18 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		playerOpenEntity.remove(name);
 	}
 
+	//check valid on inventory click
+	@EventHandler
+	public void onClick(ClickInventoryPacketClickInventoryEvent event) {
+		Player player = event.getPlayer();
+		Entity entity = playerOpenEntity.get(player.getName());
+		if (!isValid(player, entity)) {
+			event.setCancelled(true);
+			removeData(player.getName());
+			player.closeInventory();
+		}
+	}
+
 	private BukkitTask task;
 	// check if entity is not valid or player is too far away from it, if yes -  force close inventory
 	private void initEntitiesCheck() {
@@ -122,7 +135,7 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 						String playername = player.getName();
 						if (playerOpenEntity.containsKey(playername)) {
 							Entity entity = playerOpenEntity.get(playername);
-							if (!entity.isValid() || (entity.getWorld() != player.getWorld()) || (entity.getLocation().distanceSquared(player.getLocation()) > 36)) {
+							if (!isValid(player, entity)) {
 								playerOpenEntity.remove(playername);
 								player.closeInventory();
 							}
@@ -132,6 +145,10 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 			},
 			0, 1
 		);
+	}
+
+	private boolean isValid(Player player, Entity entity) {
+		return (entity.isValid() && (entity.getWorld().equals(player.getWorld())) && (entity.getLocation().distanceSquared(player.getLocation()) < 36));
 	}
 
 	@Override
