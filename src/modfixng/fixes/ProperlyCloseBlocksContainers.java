@@ -119,12 +119,15 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 	@EventHandler
 	public void onClick(ClickInventoryPacketClickInventoryEvent event) {
 		Player player = event.getPlayer();
-		BlockState blockstate = playerOpenBlock.get(player.getName());
-		Block block = blockstate.getBlock();
-		if (!isValid(player, blockstate, block)) {
-			event.setCancelled(true);
-			removeData(player.getName());
-			player.closeInventory();
+		String playername = player.getName();
+		if (playerOpenBlock.containsKey(playername)) {
+			BlockState blockstate = playerOpenBlock.get(playername);
+			Block block = blockstate.getBlock();
+			if (!isValid(player, blockstate, block)) {
+				event.setCancelled(true);
+				removeData(player.getName());
+				player.closeInventory();
+			}
 		}
 	}
 

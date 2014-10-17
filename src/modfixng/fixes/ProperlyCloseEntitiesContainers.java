@@ -115,11 +115,14 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 	@EventHandler
 	public void onClick(ClickInventoryPacketClickInventoryEvent event) {
 		Player player = event.getPlayer();
-		Entity entity = playerOpenEntity.get(player.getName());
-		if (!isValid(player, entity)) {
-			event.setCancelled(true);
-			removeData(player.getName());
-			player.closeInventory();
+		String playername = player.getName();
+		if (playerOpenEntity.containsKey(playername)) {
+			Entity entity = playerOpenEntity.get(player.getName());
+			if (!isValid(player, entity)) {
+				event.setCancelled(true);
+				removeData(player.getName());
+				player.closeInventory();
+			}
 		}
 	}
 
