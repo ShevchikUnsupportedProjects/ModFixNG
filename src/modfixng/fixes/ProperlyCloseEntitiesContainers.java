@@ -87,8 +87,12 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 	private PacketListener plistener;
 	// remove player from list when he closes inventory
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPacketInInventoryClose(CloseInventoryPacketCloseInventoryEvent event) {
-		removeData(event.getPlayer().getName());
+	public void onPacketInInventoryClose(final CloseInventoryPacketCloseInventoryEvent event) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(ModFixNG.getInstance(), new Runnable() {
+			public void run() {
+				removeData(event.getPlayer().getName());
+			}
+		});
 	}
 	private void initServerCloseInventoryFixListener() {
 		plistener = new PacketAdapter(
