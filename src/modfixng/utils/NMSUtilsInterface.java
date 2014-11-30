@@ -20,11 +20,14 @@ package modfixng.utils;
 import java.util.ArrayList;
 
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 public interface NMSUtilsInterface {
 
 	public boolean hasInventory(Block b);
+
+	public boolean hasInventory(Entity e);
 
 	public boolean isInventoryOpen(Player p);
 

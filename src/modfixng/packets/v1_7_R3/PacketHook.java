@@ -52,48 +52,4 @@ public class PacketHook implements PacketHookInterface {
 		);
 	}
 
-	@Override
-	public void initInCloseInventoryListener() {
-		ModFixNG.getProtocolManager().addPacketListener(
-			new PacketAdapter(
-				PacketAdapter
-				.params(ModFixNG.getInstance(), PacketType.Play.Client.CLOSE_WINDOW)
-				.listenerPriority(ListenerPriority.HIGHEST)
-			) {
-				@Override
-				public void onPacketReceiving(PacketEvent e) {
-					Player player = e.getPlayer();
-					if (player == null) {
-						return;
-					}
-
-					PacketContainer newpacket = PacketFactory.getWindowClosePacket(player, e.getPacket());
-					e.setPacket(newpacket);
-				}
-			}
-		);
-	}
-
-	@Override
-	public void initInClickInventoryListener() {
-		ModFixNG.getProtocolManager().addPacketListener(
-			new PacketAdapter(
-				PacketAdapter
-				.params(ModFixNG.getInstance(), PacketType.Play.Client.WINDOW_CLICK)
-				.listenerPriority(ListenerPriority.HIGHEST)
-			) {
-				@Override
-				public void onPacketReceiving(PacketEvent e) {
-					Player player = e.getPlayer();
-					if (player == null) {
-						return;
-					}
-
-					PacketContainer newpacket = PacketFactory.getWindowClickPacket(player, e.getPacket());
-					e.setPacket(newpacket);
-				}
-			}
-		);
-	}
-
 }

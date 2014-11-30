@@ -24,32 +24,13 @@ import com.comphenix.protocol.events.PacketContainer;
 public class PacketFactory {
 
 	protected static PacketContainer getBlockDigPacket(Player player, PacketContainer container) {
-		Object nmsPacket = new BlockDig(player);
+		Object nmsPacket = new BlockDig();
 		PacketContainer newpacket = new PacketContainer(container.getType(), nmsPacket);
 		newpacket.getIntegers().write(0, container.getIntegers().read(0));
 		newpacket.getIntegers().write(1, container.getIntegers().read(1));
 		newpacket.getIntegers().write(2, container.getIntegers().read(2));
 		newpacket.getIntegers().write(3, container.getIntegers().read(3));
 		newpacket.getIntegers().write(4, container.getIntegers().read(4));
-		return newpacket;
-	}
-
-	protected static PacketContainer getWindowClosePacket(Player player, PacketContainer container) {
-		Object nmsPacket = new CloseInventory(player, container.getIntegers().read(0));
-		PacketContainer newpacket = new PacketContainer(container.getType(), nmsPacket);
-		newpacket.getIntegers().write(0, container.getIntegers().read(0));
-		return newpacket;
-	}
-
-	protected static PacketContainer getWindowClickPacket(Player player, PacketContainer container) {
-		Object nmsPacket = new InventoryClick(player);
-		PacketContainer newpacket = new PacketContainer(container.getType(), nmsPacket);
-		newpacket.getIntegers().write(0, container.getIntegers().read(0));
-		newpacket.getIntegers().write(1, container.getIntegers().read(1));
-		newpacket.getIntegers().write(2, container.getIntegers().read(2));
-		newpacket.getIntegers().write(3, container.getIntegers().read(3));
-		newpacket.getShorts().write(0, container.getShorts().read(0));
-		newpacket.getItemModifier().write(0, container.getItemModifier().read(0));
 		return newpacket;
 	}
 

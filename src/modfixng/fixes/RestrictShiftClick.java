@@ -17,17 +17,18 @@
 
 package modfixng.fixes;
 
-import modfixng.events.ClickInventoryPacketClickInventoryEvent;
-import modfixng.events.ClickInventoryPacketClickInventoryEvent.Mode;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 public class RestrictShiftClick implements Feature, Listener {
 
@@ -39,12 +40,13 @@ public class RestrictShiftClick implements Feature, Listener {
 
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPacketInInventoryClick(ClickInventoryPacketClickInventoryEvent event) {
-		if (event.getMode() == Mode.SHIFT_MOUSE_CLICK) {
-			String invname = NMSUtilsAccess.getNMSUtils().getOpenInventoryName(event.getPlayer());
+	public void onPacketInInventoryClick(InventoryClickEvent event) {
+		if (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT) {
+			Player player = (Player) event.getWhoClicked();
+			String invname = NMSUtilsAccess.getNMSUtils().getOpenInventoryName(player);
 			if (config.restrictShiftInvetoryNames.contains(invname)) {
 				event.setCancelled(true);
-				event.getPlayer().updateInventory();
+				player.updateInventory();
 			}
 		}
 	}

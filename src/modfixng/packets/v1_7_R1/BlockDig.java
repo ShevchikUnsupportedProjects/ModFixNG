@@ -20,33 +20,29 @@ package modfixng.packets.v1_7_R1;
 import modfixng.events.BlockDigPacketItemDropEvent;
 import net.minecraft.server.v1_7_R1.PacketPlayInBlockDig;
 import net.minecraft.server.v1_7_R1.PacketPlayInListener;
+import net.minecraft.server.v1_7_R1.PlayerConnection;
 
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
 
 public class BlockDig extends PacketPlayInBlockDig {
 
-	private Player player;
-
-	protected BlockDig(Player player) {
-		this.player = player;
-	}
-
 	@Override
-	public void a(PacketPlayInListener paramPacketPlayInListener) {
-		CraftPlayer cplayer = (CraftPlayer) player;
-		if (cplayer.getHandle().playerConnection.isDisconnected()) {
-			return;
-		}
-		if ((g() == 3) || (g() == 4)) {
-			BlockDigPacketItemDropEvent event = new BlockDigPacketItemDropEvent(player);
-			Bukkit.getPluginManager().callEvent(event);
-			if (event.isCancelled()) {
+	public void a(PacketPlayInListener packetplayinlistener) {
+		if (packetplayinlistener instanceof PlayerConnection) {
+			CraftPlayer cplayer = ((PlayerConnection) packetplayinlistener).getPlayer();
+			if (cplayer.getHandle().playerConnection.isDisconnected()) {
 				return;
 			}
+			if ((g() == 3) || (g() == 4)) {
+				BlockDigPacketItemDropEvent event = new BlockDigPacketItemDropEvent(cplayer);
+				Bukkit.getPluginManager().callEvent(event);
+				if (event.isCancelled()) {
+					return;
+				}
+			}
 		}
-		paramPacketPlayInListener.a(this);
+		packetplayinlistener.a(this);
 	}
 
 }

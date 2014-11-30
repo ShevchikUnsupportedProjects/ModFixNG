@@ -30,6 +30,7 @@ import net.minecraft.server.v1_7_R2.PlayerInventory;
 import net.minecraft.server.v1_7_R2.Slot;
 import net.minecraft.server.v1_7_R2.TileEntity;
 
+import org.bukkit.craftbukkit.v1_7_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_7_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_7_R2.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_7_R2.inventory.CraftItemStack;
@@ -44,6 +45,12 @@ public class NMSUtils implements NMSUtilsInterface {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean hasInventory(org.bukkit.entity.Entity e) {
+		CraftEntity centity = (CraftEntity) e;
+		return centity.getHandle() instanceof IInventory;
 	}
 
 	@Override

@@ -18,8 +18,6 @@
 package modfixng.fixes;
 
 import modfixng.events.BlockDigPacketItemDropEvent;
-import modfixng.events.ClickInventoryPacketClickInventoryEvent;
-import modfixng.events.CloseInventoryPacketCloseInventoryEvent;
 import modfixng.main.ModFixNG;
 import modfixng.utils.NMSUtilsAccess;
 
@@ -82,25 +80,6 @@ public class ValidateActions implements Listener, Feature {
 		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
 			event.setCancelled(true);
 			return;
-		}
-	}
-
-	//do not allow to close invalid inventory
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPacketInInventoryClose(CloseInventoryPacketCloseInventoryEvent event) {
-		if (!NMSUtilsAccess.getNMSUtils().isContainerValid(event.getPlayer(), event.getId())) {
-			event.setCancelled(true);
-			event.getPlayer().closeInventory();
-		}
-	}
-
-	// do not allow to click invalid inventory
-	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPacketInInvetoryClick(ClickInventoryPacketClickInventoryEvent event) {
-		if (!NMSUtilsAccess.getNMSUtils().isContainerValid(event.getPlayer(), event.getId())) {
-			event.setCancelled(true);
-			event.getPlayer().updateInventory();
 		}
 	}
 

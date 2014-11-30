@@ -3,15 +3,16 @@ package modfixng.fixes;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import modfixng.events.ClickInventoryPacketClickInventoryEvent;
 import modfixng.main.ModFixNG;
 import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class FixForestryCraftingContainers implements Listener, Feature {
@@ -26,9 +27,10 @@ public class FixForestryCraftingContainers implements Listener, Feature {
 	);
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPacketInInventoryClick(ClickInventoryPacketClickInventoryEvent event) {
-		if (forestryInventoryNames.contains(NMSUtilsAccess.getNMSUtils().getOpenInventoryName(event.getPlayer()))) {
-			for (ItemStack item : NMSUtilsAccess.getNMSUtils().getTopInvetnoryItems(event.getPlayer())) {
+	public void onPacketInInventoryClick(InventoryClickEvent event) {
+		Player player = (Player) event.getWhoClicked();
+		if (forestryInventoryNames.contains(NMSUtilsAccess.getNMSUtils().getOpenInventoryName(player))) {
+			for (ItemStack item : NMSUtilsAccess.getNMSUtils().getTopInvetnoryItems(player)) {
 				item.setItemMeta(null);
 			}
 		}

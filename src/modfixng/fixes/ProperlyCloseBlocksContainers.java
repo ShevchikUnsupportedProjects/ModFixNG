@@ -21,8 +21,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import modfixng.events.ClickInventoryPacketClickInventoryEvent;
-import modfixng.events.CloseInventoryPacketCloseInventoryEvent;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.ModFixNGUtils;
@@ -38,14 +36,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
-
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.events.PacketListener;
 
 public class ProperlyCloseBlocksContainers implements Listener, Feature {
 
@@ -88,27 +83,10 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		}
 	}
 
-	private PacketListener plistener;
-	// remove player from list when he closes inventory
+	//remove player from list when he closes inventory
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPacketInInventoryClose(final CloseInventoryPacketCloseInventoryEvent event) {
-		Bukkit.getScheduler().scheduleSyncDelayedTask(ModFixNG.getInstance(), new Runnable() {
-			public void run() {
-				removeData(event.getPlayer().getName());
-			}
-		});
-	}
-	private void initServerCloseInventoryFixListener() {
-		plistener = new PacketAdapter(
-			PacketAdapter
-			.params(ModFixNG.getInstance(), PacketType.Play.Server.CLOSE_WINDOW)
-		) {
-			@Override
-			public void onPacketSending(PacketEvent e) {
-				removeData(e.getPlayer().getName());
-			}
-		};
-		ModFixNG.getProtocolManager().addPacketListener(plistener);
+	public void onInvetoryClose(InventoryCloseEvent event) {
+		removeData(event.getPlayer().getName());
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
@@ -120,9 +98,9 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 	}
 
 	//check valid on inventory click
-	@EventHandler
-	public void onClick(ClickInventoryPacketClickInventoryEvent event) {
-		Player player = event.getPlayer();
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onClick(InventoryClickEvent event) {
+		Player player = (Player) event.getWhoClicked();
 		String playername = player.getName();
 		if (playerOpenBlock.containsKey(playername)) {
 			BlockState blockstate = playerOpenBlock.get(playername);
@@ -173,14 +151,12 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 	@Override
 	public void load() {
 		Bukkit.getPluginManager().registerEvents(this, ModFixNG.getInstance());
-		initServerCloseInventoryFixListener();
 		initBlockCheck();
 	}
 
 	@Override
 	public void unload() {
 		task.cancel();
-		ModFixNG.getProtocolManager().removePacketListener(plistener);
 		HandlerList.unregisterAll(this);
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			String playername = player.getName();

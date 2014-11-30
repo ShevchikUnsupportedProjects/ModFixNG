@@ -13,16 +13,6 @@ public class PacketHook implements PacketHookInterface {
 		hookPacket(BlockDig.class, BlockDig.getPacketID());
 	}
 
-	@Override
-	public void initInCloseInventoryListener() {
-		hookPacket(CloseInventory.class, CloseInventory.getPacketID());
-	}
-
-	@Override
-	public void initInClickInventoryListener() {
-		hookPacket(InventoryClick.class, InventoryClick.getPacketID());
-	}
-
 	@SuppressWarnings("unchecked")
 	private void hookPacket(Class<?> packetclass, int packetid) {
 		Packet.l.a(packetid, packetclass);

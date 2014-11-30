@@ -21,8 +21,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import modfixng.events.ClickInventoryPacketClickInventoryEvent;
-import modfixng.events.ClickInventoryPacketClickInventoryEvent.Mode;
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
 import modfixng.utils.NMSUtilsAccess;
@@ -34,6 +32,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -93,18 +93,19 @@ public class FixBag implements Listener, Feature {
 
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPacketInInvetory19Click(ClickInventoryPacketClickInventoryEvent event) {
+	public void onPacketInInvetory19Click(InventoryClickEvent event) {
 		if (!config.fixBag19ButtonClickEnabled) {
 			return;
 		}
 
-		if (event.getMode() == Mode.NUMBER_KEY_PRESS) {
-			final int heldslot = event.getPlayer().getInventory().getHeldItemSlot();
-			if (heldslot == event.getButton()) {
-				String inventoryName = NMSUtilsAccess.getNMSUtils().getOpenInventoryName(event.getPlayer());
+		if (event.getClick() == ClickType.NUMBER_KEY) {
+			Player player = (Player) event.getWhoClicked();
+			final int heldslot = player.getInventory().getHeldItemSlot();
+			if (heldslot == event.getSlot()) {
+				String inventoryName = NMSUtilsAccess.getNMSUtils().getOpenInventoryName(player);
 				if (config.fixBag19ButtonClickBagInventoryNames.contains(inventoryName) || knownInventoryNames.contains(inventoryName)) {
 					event.setCancelled(true);
-					event.getPlayer().updateInventory();
+					player.updateInventory();
 				}
 			}
 		}
@@ -113,14 +114,15 @@ public class FixBag implements Listener, Feature {
 	// close inventory if trying to drop opened toolbox or cropnalyzer(q button in inventory)
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPacketInInventoryDropClick(ClickInventoryPacketClickInventoryEvent event) {
+	public void onPacketInInventoryDropClick(InventoryClickEvent event) {
 		if (!config.fixBagCropanalyzerFixEnabled && !config.fixBagToolboxFixEnabled) {
 			return;
 		}
-		if ((event.getMode() == Mode.DROP) && (event.getSlot() != -999)) {
-			if (isInvalidDropInventory(event.getPlayer(), event.getSlot())) {
+		if ((event.getClick() == ClickType.DROP) && (event.getSlot() != -999)) {
+			Player player = (Player) event.getWhoClicked();
+			if (isInvalidDropInventory(player, event.getSlot())) {
 				event.setCancelled(true);
-				event.getPlayer().updateInventory();
+				player.updateInventory();
 			}
 		}
 	}

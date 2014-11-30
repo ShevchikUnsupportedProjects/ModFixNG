@@ -34,8 +34,6 @@ public class NMSPacketAccess {
 			String versioned = NMSPacketAccess.class.getPackage().getName()+"."+nmspackageversion+".";
 			PacketHookInterface phook  = (PacketHookInterface) Class.forName(versioned+"PacketHook").newInstance();
 			phook.initInBlockDigListener();
-			phook.initInCloseInventoryListener();
-			phook.initInClickInventoryListener();
 			return true;
 		} catch (Throwable t) {
 			error = t;
