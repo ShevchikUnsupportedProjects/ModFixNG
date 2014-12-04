@@ -118,7 +118,7 @@ public class FixBag implements Listener, Feature {
 		if (!config.fixBagCropanalyzerFixEnabled && !config.fixBagToolboxFixEnabled) {
 			return;
 		}
-		if ((event.getClick() == ClickType.DROP) && (event.getSlot() != -999)) {
+		if (event.getClick() == ClickType.DROP) {
 			Player player = (Player) event.getWhoClicked();
 			if (isInvalidDropInventory(player, event.getSlot())) {
 				event.setCancelled(true);

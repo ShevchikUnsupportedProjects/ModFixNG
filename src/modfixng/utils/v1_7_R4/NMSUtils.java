@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modfixng.utils.NMSUtilsInterface;
+import net.minecraft.server.v1_7_R4.EntityPlayer;
+import net.minecraft.server.v1_7_R4.PacketPlayOutSetSlot;
 import net.minecraft.server.v1_7_R4.Container;
 import net.minecraft.server.v1_7_R4.EntityHuman;
 import net.minecraft.server.v1_7_R4.IInventory;
@@ -55,7 +57,7 @@ public class NMSUtils implements NMSUtilsInterface {
 
 	@Override
 	public boolean isInventoryOpen(org.bukkit.entity.Player p) {
-		return getOpenInventoryId(p) != 0;
+		return getPlayerContainer(p).windowId != 0;
 	}
 
 	@Override
@@ -75,16 +77,6 @@ public class NMSUtils implements NMSUtilsInterface {
 			}
 		}
 		return items;
-	}
-
-	@Override
-	public boolean isContainerValid(org.bukkit.entity.Player p, int invid) {
-		return getOpenInventoryId(p) == invid;
-	}
-
-	@Override
-	public int getOpenInventoryId(org.bukkit.entity.Player p) {
-		return getPlayerContainer(p).windowId;
 	}
 
 	@Override
@@ -133,6 +125,13 @@ public class NMSUtils implements NMSUtilsInterface {
 		CraftPlayer cplayer = (CraftPlayer) p;
 		EntityHuman nmshuman = cplayer.getHandle();
 		return nmshuman.activeContainer;
+	}
+
+	@Override
+	public void updateSlot(org.bukkit.entity.Player p, int slot, org.bukkit.inventory.ItemStack item) {
+		CraftPlayer cplayer = (CraftPlayer) p;
+		EntityPlayer nmshuman = cplayer.getHandle();
+		nmshuman.playerConnection.sendPacket(new PacketPlayOutSetSlot(0, slot, CraftItemStack.asNMSCopy(item)));
 	}
 
 }

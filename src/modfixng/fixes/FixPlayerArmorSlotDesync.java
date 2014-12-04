@@ -18,7 +18,7 @@
 package modfixng.fixes;
 
 import modfixng.main.ModFixNG;
-import modfixng.utils.ModFixNGUtils;
+import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -36,10 +36,10 @@ public class FixPlayerArmorSlotDesync implements Feature {
 				@Override
 				public void run() {
 					for (Player player : Bukkit.getOnlinePlayers()) {
-						ModFixNGUtils.updateSlot(player, 0, 5, player.getInventory().getHelmet());
-						ModFixNGUtils.updateSlot(player, 0, 6, player.getInventory().getChestplate());
-						ModFixNGUtils.updateSlot(player, 0, 7, player.getInventory().getLeggings());
-						ModFixNGUtils.updateSlot(player, 0, 8, player.getInventory().getBoots());
+						NMSUtilsAccess.getNMSUtils().updateSlot(player, 5, player.getInventory().getHelmet());
+						NMSUtilsAccess.getNMSUtils().updateSlot(player, 6, player.getInventory().getChestplate());
+						NMSUtilsAccess.getNMSUtils().updateSlot(player, 7, player.getInventory().getLeggings());
+						NMSUtilsAccess.getNMSUtils().updateSlot(player, 8, player.getInventory().getBoots());
 					}
 				}
 			},

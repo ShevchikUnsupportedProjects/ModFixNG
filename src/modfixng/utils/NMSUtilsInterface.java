@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public interface NMSUtilsInterface {
 
@@ -35,12 +36,10 @@ public interface NMSUtilsInterface {
 
 	public ArrayList<org.bukkit.inventory.ItemStack> getTopInvetnoryItems(Player p);
 
-	public boolean isContainerValid(Player p, int invid);
-
-	public int getOpenInventoryId(Player p);
-
 	public boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException;
 
 	public boolean isTryingToDropOpenToolBox(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException;
+
+	public void updateSlot(Player p, int slot, ItemStack item);
 
 }

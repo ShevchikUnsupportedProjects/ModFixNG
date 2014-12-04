@@ -29,7 +29,6 @@ import modfixng.fixes.ProperlyCloseEntitiesContainers;
 import modfixng.fixes.Restrict19Click;
 import modfixng.fixes.RestrictShiftClick;
 import modfixng.fixes.ValidateActions;
-import modfixng.utils.ModFixNGUtils;
 
 import org.bukkit.Material;
 
@@ -61,16 +60,16 @@ public class FeatureLoader {
 		if (config.properlyCloseEntitiesContainersEnabled) {
 			loadFeature(new ProperlyCloseEntitiesContainers(config));
 		}
-		if (config.fixBagEnabled && ModFixNGUtils.isRunningMCPC()) {
+		if (config.fixBagEnabled) {
 			loadFeature(new FixBag(config));
 		}
-		if (config.fixMultipartEnabled && (config.fixMultipartBlockMaterial != Material.AIR)  && (config.fixMultipartItemMaterial != Material.AIR) && ModFixNGUtils.isRunningMCPC()) {
+		if (config.fixMultipartEnabled && (config.fixMultipartBlockMaterial != Material.AIR) && (config.fixMultipartItemMaterial != Material.AIR)) {
 			loadFeature(new ForgeMultipartPlaceFix(config));
 		}
 		if (config.fixSlotDesyncEnabled) {
 			loadFeature(new FixPlayerArmorSlotDesync());
 		}
-		if (config.validateActionsEnabled || (config.fixBagEnabled && ModFixNGUtils.isRunningMCPC())) {
+		if (config.validateActionsEnabled || config.fixBagEnabled) {
 			loadFeature(new ValidateActions());
 		}
 		if (config.restrict19Enabled) {
@@ -79,7 +78,7 @@ public class FeatureLoader {
 		if (config.restrictShiftEnabled) {
 			loadFeature(new RestrictShiftClick(config));
 		}
-		if (config.fixForestryCraftingContainers && ModFixNGUtils.isRunningMCPC()) {
+		if (config.fixForestryCraftingContainers) {
 			loadFeature(new FixForestryCraftingContainers());
 		}
 	}

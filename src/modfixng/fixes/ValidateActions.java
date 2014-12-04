@@ -17,7 +17,8 @@
 
 package modfixng.fixes;
 
-import modfixng.events.BlockDigPacketItemDropEvent;
+import java.util.HashSet;
+
 import modfixng.main.ModFixNG;
 import modfixng.utils.NMSUtilsAccess;
 
@@ -27,7 +28,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -74,13 +77,25 @@ public class ValidateActions implements Listener, Feature {
 		}
 	}
 
-	//deny drop by q button (not in inventory) while inventory is open
+	// close inventory if q (not in inventory one) is used while inventory is open
+	private HashSet<String> dropppedByInvClick = new HashSet<String>();
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPacketInItemDrop(BlockDigPacketItemDropEvent event) {
-		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
-			event.setCancelled(true);
-			return;
+	public void onInventoryClick(InventoryClickEvent event) {
+		if (event.getSlot() == -999) {
+			dropppedByInvClick.add(event.getWhoClicked().getName());
 		}
+	}
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPacketInItemDrop(PlayerDropItemEvent event) {
+		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
+			if (!dropppedByInvClick.contains(event.getPlayer().getName())) {
+				event.getPlayer().getInventory().setItem(event.getPlayer().getInventory().getHeldItemSlot(), event.getItemDrop().getItemStack());
+				event.getPlayer().closeInventory();
+				event.getItemDrop().setItemStack(event.getPlayer().getInventory().getItemInHand());
+				event.getPlayer().getInventory().setItem(event.getPlayer().getInventory().getHeldItemSlot(), null);
+			}
+		}
+		dropppedByInvClick.remove(event.getPlayer().getName());
 	}
 
 	@Override

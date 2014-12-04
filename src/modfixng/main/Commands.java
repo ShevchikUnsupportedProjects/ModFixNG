@@ -19,7 +19,6 @@ package modfixng.main;
 
 import java.util.HashSet;
 
-import modfixng.utils.ModFixNGUtils;
 import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
@@ -77,7 +76,6 @@ public class Commands implements CommandExecutor, Listener {
 			sender.sendMessage(ChatColor.BLUE + "ModFixNG перезагружен");
 			return true;
 		} else if ((args.length == 1) && args[0].equalsIgnoreCase("status")) {
-			sender.sendMessage(ChatColor.BLUE + "MCPC+: "+ModFixNGUtils.isRunningMCPC());
 			sender.sendMessage(ChatColor.BLUE + "Активные модули:");
 			for (String name : ModFixNG.getFeatureLoader().getLoadedFeaturesNames()) {
 				sender.sendMessage(ChatColor.BLUE + name);
