@@ -17,8 +17,6 @@
 
 package modfixng.utils;
 
-import java.util.ArrayList;
-
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -33,8 +31,6 @@ public interface NMSUtilsInterface {
 	public boolean isInventoryOpen(Player p);
 
 	public String getOpenInventoryName(Player p);
-
-	public ArrayList<org.bukkit.inventory.ItemStack> getTopInvetnoryItems(Player p);
 
 	public boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException;
 

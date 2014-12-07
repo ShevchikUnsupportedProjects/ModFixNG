@@ -18,18 +18,15 @@
 package modfixng.utils.v1_7_R2;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 import modfixng.utils.NMSUtilsInterface;
+
 import net.minecraft.server.v1_7_R2.EntityPlayer;
 import net.minecraft.server.v1_7_R2.PacketPlayOutSetSlot;
 import net.minecraft.server.v1_7_R2.Container;
 import net.minecraft.server.v1_7_R2.EntityHuman;
 import net.minecraft.server.v1_7_R2.IInventory;
 import net.minecraft.server.v1_7_R2.ItemStack;
-import net.minecraft.server.v1_7_R2.PlayerInventory;
-import net.minecraft.server.v1_7_R2.Slot;
 import net.minecraft.server.v1_7_R2.TileEntity;
 
 import org.bukkit.craftbukkit.v1_7_R2.entity.CraftEntity;
@@ -63,20 +60,6 @@ public class NMSUtils implements NMSUtilsInterface {
 	@Override
 	public String getOpenInventoryName(org.bukkit.entity.Player p) {
 		return getPlayerContainer(p).getClass().getName();
-	}
-
-	@Override
-	public ArrayList<org.bukkit.inventory.ItemStack> getTopInvetnoryItems(org.bukkit.entity.Player p) {
-		ArrayList<org.bukkit.inventory.ItemStack> items = new ArrayList<org.bukkit.inventory.ItemStack>();
-		Container container = getPlayerContainer(p);
-		@SuppressWarnings("unchecked")
-		List<Slot> slots = container.c;
-		for (Slot slot : slots) {
-			if ((slot.getItem() != null) && !(slot.inventory instanceof PlayerInventory)) {
-				items.add(CraftItemStack.asCraftMirror(slot.getItem()));
-			}
-		}
-		return items;
 	}
 
 	@Override
