@@ -40,7 +40,7 @@ public class RestrictShiftClick implements Feature, Listener {
 
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPacketInInventoryClick(InventoryClickEvent event) {
+	public void onInventoryClick(InventoryClickEvent event) {
 		if (event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT) {
 			Player player = (Player) event.getWhoClicked();
 			String invname = NMSUtilsAccess.getNMSUtils().getOpenInventoryName(player);

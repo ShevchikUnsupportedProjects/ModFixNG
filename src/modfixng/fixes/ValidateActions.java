@@ -86,7 +86,7 @@ public class ValidateActions implements Listener, Feature {
 		}
 	}
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPacketInItemDrop(PlayerDropItemEvent event) {
+	public void onItemDrop(PlayerDropItemEvent event) {
 		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
 			if (!dropppedByInvClick.contains(event.getPlayer().getName())) {
 				event.getPlayer().getInventory().setItem(event.getPlayer().getInventory().getHeldItemSlot(), event.getItemDrop().getItemStack());

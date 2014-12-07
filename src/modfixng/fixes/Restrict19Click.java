@@ -32,7 +32,7 @@ public class Restrict19Click implements Feature, Listener {
 
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPacketInInventoryClick(InventoryClickEvent event) {
+	public void onInventoryClick(InventoryClickEvent event) {
 		if (event.getClick() == ClickType.NUMBER_KEY) {
 			Player player = (Player) event.getWhoClicked();
 			String invname = NMSUtilsAccess.getNMSUtils().getOpenInventoryName(player);

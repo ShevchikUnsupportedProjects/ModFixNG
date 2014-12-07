@@ -93,7 +93,7 @@ public class FixBag implements Listener, Feature {
 
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPacketInInvetory19Click(InventoryClickEvent event) {
+	public void onInvetory19Click(InventoryClickEvent event) {
 		if (!config.fixBag19ButtonClickEnabled) {
 			return;
 		}
@@ -120,7 +120,7 @@ public class FixBag implements Listener, Feature {
 		}
 		if (event.getClick() == ClickType.DROP || event.getClick() == ClickType.CONTROL_DROP) {
 			Player player = (Player) event.getWhoClicked();
-			if (isInvalidDropInventory(player, event.getSlot())) {
+			if (isInvalidDropInventory(player, event.getRawSlot())) {
 				event.setCancelled(true);
 				player.updateInventory();
 			}
