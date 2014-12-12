@@ -23,6 +23,7 @@ import modfixng.main.ModFixNG;
 import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -81,21 +82,34 @@ public class ValidateActions implements Listener, Feature {
 	private HashSet<String> dropppedByInvClick = new HashSet<String>();
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onInventoryClick(InventoryClickEvent event) {
-		if (event.getSlot() == -999) {
+		if (event.getSlot() == -999 && event.getWhoClicked().getItemOnCursor().getType() != Material.AIR) {
 			dropppedByInvClick.add(event.getWhoClicked().getName());
 		}
 	}
+	private HashSet<String> errorDetection = new HashSet<String>();
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onItemDrop(PlayerDropItemEvent event) {
+		String playername = event.getPlayer().getName();
+		//if event is caused by wrong detection than we clear item on player held slot and unset the error detection;
+		if (errorDetection.contains(playername)) {
+			errorDetection.remove(playername);
+			return;
+		}
+		//if drop is probably caused by using q then we set item back to held slot, close inventory, and then set that item as drop.
 		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
-			if (!dropppedByInvClick.contains(event.getPlayer().getName())) {
+			if (!dropppedByInvClick.contains(playername)) {
+				errorDetection.add(playername);
 				event.getPlayer().getInventory().setItem(event.getPlayer().getInventory().getHeldItemSlot(), event.getItemDrop().getItemStack());
-				event.getPlayer().closeInventory();
-				event.getItemDrop().setItemStack(event.getPlayer().getInventory().getItemInHand());
+				event.getPlayer().closeInventory(); //closing inventory will cause StackOverflow if player was dropping item that was on his cursor
+				//if error detection no longer contains player because it was actually item on cursor somehow we skip setting item drop
+				if (errorDetection.contains(playername)) {
+					event.getItemDrop().setItemStack(event.getPlayer().getInventory().getItemInHand());
+				}
 				event.getPlayer().getInventory().setItem(event.getPlayer().getInventory().getHeldItemSlot(), null);
 			}
 		}
-		dropppedByInvClick.remove(event.getPlayer().getName());
+		errorDetection.remove(playername);
+		dropppedByInvClick.remove(playername);
 	}
 
 	@Override
