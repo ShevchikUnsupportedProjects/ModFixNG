@@ -93,7 +93,7 @@ public class FixBag implements Listener, Feature {
 
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onInvetory19Click(InventoryClickEvent event) {
+	public void onPacketInInvetory19Click(InventoryClickEvent event) {
 		if (!config.fixBag19ButtonClickEnabled) {
 			return;
 		}
@@ -114,11 +114,11 @@ public class FixBag implements Listener, Feature {
 	// close inventory if trying to drop opened toolbox or cropnalyzer(q button in inventory)
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void inInventoryDropClick(InventoryClickEvent event) {
+	public void onPacketInInventoryDropClick(InventoryClickEvent event) {
 		if (!config.fixBagCropanalyzerFixEnabled && !config.fixBagToolboxFixEnabled) {
 			return;
 		}
-		if (event.getClick() == ClickType.DROP || event.getClick() == ClickType.CONTROL_DROP) {
+		if ((event.getClick() == ClickType.DROP) || (event.getClick() == ClickType.CONTROL_DROP)) {
 			Player player = (Player) event.getWhoClicked();
 			if (isInvalidDropInventory(player, event.getRawSlot())) {
 				event.setCancelled(true);

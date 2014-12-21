@@ -18,6 +18,7 @@
 package modfixng.fixes;
 
 import modfixng.main.ModFixNG;
+
 import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;

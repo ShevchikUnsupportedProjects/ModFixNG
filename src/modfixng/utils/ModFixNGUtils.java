@@ -18,6 +18,16 @@
 package modfixng.utils;
 
 import org.bukkit.block.Block;
+import java.lang.reflect.InvocationTargetException;
+
+import modfixng.main.ModFixNG;
+
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.utility.MinecraftReflection;
 
 public class ModFixNGUtils {
 
@@ -28,6 +38,26 @@ public class ModFixNGUtils {
 			blstring += ":" + bl.getData();
 		}
 		return blstring;
+	}
+
+	public static void updateSlot(Player player, int inventory, int minecraftslot, ItemStack item) {
+		PacketContainer updateslot = ModFixNG.getProtocolManager().createPacket(PacketType.Play.Server.SET_SLOT);
+		updateslot.getIntegers().write(0, inventory);
+		updateslot.getIntegers().write(1, minecraftslot);
+		updateslot.getItemModifier().write(0, item);
+		try {
+			ModFixNG.getProtocolManager().sendServerPacket(player, updateslot);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static boolean runningMCPC = false;
+	public static void checkMCPC() {
+		runningMCPC = MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP");
+	}
+	public static boolean isRunningMCPC() {
+		return runningMCPC;
 	}
 
 }

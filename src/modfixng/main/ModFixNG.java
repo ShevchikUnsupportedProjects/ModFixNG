@@ -17,17 +17,27 @@
 
 package modfixng.main;
 
+import modfixng.packets.NMSPacketAccess;
+import modfixng.utils.ModFixNGUtils;
 import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
 public class ModFixNG extends JavaPlugin {
 
 	private static ModFixNG instance;
 	public static ModFixNG getInstance() {
 		return instance;
+	}
+
+	private static ProtocolManager protocolManager;
+	public static ProtocolManager getProtocolManager() {
+		return protocolManager;
 	}
 
 	private static FeatureLoader loader;
@@ -44,10 +54,13 @@ public class ModFixNG extends JavaPlugin {
 	public void onEnable() {
 		//set instance
 		instance = this;
+		//get protocol access
+		protocolManager = ProtocolLibrary.getProtocolManager();
 		//init nms access
-		init = NMSUtilsAccess.init();
+		init = NMSPacketAccess.init() & NMSUtilsAccess.init();
 		if (!init) {
 			getLogger().severe("Can't load nms access");
+			NMSPacketAccess.getError().printStackTrace();
 			NMSUtilsAccess.getError().printStackTrace();
 			Bukkit.getPluginManager().disablePlugin(this);
 			return;
@@ -59,6 +72,8 @@ public class ModFixNG extends JavaPlugin {
 		commandl = new Commands(config);
 		getServer().getPluginManager().registerEvents(commandl, this);
 		getCommand("modfixng").setExecutor(commandl);
+		//check platform
+		ModFixNGUtils.checkMCPC();
 		//init fixes
 		loader = new FeatureLoader(config);
 		loader.loadAll();
@@ -67,6 +82,7 @@ public class ModFixNG extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		if (!init) {
+			protocolManager = null;
 			instance = null;
 			return;
 		}
@@ -75,6 +91,9 @@ public class ModFixNG extends JavaPlugin {
 		}
 		loader.unloadAll();
 		loader = null;
+		protocolManager.removePacketListeners(this);
+		protocolManager.getAsynchronousManager().unregisterAsyncHandlers(this);
+		protocolManager = null;
 		instance = null;
 	}
 

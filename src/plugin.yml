@@ -1,7 +1,8 @@
 name: ModFixNG
 main: modfixng.main.ModFixNG
 version: 1.0
-author: _Shevchik_
+author: Shevchik
+depend: [ProtocolLib]
 load: STARTUP
 commands:
   modfixng:

@@ -15,27 +15,40 @@
  *
  */
 
-package modfixng.utils;
+package modfixng.events;
 
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 
-public interface NMSUtilsInterface {
+public class BlockDigPacketItemDropEvent extends PlayerEvent implements Cancellable {
 
-	public boolean hasInventory(Block b);
+	public BlockDigPacketItemDropEvent(Player who) {
+		super(who);
+	}
 
-	public boolean hasInventory(Entity e);
+	private static final HandlerList handlers = new HandlerList();
 
-	public boolean isInventoryOpen(Player p);
+	private boolean cancelled = false;
 
-	public String getOpenInventoryName(Player p);
+	@Override
+	public boolean isCancelled() {
+		return cancelled;
+	}
 
-	public boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException;
+	@Override
+	public void setCancelled(boolean cancel) {
+		cancelled = cancel;
+	}
 
-	public boolean isTryingToDropOpenToolBox(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException;
+	@Override
+	public HandlerList getHandlers() {
+		return handlers;
+	}
 
-	public void updateSlot(Player p, int slot, ItemStack item);
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
 }

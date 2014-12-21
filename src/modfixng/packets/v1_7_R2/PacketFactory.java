@@ -15,27 +15,23 @@
  *
  */
 
-package modfixng.utils;
+package modfixng.packets.v1_7_R2;
 
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
-public interface NMSUtilsInterface {
+import com.comphenix.protocol.events.PacketContainer;
 
-	public boolean hasInventory(Block b);
+public class PacketFactory {
 
-	public boolean hasInventory(Entity e);
-
-	public boolean isInventoryOpen(Player p);
-
-	public String getOpenInventoryName(Player p);
-
-	public boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException;
-
-	public boolean isTryingToDropOpenToolBox(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException;
-
-	public void updateSlot(Player p, int slot, ItemStack item);
+	protected static PacketContainer getBlockDigPacket(Player player, PacketContainer container) {
+		Object nmsPacket = new BlockDig();
+		PacketContainer newpacket = new PacketContainer(container.getType(), nmsPacket);
+		newpacket.getIntegers().write(0, container.getIntegers().read(0));
+		newpacket.getIntegers().write(1, container.getIntegers().read(1));
+		newpacket.getIntegers().write(2, container.getIntegers().read(2));
+		newpacket.getIntegers().write(3, container.getIntegers().read(3));
+		newpacket.getIntegers().write(4, container.getIntegers().read(4));
+		return newpacket;
+	}
 
 }
