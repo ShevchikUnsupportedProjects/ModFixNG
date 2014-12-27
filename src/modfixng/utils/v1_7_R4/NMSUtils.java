@@ -22,6 +22,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+import modfixng.utils.ModFixNGUtils;
 import modfixng.utils.NMSUtilsInterface;
 import net.minecraft.server.v1_7_R4.EntityPlayer;
 import net.minecraft.server.v1_7_R4.PacketPlayOutSetSlot;
@@ -44,7 +45,7 @@ public class NMSUtils implements NMSUtilsInterface {
 	public boolean hasInventory(org.bukkit.block.Block b) {
 		CraftWorld cworld = (CraftWorld) b.getWorld();
 		TileEntity te = cworld.getTileEntityAt(b.getX(), b.getY(), b.getZ());
-		if ((te != null) && (te instanceof IInventory)) {
+		if (te instanceof IInventory) {
 			return true;
 		}
 		return false;
@@ -126,10 +127,7 @@ public class NMSUtils implements NMSUtilsInterface {
 		DataInputStream datainputstream = new DataInputStream(new ByteArrayInputStream(packet.getByteArrays().read(0)));
 		int choice1 = datainputstream.readInt();
 		int choice2 = datainputstream.readInt();
-		if (choice1 > 23 || choice2 > 23 || choice1 < 1 || choice2 < 1) {
-			return false;
-		}
-		return true;
+		return ModFixNGUtils.isBeaconEffectValid(choice1) && ModFixNGUtils.isBeaconEffectValid(choice2);
 	}
 
 }

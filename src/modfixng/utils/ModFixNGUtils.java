@@ -52,6 +52,22 @@ public class ModFixNGUtils {
 		}
 	}
 
+	public static boolean isBeaconEffectValid(int effectId) {
+		switch (effectId) {
+			case 1:
+			case 3:
+			case 11:
+			case 8:
+			case 5:
+			case 10: {
+				return true;
+			}
+			default: {
+				return false;
+			}
+		}
+	}
+
 	private static boolean runningMCPC = false;
 	public static void checkMCPC() {
 		runningMCPC = MinecraftReflection.getEntityPlayerClass().getName().equals("net.minecraft.entity.player.EntityPlayerMP");
