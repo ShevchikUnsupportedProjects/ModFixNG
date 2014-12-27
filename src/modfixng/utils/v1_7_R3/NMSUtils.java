@@ -45,10 +45,7 @@ public class NMSUtils implements NMSUtilsInterface {
 	public boolean hasInventory(org.bukkit.block.Block b) {
 		CraftWorld cworld = (CraftWorld) b.getWorld();
 		TileEntity te = cworld.getTileEntityAt(b.getX(), b.getY(), b.getZ());
-		if (te instanceof IInventory) {
-			return true;
-		}
-		return false;
+		return te instanceof IInventory;
 	}
 
 	@Override
