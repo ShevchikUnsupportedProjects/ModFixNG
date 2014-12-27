@@ -21,6 +21,7 @@ import java.util.LinkedList;
 
 import modfixng.fixes.Feature;
 import modfixng.fixes.FixBag;
+import modfixng.fixes.FixBeaconCrash;
 import modfixng.fixes.FixForestryCraftingContainers;
 import modfixng.fixes.FixPlayerArmorSlotDesync;
 import modfixng.fixes.ForgeMultipartPlaceFix;
@@ -29,7 +30,6 @@ import modfixng.fixes.ProperlyCloseEntitiesContainers;
 import modfixng.fixes.Restrict19Click;
 import modfixng.fixes.RestrictShiftClick;
 import modfixng.fixes.ValidateActions;
-
 import modfixng.utils.ModFixNGUtils;
 
 import org.bukkit.Material;
@@ -82,6 +82,9 @@ public class FeatureLoader {
 		}
 		if (config.fixForestryCraftingContainers && ModFixNGUtils.isRunningMCPC()) {
 			loadFeature(new FixForestryCraftingContainers());
+		}
+		if (config.validateBeaconEffectsChoiceEnabled) {
+			loadFeature(new FixBeaconCrash());
 		}
 	}
 

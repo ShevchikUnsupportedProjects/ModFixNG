@@ -17,10 +17,12 @@
 
 package modfixng.utils.v1_6_R3;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import modfixng.utils.NMSUtilsInterface;
-
 import net.minecraft.server.v1_6_R3.Container;
 import net.minecraft.server.v1_6_R3.EntityHuman;
 import net.minecraft.server.v1_6_R3.EntityPlayer;
@@ -33,6 +35,8 @@ import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_6_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_6_R3.inventory.CraftItemStack;
+
+import com.comphenix.protocol.events.PacketContainer;
 
 public class NMSUtils implements NMSUtilsInterface {
 
@@ -115,6 +119,17 @@ public class NMSUtils implements NMSUtilsInterface {
 		CraftPlayer cplayer = (CraftPlayer) p;
 		EntityPlayer nmshuman = cplayer.getHandle();
 		nmshuman.playerConnection.sendPacket(new Packet103SetSlot(0, slot, CraftItemStack.asNMSCopy(item)));
+	}
+
+	@Override
+	public boolean isBeaconEffectsChoiceValid(PacketContainer packet) throws IOException {
+		DataInputStream datainputstream = new DataInputStream(new ByteArrayInputStream(packet.getByteArrays().read(0)));
+		int choice1 = datainputstream.readInt();
+		int choice2 = datainputstream.readInt();
+		if (choice1 > 23 || choice2 > 23 || choice1 < 1 || choice2 < 1) {
+			return false;
+		}
+		return true;
 	}
 
 }

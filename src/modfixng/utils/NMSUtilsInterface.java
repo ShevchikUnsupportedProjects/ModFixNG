@@ -17,10 +17,14 @@
 
 package modfixng.utils;
 
+import java.io.IOException;
+
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import com.comphenix.protocol.events.PacketContainer;
 
 public interface NMSUtilsInterface {
 
@@ -37,5 +41,7 @@ public interface NMSUtilsInterface {
 	public boolean isTryingToDropOpenToolBox(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException;
 
 	public void updateSlot(Player p, int slot, ItemStack item);
+
+	public boolean isBeaconEffectsChoiceValid(PacketContainer packet) throws IOException;
 
 }
