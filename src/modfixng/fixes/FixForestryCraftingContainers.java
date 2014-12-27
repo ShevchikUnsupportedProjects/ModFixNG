@@ -30,11 +30,13 @@ public class FixForestryCraftingContainers implements Listener, Feature {
 	public void onPacketInInventoryClick(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
 		if (forestryInventoryNames.contains(NMSUtilsAccess.getNMSUtils().getOpenInventoryName(player))) {
-			for (ItemStack item : event.getView().getTopInventory().getContents()) {
+			ItemStack[] contents = event.getView().getTopInventory().getContents();
+			for (ItemStack item : contents) {
 				if (item != null) {
 					item.setItemMeta(null);
 				}
 			}
+			event.getView().getTopInventory().setContents(contents);
 		}
 	}
 
