@@ -18,6 +18,7 @@
 package modfixng.utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -43,5 +44,7 @@ public interface NMSUtilsInterface {
 	public void updateSlot(Player p, int slot, ItemStack item);
 
 	public boolean isBeaconEffectsChoiceValid(PacketContainer packet) throws IOException;
+
+	public ArrayList<ItemStack> getTopInvetnoryItems(Player p);
 
 }

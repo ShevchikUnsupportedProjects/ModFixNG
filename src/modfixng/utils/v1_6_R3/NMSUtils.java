@@ -21,6 +21,8 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import modfixng.utils.ModFixNGUtils;
 import modfixng.utils.NMSUtilsInterface;
@@ -30,6 +32,8 @@ import net.minecraft.server.v1_6_R3.EntityPlayer;
 import net.minecraft.server.v1_6_R3.IInventory;
 import net.minecraft.server.v1_6_R3.ItemStack;
 import net.minecraft.server.v1_6_R3.Packet103SetSlot;
+import net.minecraft.server.v1_6_R3.PlayerInventory;
+import net.minecraft.server.v1_6_R3.Slot;
 import net.minecraft.server.v1_6_R3.TileEntity;
 
 import org.bukkit.craftbukkit.v1_6_R3.CraftWorld;
@@ -125,6 +129,20 @@ public class NMSUtils implements NMSUtilsInterface {
 		int choice1 = datainputstream.readInt();
 		int choice2 = datainputstream.readInt();
 		return ModFixNGUtils.isBeaconEffectValid(choice1) && ModFixNGUtils.isBeaconEffectValid(choice2);
+	}
+
+	@Override
+	public ArrayList<org.bukkit.inventory.ItemStack> getTopInvetnoryItems(org.bukkit.entity.Player p) {
+		ArrayList<org.bukkit.inventory.ItemStack> items = new ArrayList<org.bukkit.inventory.ItemStack>();
+		Container container = getPlayerContainer(p);
+		@SuppressWarnings("unchecked")
+		List<Slot> slots = container.c;
+		for (Slot slot : slots) {
+			if ((slot.getItem() != null) && !(slot.inventory instanceof PlayerInventory)) {
+				items.add(CraftItemStack.asCraftMirror(slot.getItem()));
+			}
+		}
+		return items;
 	}
 
 }
