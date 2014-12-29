@@ -124,8 +124,10 @@ public class NMSUtils implements NMSUtilsInterface {
 	@Override
 	public boolean isBeaconEffectsChoiceValid(PacketContainer packet) {
 		PacketDataSerializer serializer = packet.getSpecificModifier(PacketDataSerializer.class).read(0);
+		serializer.markReaderIndex();
 		int choice1 = serializer.readInt();
 		int choice2 = serializer.readInt();
+		serializer.resetReaderIndex();
 		return ModFixNGUtils.isBeaconEffectValid(choice1) && ModFixNGUtils.isBeaconEffectValid(choice2);
 	}
 
