@@ -54,6 +54,7 @@ public class ModFixNGUtils {
 
 	public static boolean isBeaconEffectValid(int effectId) {
 		switch (effectId) {
+			case 0:
 			case 1:
 			case 3:
 			case 11:
