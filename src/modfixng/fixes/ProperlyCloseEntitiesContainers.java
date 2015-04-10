@@ -33,6 +33,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -93,6 +94,16 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		playerOpenEntity.remove(name);
 	}
 
+	//close opened inventory on entity portal
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPortal(EntityPortalEvent event) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (event.getEntity().equals(playerOpenEntity.get(player.getName()))) {
+				player.closeInventory();
+			}
+		}
+	}
+
 	//check valid on inventory click
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onClick(InventoryClickEvent event) {
@@ -102,7 +113,6 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 			Entity entity = playerOpenEntity.get(player.getName());
 			if (!isValid(player, entity)) {
 				event.setCancelled(true);
-				removeData(player.getName());
 				player.closeInventory();
 			}
 		}
@@ -121,7 +131,6 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 						if (playerOpenEntity.containsKey(playername)) {
 							Entity entity = playerOpenEntity.get(playername);
 							if (!isValid(player, entity)) {
-								playerOpenEntity.remove(playername);
 								player.closeInventory();
 							}
 						}
@@ -149,7 +158,6 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			String playername = player.getName();
 			if (playerOpenEntity.containsKey(playername)) {
-				playerOpenEntity.remove(player.getName());
 				player.closeInventory();
 			}
 		}

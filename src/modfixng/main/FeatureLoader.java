@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import modfixng.fixes.Feature;
 import modfixng.fixes.FixBag;
 import modfixng.fixes.FixBeaconCrash;
+import modfixng.fixes.CleanupBookMeta;
 import modfixng.fixes.FixForestryCraftingContainers;
 import modfixng.fixes.FixPlayerArmorSlotDesync;
 import modfixng.fixes.ForgeMultipartPlaceFix;
@@ -85,6 +86,9 @@ public class FeatureLoader {
 		}
 		if (config.validateBeaconEffectsChoiceEnabled) {
 			loadFeature(new FixBeaconCrash());
+		}
+		if (config.cleanupBookMeta) {
+			loadFeature(new CleanupBookMeta());
 		}
 	}
 

@@ -66,44 +66,48 @@ public class Config {
 
 	public boolean validateBeaconEffectsChoiceEnabled = true;
 
+	public boolean cleanupBookMeta = true;
+
 	public void loadConfig() {
-		YamlConfigurationWrapper config = YamlConfigurationWrapper.loadConfiguration(configfile);
+		Configuration config = Configuration.loadConfiguration(configfile);
 
-		fixBagEnabled = config.get(boolean.class, "BackPackFix.enabled", fixBagEnabled);
-		fixBag19ButtonClickEnabled = config.get(boolean.class, "BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
-		fixBag19ButtonClickBagInventoryNames = config.getHashSet(String.class, "BackPackFix.restrict19ButtonClick.inventoryNames", fixBag19ButtonClickBagInventoryNames);
-		fixBagCropanalyzerFixEnabled = config.get(boolean.class, "BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
-		fixBagToolboxFixEnabled = config.get(boolean.class, "BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
+		fixBagEnabled = config.get("BackPackFix.enabled", fixBagEnabled);
+		fixBag19ButtonClickEnabled = config.get("BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
+		fixBag19ButtonClickBagInventoryNames = config.getHashSet("BackPackFix.restrict19ButtonClick.inventoryNames", fixBag19ButtonClickBagInventoryNames);
+		fixBagCropanalyzerFixEnabled = config.get("BackPackFix.fixCropanalyzer.enabled", fixBagCropanalyzerFixEnabled);
+		fixBagToolboxFixEnabled = config.get("BackPackFix.fixToolbox.enabled", fixBagToolboxFixEnabled);
 
-		properlyCloseBlocksContainers = config.get(boolean.class, "ProperlyCloseInventories.checkBlocks.enabled", properlyCloseBlocksContainers);
-		properlyCloseBlocksContainersBlocksMaterials = config.getHashSet(String.class, "ProperlyCloseInventories.checkBlocks.materials", properlyCloseBlocksContainersBlocksMaterials);
+		properlyCloseBlocksContainers = config.get("ProperlyCloseInventories.checkBlocks.enabled", properlyCloseBlocksContainers);
+		properlyCloseBlocksContainersBlocksMaterials = config.getHashSet("ProperlyCloseInventories.checkBlocks.materials", properlyCloseBlocksContainersBlocksMaterials);
 
-		properlyCloseEntitiesContainersEnabled = config.get(boolean.class, "ProperlyCloseInventories.checkEntities.enabled", properlyCloseEntitiesContainersEnabled);
-		properlyCloseEntitiesContainersEntitiesTypes = config.getHashSet(String.class, "ProperlyCloseInventories.checkEntities.types", properlyCloseEntitiesContainersEntitiesTypes);
+		properlyCloseEntitiesContainersEnabled = config.get("ProperlyCloseInventories.checkEntities.enabled", properlyCloseEntitiesContainersEnabled);
+		properlyCloseEntitiesContainersEntitiesTypes = config.getHashSet("ProperlyCloseInventories.checkEntities.types", properlyCloseEntitiesContainersEntitiesTypes);
 
-		fixSlotDesyncEnabled = config.get(boolean.class, "ForceSyncSlots.enabled", fixSlotDesyncEnabled);
+		fixSlotDesyncEnabled = config.get("ForceSyncSlots.enabled", fixSlotDesyncEnabled);
 
-		fixMultipartEnabled = config.get(boolean.class, "MultipartFix.enabled", fixMultipartEnabled);
+		fixMultipartEnabled = config.get("MultipartFix.enabled", fixMultipartEnabled);
 		fixMultipartItemMaterial = config.getMaterial("MultipartFix.itemMaterial", fixMultipartItemMaterial);
 		fixMultipartBlockMaterial = config.getMaterial("MultipartFix.blockMaterial", fixMultipartBlockMaterial);
 
-		validateActionsEnabled = config.get(boolean.class, "ValidateActions.enabled", validateActionsEnabled);
+		validateActionsEnabled = config.get("ValidateActions.enabled", validateActionsEnabled);
 
-		restrict19Enabled = config.get(boolean.class, "Restrict19ButtonClick.enabled", restrict19Enabled);
-		restrict19InvetoryNames = config.getHashSet(String.class, "Restrict19ButtonClick.inventoryNames", restrict19InvetoryNames);
+		restrict19Enabled = config.get("Restrict19ButtonClick.enabled", restrict19Enabled);
+		restrict19InvetoryNames = config.getHashSet("Restrict19ButtonClick.inventoryNames", restrict19InvetoryNames);
 
-		restrictShiftEnabled = config.get(boolean.class, "RestrictShiftButtonClick.enabled", restrictShiftEnabled);
-		restrictShiftInvetoryNames = config.getHashSet(String.class, "RestrictShiftButtonClick.inventoryNames", restrictShiftInvetoryNames);
+		restrictShiftEnabled = config.get("RestrictShiftButtonClick.enabled", restrictShiftEnabled);
+		restrictShiftInvetoryNames = config.getHashSet("RestrictShiftButtonClick.inventoryNames", restrictShiftInvetoryNames);
 
-		fixForestryCraftingContainers = config.get(boolean.class, "ForestryCraftingContainersFix.enabled", fixForestryCraftingContainers);
+		fixForestryCraftingContainers = config.get("ForestryCraftingContainersFix.enabled", fixForestryCraftingContainers);
 
-		validateBeaconEffectsChoiceEnabled = config.get(boolean.class, "ValidateBeaconEffectsChoice.enabled", validateBeaconEffectsChoiceEnabled);
+		validateBeaconEffectsChoiceEnabled = config.get("ValidateBeaconEffectsChoice.enabled", validateBeaconEffectsChoiceEnabled);
+
+		cleanupBookMeta = config.get("CleanupBookMeta.enabled", cleanupBookMeta);
 
 		saveConfig();
 	}
 
 	public void saveConfig() {
-		YamlConfigurationWrapper config = new YamlConfigurationWrapper();
+		Configuration config = new Configuration();
 
 		config.set("BackPackFix.enabled", fixBagEnabled);
 		config.set("BackPackFix.restrict19ButtonClick.enabled", fixBag19ButtonClickEnabled);
@@ -135,54 +139,66 @@ public class Config {
 
 		config.set("ValidateBeaconEffectsChoice.enabled", validateBeaconEffectsChoiceEnabled);
 
+		config.set("CleanupBookMeta.enabled", cleanupBookMeta);
+
 		try {
 			config.save(configfile);
 		} catch (IOException e) {
 		}
 	}
 
-	private static class YamlConfigurationWrapper extends YamlConfiguration {
+	private static class Configuration {
 
-		public static YamlConfigurationWrapper loadConfiguration(File file) {
-			YamlConfigurationWrapper wrapper = new YamlConfigurationWrapper();
+		private YamlConfiguration config;
+
+		public Configuration(YamlConfiguration config) {
+			this.config = config;
+		}
+
+		public Configuration() {
+			this.config = new YamlConfiguration();
+		}
+
+		public static Configuration loadConfiguration(File file) {
+			YamlConfiguration config = new YamlConfiguration();
 			try {
-				wrapper.load(file);
+				config.load(file);
 			} catch (FileNotFoundException e) {
 			} catch (IOException | InvalidConfigurationException e) {
 				e.printStackTrace();
 			}
-			return wrapper;
+			return new Configuration(config);
 		}
 
 		@SuppressWarnings("unchecked")
-		private <T> T get(Class<T> t, String path, T defaultValue) {
+		private <T> T get(String path, T defaultValue) {
 			try {
-				Object obj = get(path);
+				Object obj = config.get(path);
 				if (obj != null) {
 					return (T) obj;
 				}
-			} catch (Exception e) {
+			} catch (Throwable e) {
 			}
 			return defaultValue;
 		}
 
 		private Material getMaterial(String path, Material defaultValue) {
 			try {
-				String value = getString(path);
+				String value = config.getString(path);
 				Material mat = Material.getMaterial(value);
 				if (mat != null) {
 					return mat;
 				}
-			} catch (Exception e) {
+			} catch (Throwable e) {
 			}
 			return defaultValue;
 		}
 
 		@SuppressWarnings("unchecked")
-		private <T> HashSet<T> getHashSet(Class<T> t, String path, HashSet<T> defaultValue) {
+		private <T> HashSet<T> getHashSet(String path, HashSet<T> defaultValue) {
 			try {
 				HashSet<T> set = new HashSet<T>();
-				List<?> list = getList(path, new ArrayList<T>());
+				List<?> list = config.getList(path, new ArrayList<T>());
 				for (Object element : list) {
 					set.add((T) element);
 				}
@@ -192,16 +208,19 @@ public class Config {
 			return defaultValue;
 		}
 
-		@Override
 		public void set(String path, Object obj) {
 			if (obj instanceof HashSet) {
 				ArrayList<Object> list = new ArrayList<Object>((HashSet<?>) obj);
-				set(path, list);
+				config.set(path, list);
 			} else if (obj instanceof Material) {
-				set(path, ((Material) obj).toString());
+				config.set(path, ((Material) obj).toString());
 			} else {
-				super.set(path, obj);
+				config.set(path, obj);
 			}
+		}
+
+		public void save(File configfile) throws IOException {
+			config.save(configfile);
 		}
 
 	}

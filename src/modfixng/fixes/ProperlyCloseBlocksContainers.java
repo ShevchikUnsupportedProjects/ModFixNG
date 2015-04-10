@@ -107,7 +107,6 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 			Block block = blockstate.getBlock();
 			if (!isValid(player, blockstate, block)) {
 				event.setCancelled(true);
-				removeData(player.getName());
 				player.closeInventory();
 			}
 		}
@@ -127,7 +126,6 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 							BlockState blockstate = playerOpenBlock.get(playername);
 							Block block = blockstate.getBlock();
 							if (!isValid(player, blockstate, block)) {
-								removeData(playername);
 								player.closeInventory();
 							}
 						}
@@ -159,9 +157,7 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		task.cancel();
 		HandlerList.unregisterAll(this);
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			String playername = player.getName();
-			if (playerOpenBlock.containsKey(playername)) {
-				playerOpenBlock.remove(playername);
+			if (playerOpenBlock.containsKey(player.getName())) {
 				player.closeInventory();
 			}
 		}
