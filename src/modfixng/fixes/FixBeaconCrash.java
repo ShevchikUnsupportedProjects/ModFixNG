@@ -10,7 +10,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
 
 import modfixng.main.ModFixNG;
-import modfixng.utils.NMSUtilsAccess;
+import modfixng.nms.utils.NMSUtilsAccess;
 
 public class FixBeaconCrash implements Feature {
 

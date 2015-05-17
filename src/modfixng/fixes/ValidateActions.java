@@ -19,7 +19,7 @@ package modfixng.fixes;
 
 import modfixng.events.BlockDigPacketItemDropEvent;
 import modfixng.main.ModFixNG;
-import modfixng.utils.NMSUtilsAccess;
+import modfixng.nms.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;

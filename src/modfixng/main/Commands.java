@@ -19,8 +19,8 @@ package modfixng.main;
 
 import java.util.HashSet;
 
+import modfixng.nms.utils.NMSUtilsAccess;
 import modfixng.utils.ModFixNGUtils;
-import modfixng.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

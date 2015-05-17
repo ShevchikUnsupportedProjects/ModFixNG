@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import modfixng.main.ModFixNG;
-import modfixng.utils.NMSUtilsAccess;
+import modfixng.nms.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

@@ -23,7 +23,7 @@ import java.util.List;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
-import modfixng.utils.NMSUtilsAccess;
+import modfixng.nms.utils.NMSUtilsAccess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
