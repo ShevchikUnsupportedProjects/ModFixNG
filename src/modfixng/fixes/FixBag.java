@@ -77,7 +77,7 @@ public class FixBag implements Listener, Feature {
 	}
 
 	// restrict using 1-9 buttons in bags inventories if it will move bag to another slot
-	private HashSet<String> knownInventoryNames = new HashSet<String>(
+	private final HashSet<String> knownInventoryNames = new HashSet<String>(
 		Arrays.asList(
 			new String[] {
 				//forestry

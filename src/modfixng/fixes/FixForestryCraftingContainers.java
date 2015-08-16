@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class FixForestryCraftingContainers implements Listener, Feature {
 
-	private HashSet<String> forestryInventoryNames = new HashSet<String>(
+	private final HashSet<String> forestryInventoryNames = new HashSet<String>(
 		Arrays.asList(
 			new String[] {
 				"forestry.factory.gui.ContainerWorktable",

@@ -20,6 +20,8 @@ package modfixng.fixes;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -47,9 +49,9 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 		this.config = config;
 	}
 
-	private HashMap<String, Entity> playerOpenEntity = new HashMap<String, Entity>(200);
+	private final HashMap<Player, Entity> playerOpenEntity = new HashMap<Player, Entity>(200);
 
-	private HashSet<EntityType> knownEntityTypes  = new HashSet<EntityType>(
+	private final HashSet<EntityType> knownEntityTypes  = new HashSet<EntityType>(
 		Arrays.asList(
 			new EntityType[] {
 				//vanilla entities that has inventories
@@ -65,9 +67,8 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerOpenedEntity(PlayerInteractEntityEvent e) {
 		Player player = e.getPlayer();
-		String playername = player.getName();
 
-		if (playerOpenEntity.containsKey(playername)) {
+		if (playerOpenEntity.containsKey(player)) {
 			if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(player)) {
 				e.setCancelled(true);
 				return;
@@ -76,30 +77,30 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 
 		final Entity entity = e.getRightClicked();
 		if (config.properlyCloseEntitiesContainersEntitiesTypes.contains(entity.getType().toString()) || NMSUtilsAccess.getNMSUtils().hasInventory(entity) || knownEntityTypes.contains(entity.getType())) {
-			playerOpenEntity.put(playername, entity);
+			playerOpenEntity.put(player, entity);
 		}
 	}
 
 	//remove player from list when he closes inventory
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onInvetoryClose(InventoryCloseEvent event) {
-		removeData(event.getPlayer().getName());
+		playerOpenEntity.remove(event.getPlayer());
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(PlayerQuitEvent e) {
-		removeData(e.getPlayer().getName());
-	}
-
-	private void removeData(String name) {
-		playerOpenEntity.remove(name);
+		playerOpenEntity.remove(e.getPlayer());
 	}
 
 	//close opened inventory on entity portal
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPortal(EntityPortalEvent event) {
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (event.getEntity().equals(playerOpenEntity.get(player.getName()))) {
-				player.closeInventory();
+		Entity entity = event.getEntity();
+		Iterator<Entry<Player, Entity>> iterator = playerOpenEntity.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Entry<Player, Entity> entry = iterator.next();
+			if (entity.equals(entry.getValue())) {
+				iterator.remove();
+				entry.getKey().closeInventory();
 			}
 		}
 	}
@@ -108,9 +109,8 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onClick(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
-		String playername = player.getName();
-		if (playerOpenEntity.containsKey(playername)) {
-			Entity entity = playerOpenEntity.get(player.getName());
+		Entity entity = playerOpenEntity.get(player);
+		if (entity != null) {
 			if (!isValid(player, entity)) {
 				event.setCancelled(true);
 				player.closeInventory();
@@ -126,13 +126,12 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 			new Runnable() {
 				@Override
 				public void run() {
-					for (Player player : Bukkit.getOnlinePlayers()) {
-						String playername = player.getName();
-						if (playerOpenEntity.containsKey(playername)) {
-							Entity entity = playerOpenEntity.get(playername);
-							if (!isValid(player, entity)) {
-								player.closeInventory();
-							}
+					Iterator<Entry<Player, Entity>> iterator = playerOpenEntity.entrySet().iterator();
+					while (iterator.hasNext()) {
+						Entry<Player, Entity> entry = iterator.next();
+						if (!isValid(entry.getKey(), entry.getValue())) {
+							iterator.remove();
+							entry.getKey().closeInventory();
 						}
 					}
 				}
@@ -159,11 +158,11 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 	public void unload() {
 		task.cancel();
 		HandlerList.unregisterAll(this);
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			String playername = player.getName();
-			if (playerOpenEntity.containsKey(playername)) {
-				player.closeInventory();
-			}
+		Iterator<Entry<Player, Entity>> iterator = playerOpenEntity.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Entry<Player, Entity> entry = iterator.next();
+			iterator.remove();
+			entry.getKey().closeInventory();
 		}
 	}
 

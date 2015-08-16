@@ -24,7 +24,7 @@ public class Restrict19Click implements Feature, Listener {
 		this.config = config;
 	}
 
-	private HashSet<String> knownInvNames = new HashSet<String>(
+	private final HashSet<String> knownInvNames = new HashSet<String>(
 		Arrays.asList(
 			"ic2.core.block.wiring.ContainerElectricBlock"
 		)

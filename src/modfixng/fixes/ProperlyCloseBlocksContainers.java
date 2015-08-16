@@ -20,6 +20,8 @@ package modfixng.fixes;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import modfixng.main.Config;
 import modfixng.main.ModFixNG;
@@ -49,9 +51,9 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		this.config = config;
 	}
 
-	private HashMap<String, BlockState> playerOpenBlock = new HashMap<String, BlockState>(200);
+	private final HashMap<Player, BlockState> playerOpenBlock = new HashMap<Player, BlockState>(200);
 
-	private HashSet<Material> knownBlockMaterials  = new HashSet<Material>(
+	private final HashSet<Material> knownBlockMaterials  = new HashSet<Material>(
 		Arrays.asList(
 			new Material[] {
 				//some vanilla minecraft item that has gui but doesn't implement IInventory
@@ -68,9 +70,8 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 		}
 
 		Player player = e.getPlayer();
-		String playername = player.getName();
 
-		if (playerOpenBlock.containsKey(playername)) {
+		if (playerOpenBlock.containsKey(player)) {
 			if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(player)) {
 				e.setCancelled(true);
 				return;
@@ -79,31 +80,26 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 
 		final Block b = e.getClickedBlock();
 		if (config.properlyCloseBlocksContainersBlocksMaterials.contains(ModFixNGUtils.getMaterialString(b)) || NMSUtilsAccess.getNMSUtils().hasInventory(b) || knownBlockMaterials.contains(b.getType())) {
-			playerOpenBlock.put(playername, b.getState());
+			playerOpenBlock.put(player, b.getState());
 		}
 	}
 
 	//remove player from list when he closes inventory
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onInvetoryClose(InventoryCloseEvent event) {
-		removeData(event.getPlayer().getName());
+		playerOpenBlock.remove(event.getPlayer());
 	}
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onQuit(PlayerQuitEvent e) {
-		removeData(e.getPlayer().getName());
-	}
-
-	private void removeData(String name) {
-		playerOpenBlock.remove(name);
+	public void onQuit(PlayerQuitEvent event) {
+		playerOpenBlock.remove(event.getPlayer());
 	}
 
 	//check valid on inventory click
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onClick(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
-		String playername = player.getName();
-		if (playerOpenBlock.containsKey(playername)) {
-			BlockState blockstate = playerOpenBlock.get(playername);
+		BlockState blockstate = playerOpenBlock.get(player);
+		if (blockstate != null) {
 			Block block = blockstate.getBlock();
 			if (!isValid(player, blockstate, block)) {
 				event.setCancelled(true);
@@ -120,14 +116,13 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 			new Runnable() {
 				@Override
 				public void run() {
-					for (Player player : Bukkit.getOnlinePlayers()) {
-						String playername = player.getName();
-						if (playerOpenBlock.containsKey(playername)) {
-							BlockState blockstate = playerOpenBlock.get(playername);
-							Block block = blockstate.getBlock();
-							if (!isValid(player, blockstate, block)) {
-								player.closeInventory();
-							}
+					Iterator<Entry<Player, BlockState>> iterator = playerOpenBlock.entrySet().iterator();
+					while (iterator.hasNext()) {
+						Entry<Player, BlockState> entry = iterator.next();
+						BlockState blockstate = entry.getValue();
+						if (!isValid(entry.getKey(), blockstate, blockstate.getBlock())) {
+							iterator.remove();
+							entry.getKey().closeInventory();
 						}
 					}
 				}
@@ -159,10 +154,11 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 	public void unload() {
 		task.cancel();
 		HandlerList.unregisterAll(this);
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			if (playerOpenBlock.containsKey(player.getName())) {
-				player.closeInventory();
-			}
+		Iterator<Entry<Player, BlockState>> iterator = playerOpenBlock.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Entry<Player, BlockState> entry = iterator.next();
+			iterator.remove();
+			entry.getKey().closeInventory();
 		}
 	}
 

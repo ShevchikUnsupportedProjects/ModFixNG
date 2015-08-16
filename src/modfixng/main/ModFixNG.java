@@ -45,9 +45,6 @@ public class ModFixNG extends JavaPlugin {
 		return loader;
 	}
 
-	private Config config;
-	private Commands commandl;
-
 	private boolean init = false;
 
 	@Override
@@ -66,10 +63,10 @@ public class ModFixNG extends JavaPlugin {
 			return;
 		}
 		//init config
-		config = new Config(this);
+		Config config = new Config(this);
 		config.loadConfig();
 		//init commands
-		commandl = new Commands(config);
+		Commands commandl = new Commands(config);
 		getServer().getPluginManager().registerEvents(commandl, this);
 		getCommand("modfixng").setExecutor(commandl);
 		//check platform
