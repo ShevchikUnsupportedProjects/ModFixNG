@@ -142,7 +142,11 @@ public class ProperlyCloseEntitiesContainers implements Listener, Feature {
 	}
 
 	private boolean isValid(Player player, Entity entity) {
-		return (entity.isValid() && (entity.getWorld().equals(player.getWorld())) && (entity.getLocation().distanceSquared(player.getLocation()) < 36));
+		return
+		entity.isValid() &&
+		NMSUtilsAccess.getNMSUtils().isInventoryValid(player) &&
+		entity.getWorld().equals(player.getWorld()) &&
+		entity.getLocation().distanceSquared(player.getLocation()) < 36;
 	}
 
 	@Override

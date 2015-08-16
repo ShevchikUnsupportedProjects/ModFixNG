@@ -69,6 +69,11 @@ public class NMSUtils implements NMSUtilsInterface {
 	}
 
 	@Override
+	public boolean isInventoryValid(org.bukkit.entity.Player p) {
+		return getPlayerContainer(p).a(getNMSPlayer(p));
+	}
+
+	@Override
 	public boolean isTryingToDropOpenCropanalyzer(org.bukkit.entity.Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		if (!getOpenInventoryName(p).equals("ic2.core.item.tool.ContainerCropnalyzer")) {
 			return false;
@@ -110,12 +115,6 @@ public class NMSUtils implements NMSUtilsInterface {
 		return false;
 	}
 
-	private Container getPlayerContainer(org.bukkit.entity.Player p) {
-		CraftPlayer cplayer = (CraftPlayer) p;
-		EntityHuman nmshuman = cplayer.getHandle();
-		return nmshuman.activeContainer;
-	}
-
 	@Override
 	public void updateSlot(org.bukkit.entity.Player p, int slot, org.bukkit.inventory.ItemStack item) {
 		CraftPlayer cplayer = (CraftPlayer) p;
@@ -143,6 +142,16 @@ public class NMSUtils implements NMSUtilsInterface {
 			}
 		}
 		return items;
+	}
+
+	private Container getPlayerContainer(org.bukkit.entity.Player p) {
+		return getNMSPlayer(p).activeContainer;
+	}
+
+	private EntityHuman getNMSPlayer(org.bukkit.entity.Player p) {
+		CraftPlayer cplayer = (CraftPlayer) p;
+		EntityHuman nmshuman = cplayer.getHandle();
+		return nmshuman;
 	}
 
 }

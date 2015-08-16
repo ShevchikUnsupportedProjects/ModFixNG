@@ -137,6 +137,9 @@ public class ProperlyCloseBlocksContainers implements Listener, Feature {
 	}
 
 	private boolean isValid(Player player, BlockState bs, Block b) {
+		if (!NMSUtilsAccess.getNMSUtils().isInventoryValid(player)) {
+			return false;
+		}
 		if (!b.getWorld().equals(player.getWorld()) || b.getLocation().distanceSquared(player.getLocation()) > 36) {
 			return false;
 		}

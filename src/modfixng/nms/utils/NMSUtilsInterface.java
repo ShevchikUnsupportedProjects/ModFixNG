@@ -37,6 +37,8 @@ public interface NMSUtilsInterface {
 
 	public String getOpenInventoryName(Player p);
 
+	public boolean isInventoryValid(Player p);
+
 	public boolean isTryingToDropOpenCropanalyzer(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException;
 
 	public boolean isTryingToDropOpenToolBox(Player p, int minecraftslot) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException;
