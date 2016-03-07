@@ -17,8 +17,12 @@
 
 package modfixng.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
 
 import modfixng.main.ModFixNG;
 
@@ -66,6 +70,30 @@ public class ModFixNGUtils {
 			default: {
 				return false;
 			}
+		}
+	}
+
+	private static Method getOnlinePlayers;
+	@SuppressWarnings("unchecked")
+	public static Collection<Player> getOnlinePlayers() {
+		if (getOnlinePlayers == null) {
+			try {
+				getOnlinePlayers = Bukkit.class.getDeclaredMethod("getOnlinePlayers");
+			} catch (NoSuchMethodException | SecurityException e) {
+				throw new RuntimeException("WTF?", e);
+			}
+		}
+		try {
+			Object obj = getOnlinePlayers.invoke(null);
+			if (obj instanceof Collection) {
+				return (Collection<Player>) obj;
+			} else if (obj.getClass().isArray()) {
+				return Arrays.asList((Player[]) obj);
+			} else {
+				throw new RuntimeException("Unknown return type of getOnlinePlayers method");
+			}
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			throw new RuntimeException("WTF?", e);
 		}
 	}
 

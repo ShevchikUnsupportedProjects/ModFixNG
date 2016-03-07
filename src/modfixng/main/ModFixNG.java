@@ -83,7 +83,7 @@ public class ModFixNG extends JavaPlugin {
 			instance = null;
 			return;
 		}
-		for (Player p : getServer().getOnlinePlayers()) {
+		for (Player p : ModFixNGUtils.getOnlinePlayers()) {
 			p.closeInventory();
 		}
 		loader.unloadAll();
