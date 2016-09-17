@@ -34,7 +34,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class FixBag implements Listener, Feature {
@@ -68,12 +67,6 @@ public class FixBag implements Listener, Feature {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	// close inventory on quit
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerExit(PlayerQuitEvent event) {
-		event.getPlayer().closeInventory();
 	}
 
 	// restrict using 1-9 buttons in bags inventories if it will move bag to another slot

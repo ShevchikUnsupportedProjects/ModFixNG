@@ -31,6 +31,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class ValidateActions implements Listener, Feature {
 
@@ -50,7 +51,7 @@ public class ValidateActions implements Listener, Feature {
 		}
 	}
 
-	// deny active slot switch while invnetory is opened
+	// deny active slot switch while invetory is opened
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerSlotSwitch(PlayerItemHeldEvent event) {
 		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
@@ -58,11 +59,11 @@ public class ValidateActions implements Listener, Feature {
 		}
 	}
 
-	// deny commands use if inventory opened
+	// close opened inventory before processing commands
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerCommand(PlayerCommandPreprocessEvent event) {
 		if (NMSUtilsAccess.getNMSUtils().isInventoryOpen(event.getPlayer())) {
-			event.setCancelled(true);
+			event.getPlayer().closeInventory();
 		}
 	}
 
@@ -81,6 +82,12 @@ public class ValidateActions implements Listener, Feature {
 			event.setCancelled(true);
 			return;
 		}
+	}
+
+	// close inventory on quit
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPlayerExit(PlayerQuitEvent event) {
+		event.getPlayer().closeInventory();
 	}
 
 	@Override
